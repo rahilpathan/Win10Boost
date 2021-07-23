@@ -216,7 +216,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d 1 /f
-
+reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v SmartScreenEnabled /t REG_SZ /d Off /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v "SmartScreenEnabled" /t "REG_SZ" /d "Off" /f
@@ -228,7 +228,9 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t reg_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t reg_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Telemetry" /v "Enabled" /t REG_DWORD /d 0 /f
-
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\PhoneSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\TapiSrv" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\FontCache3.0.0.0" /v "Start" /t REG_DWORD /d "4" /f
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
@@ -241,24 +243,32 @@ reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control" /v WaitToKillServiceTimeout 
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control" /v HungAppTimeout /t REG_SZ /d 2000 /f
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control" /v AutoEndTasks /t REG_SZ /d 1 /f
 
-PowerShell -Command "Get-AppxPackage ConnectivityStore | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage Microsoft.Messaging | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage WindowsPhone | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage 3DBuilder | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage Getstarted | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage WindowsAlarms | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage CommsPhone | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *bingfinance* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *zunevideo* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *ScreenSketch* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Paint3D* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *UbuntuonWindows* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Duolingo* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *PandoraMediaInc* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *CandyCrush* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *BubbleWitch3Saga* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Wunderlist* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *CandyCrush* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Duolingo* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Flipboard* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Paint3D* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *PandoraMediaInc* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *ScreenSketch* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *UbuntuonWindows* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Wunderlist* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *zunevideo* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage CommsPhone | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage ConnectivityStore | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage Getstarted | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage Microsoft.Messaging | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage WindowsAlarms | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage WindowsPhone | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsFeedbackHub* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Drawboard PDF* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *zune* | Remove-AppxPackage"
+Powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'Internet-Explorer-Optional-amd64' -NoRestart"
+Powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
+PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
+PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -NoRestart"
+
 
 echo  Tweaking Network (Be Patient...)
 netsh winsock reset
@@ -341,7 +351,6 @@ reg add "%%r" /v "WakeOnSlot" /t REG_SZ /d "0" /f
 reg add "%%r" /v "WolShutdownLinkSpeed" /t REG_SZ /d "2" /f
 )
 
-:: Core 2 Affinity
 for /F %%n in ('wmic path win32_networkadapter get PNPDeviceID ^| findstr /L "VEN_"') do (
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "AssignmentSetOverride" /t REG_BINARY /d "04" /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePolicy" /t REG_DWORD /d "4" /f
@@ -413,67 +422,20 @@ del /s /f /q C:\Windows\Prefetch\*.*
 del /s /f /q C:\Windows\Temp\*.*
 del /s /f /q %USERPROFILE%\appdata\local\temp\*.*
 
-if((Get-WindowsOptionalFeature -FeatureName 'Internet-Explorer-Optional-amd64' -Online).State -eq "Enabled") {
-    Disable-WindowsOptionalFeature -Online -FeatureName 'Internet-Explorer-Optional-amd64' -NoRestart
-}
-if((Get-WindowsOptionalFeature -FeatureName 'SmbDirect' -Online).State -eq "Enabled") {
-    Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart
-}
-if((Get-WindowsOptionalFeature -FeatureName 'SMB1Protocol' -Online).State -eq "Enabled") {
-    Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart
-}
-if((Get-WindowsOptionalFeature -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -Online).State -eq "Enabled") {
-    Disable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -NoRestart
-}
 
-set DNS1=1.1.1.1
-set DNS2=9.9.9.9
-if "%INTERFACE%"=="" for /f "tokens=3,*" %%i in ('netsh int show interface^|find "Connected"') do set INTERFACE=%%j
-if "%IP%"=="" for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "IP Address" ^| findstr [0-9]') do set IP=%%i
-if "%MASK%"=="" for /f "tokens=2 delims=()" %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr /r "(.*)"') do for %%j in (%%i) do set MASK=%%j
-if "%GATEWAY%"=="" for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "Default" ^| findstr [0-9]') do set GATEWAY=%%i
-if "%DNS1%"=="" for /f "tokens=2 delims=: " %%i in ('echo quit^|nslookup^|find "Address:"') do set DNS1=%%i
-call:isValidIP %IP%
-call:isValidIP %MASK%
-call:isValidIP %GATEWAY%
-call:isValidIP %DNS1%
-if defined DNS2 call:isValidIP %DNS2%
-if defined _notValidIP (
-echo  Setting a static IP failed. Exiting program . . .
-pause
-exit /b 2
-)
-netsh int ipv4 set address name="%INTERFACE%" static %IP% %MASK% %GATEWAY%
-netsh int ipv4 set dns name="%INTERFACE%" static %DNS1% primary
-if defined DNS2 netsh int ipv4 add dns name="%INTERFACE%" %DNS2% index=2
-for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "DHCP" ^| findstr [a-z]') do set DHCP=%%i
-if "%DHCP%"=="Yes" (
-echo  Setting a static IP failed. Exiting program . . .
-pause
-exit /b 2
-) else (
-netsh int set interface name="%INTERFACE%" admin="disabled" && netsh int set interface name="%INTERFACE%" admin="enabled"
-)
-:isValidIP
-for /F "tokens=1-4 delims=./" %%a in ("%1") do (
-if %%a LSS 1 set _notValidIP=1
-if %%a GTR 255 set _notValidIP=1
-if %%b LSS 0 set _notValidIP=1
-if %%b GTR 255 set _notValidIP=1
-if %%c LSS 0 set _notValidIP=1
-if %%c GTR 255 set _notValidIP=1
-if %%d LSS 0 set _notValidIP=1
-if %%d GTR 255 set _notValidIP=1
-)
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "10" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d "1" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "18" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d "High" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d "20" /f
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d "20" /f
 
-LODCTR /R
-LODCTR /R
 
 setlocal ENABLEDELAYEDEXPANSION
-
-:: CHECK FOR ADMIN PRIVILEGES
-dism || (echo This script must be Run as Administrator. && pause && exit /b 1)
-
 set WHITELIST=ACPI AcpiDev AcpiPmi AFD AMDPCIDev amdgpio2 amdgpio3 AmdPPM amdpsp amdsata amdsbs amdxata asmtxhci atikmdag BasicDisplay BasicRender dc1-controll Disk DXGKrnl e1iexpress e1rexpress genericusbfn hwpolicy IntcAzAudAdd kbdclass kbdhid MMCSS monitor mouclass mouhid mountmgr mt7612US MTConfig NDIS nvdimm nvlddmkm pci PktMon Psched rt640x64 RTCore64 RzCommon RzDev_0244 Tcpip usbehci usbhub USBHUB3 USBXHCI Wdf01000 xboxgip xinputhid
 for /f %%i in ('driverquery ^| findstr "!WHITELIST!"') do set "DRIVERLIST=!DRIVERLIST!%%i\0"
 reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "LargePageDrivers" /t REG_MULTI_SZ /d "!DRIVERLIST!" /f
@@ -508,6 +470,7 @@ reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Device Metadata" /f
 :: Remove Storage Sense
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense" /f
 :: Constantly pool interrupts, dynamic tick was implemented as a power saving feature for laptops
+bcdedit /deletevalue useplatformclock
 bcdedit /set disabledynamictick yes
 :: Disable synthetic tick
 bcdedit /set useplatformtick Yes
