@@ -311,7 +311,6 @@ for /F %%r in ('reg query "HKLM\SYSTEM\ControlSet001\Control\Class\{4D36E972-E32
 reg add "%%r" /v "*EEE" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*FlowControl" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*InterruptModeration" /t REG_SZ /d "0" /f
-reg add "%%r" /v "*JumboPacket" /t REG_SZ /d "1415" /f
 reg add "%%r" /v "*LsoV1IPv4" /t REG_SZ /d "1" /f
 reg add "%%r" /v "*LsoV2IPv4" /t REG_SZ /d "1" /f
 reg add "%%r" /v "*LsoV2IPv6" /t REG_SZ /d "1" /f
@@ -320,14 +319,12 @@ reg add "%%r" /v "*NumRssQueues" /t REG_SZ /d "1" /f
 reg add "%%r" /v "*PMARPOffload" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*PMNSOffload" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*PriorityVLANTag" /t REG_SZ /d "0" /f
-reg add "%%r" /v "*ReceiveBuffers" /t REG_SZ /d "112" /f
-reg add "%%r" /v "*RSS" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*RSS" /t REG_SZ /d "2" /f
 reg add "%%r" /v "*RssBaseProcNumber" /t REG_SZ /d "1" /f
 reg add "%%r" /v "*RssMaxProcNumber" /t REG_SZ /d "1" /f
 reg add "%%r" /v "*SpeedDuplex" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*TCPChecksumOffloadIPv4" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*TCPChecksumOffloadIPv6" /t REG_SZ /d "0" /f
-reg add "%%r" /v "*TransmitBuffers" /t REG_SZ /d "112" /f
 reg add "%%r" /v "*WakeOnMagicPacket" /t REG_SZ /d "0" /f
 reg add "%%r" /v "*WakeOnPattern" /t REG_SZ /d "0" /f
 reg add "%%r" /v "AdvancedEEE" /t REG_SZ /d "0" /f
