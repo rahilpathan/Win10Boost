@@ -88,7 +88,6 @@ schtasks.exe /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentFallBac
 schtasks.exe /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn"
 schtasks /Change /TN "Microsoft\Windows\Defrag\ScheduledDefrag" /disable
 schtasks /Change /TN "Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /Disable
-schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable
 schtasks /Change /TN "Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /Disable
 schtasks /Change /TN "Microsoft\Windows\Diagnosis\Scheduled" /Disable
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
@@ -276,7 +275,6 @@ netsh int tcp set global netdma=enabled
 netsh int tcp set global nonsackrttresiliency=disabled
 netsh int tcp set global rsc=disabled
 netsh int tcp set global rss=enabled
-netsh int tcp set global timestamps=disabled
 netsh int tcp set heuristics disabled
 netsh int tcp set security mpp=disabled
 netsh int tcp set security profiles=disabled
@@ -284,24 +282,12 @@ netsh int tcp set global initialRto=3000
 netsh int tcp set global maxsynretransmissions=2
 netsh int tcp set global timestamps=disabled
 netsh int tcp set heuristics=disabled
-netsh int tcp set global autotuninglevel=disable
 netsh int tcp set global congestionprovider=ctcp
 netsh int tcp set supplemental Internet congestionprovider=CTCP
-netsh int tcp set global chimney=disabled
-netsh int tcp set global ecncapability=disabled
-netsh int tcp set global rss=enabled
-netsh int tcp set global rsc=disabled
-netsh int tcp set global dca=enabled
-netsh int tcp set global netdma=enabled
-netsh.exe int tcp set global dca=enabled
-netsh.exe int tcp set global netdma=enabled
-netsh.exe int tcp set global rss=disabled
-netsh.exe int tcp set global rsc=disabled
 
 reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d 4294967295 /f
 reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 0 /f
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "IRPStackSize" /t REG_DWORD /d 20 /f
-PAUSE
 
 PowerShell Disable-NetAdapterChecksumOffload -Name "*"
 PowerShell Disable-NetAdapterLso -Name "*"
@@ -310,6 +296,64 @@ PowerShell Disable-NetAdapterIPsecOffload -Name "*"
 PowerShell Disable-NetAdapterPowerManagement -Name "*"
 PowerShell Disable-NetAdapterQos -Name "*"
 PowerShell Disable-MMAgent -MemoryCompression
+
+for /F %%r in ('reg query "HKLM\SYSTEM\ControlSet001\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}" /f "PCI\VEN" /d /s^|Findstr HKEY') do (
+reg add "%%r" /v "*EEE" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*FlowControl" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*InterruptModeration" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*JumboPacket" /t REG_SZ /d "1415" /f
+reg add "%%r" /v "*LsoV1IPv4" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*LsoV2IPv4" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*LsoV2IPv6" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*ModernStandbyWoLMagicPacket" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*NumRssQueues" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*PMARPOffload" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*PMNSOffload" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*PriorityVLANTag" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*ReceiveBuffers" /t REG_SZ /d "112" /f
+reg add "%%r" /v "*RSS" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*RssBaseProcNumber" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*RssMaxProcNumber" /t REG_SZ /d "1" /f
+reg add "%%r" /v "*SpeedDuplex" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*TCPChecksumOffloadIPv4" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*TCPChecksumOffloadIPv6" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*TransmitBuffers" /t REG_SZ /d "112" /f
+reg add "%%r" /v "*WakeOnMagicPacket" /t REG_SZ /d "0" /f
+reg add "%%r" /v "*WakeOnPattern" /t REG_SZ /d "0" /f
+reg add "%%r" /v "AdvancedEEE" /t REG_SZ /d "0" /f
+reg add "%%r" /v "AutoDisableGigabit" /t REG_SZ /d "0" /f
+reg add "%%r" /v "EEELinkAdvertisement" /t REG_SZ /d "0" /f
+reg add "%%r" /v "EnableGreenEthernet" /t REG_SZ /d "0" /f
+reg add "%%r" /v "EnablePME" /t REG_SZ /d "0" /f
+reg add "%%r" /v "EnableTss" /t REG_SZ /d "0" /f
+reg add "%%r" /v "GigaLite" /t REG_SZ /d "0" /f
+reg add "%%r" /v "ITR" /t REG_SZ /d "0" /f
+reg add "%%r" /v "LogLinkStateEvent" /t REG_SZ /d "51" /f
+reg add "%%r" /v "MasterSlave" /t REG_SZ /d "0" /f
+reg add "%%r" /v "PowerSavingMode" /t REG_SZ /d "0" /f
+reg add "%%r" /v "ReduceSpeedOnPowerDown" /t REG_SZ /d "0" /f
+reg add "%%r" /v "S5WakeOnLan" /t REG_SZ /d "0" /f
+reg add "%%r" /v "TxIntDelay" /t REG_SZ /d "5" /f
+reg add "%%r" /v "ULPMode" /t REG_SZ /d "0" /f
+reg add "%%r" /v "WaitAutoNegComplete" /t REG_SZ /d "0" /f
+reg add "%%r" /v "WakeOnLink" /t REG_SZ /d "0" /f
+reg add "%%r" /v "WakeOnSlot" /t REG_SZ /d "0" /f
+reg add "%%r" /v "WolShutdownLinkSpeed" /t REG_SZ /d "2" /f
+)
+
+:: Core 2 Affinity
+for /F %%n in ('wmic path win32_networkadapter get PNPDeviceID ^| findstr /L "VEN_"') do (
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "AssignmentSetOverride" /t REG_BINARY /d "04" /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePolicy" /t REG_DWORD /d "4" /f
+)
+
+powershell Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterLso -Name "*" -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterRsc -Name "*" -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterIPsecOffload -Name "*" -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterPowerManagement -Name "*" -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterChecksumOffload -Name "*" -ErrorAction SilentlyContinue
+powershell Disable-NetAdapterEncapsulatedPacketTaskOffload -Name "*" -ErrorAction SilentlyContinue
 
 reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 255 /f
@@ -353,26 +397,152 @@ reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i"
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
 
-PAUSE
-
 echo NTFS Tweaks
 fsutil behavior set disablelastaccess 3
 fsutil behavior set encryptpagingfile 0
 reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\FileHistory" /v "Disabled" /t REG_DWORD /d 1 /f
 reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\I/O System" /v "IoBlockLegacyFsFilters" /t REG_DWORD /d 1 /f
-schtasks /Change /DISABLE /TN "\Microsoft\Windows\FileHistory\File History (maintenance mode)"
-
-echo Final step, press any key to continue...
 
 PAUSE
+echo Final step, press any key to continue...
+
 powercfg /h off
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 
-taskkill /f /im explorer.exe
 del /s /f /q C:\Windows\Prefetch\*.*
 del /s /f /q C:\Windows\Temp\*.*
 del /s /f /q %USERPROFILE%\appdata\local\temp\*.*
-explorer.exe
+
+if((Get-WindowsOptionalFeature -FeatureName 'Internet-Explorer-Optional-amd64' -Online).State -eq "Enabled") {
+    Disable-WindowsOptionalFeature -Online -FeatureName 'Internet-Explorer-Optional-amd64' -NoRestart
+}
+if((Get-WindowsOptionalFeature -FeatureName 'SmbDirect' -Online).State -eq "Enabled") {
+    Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart
+}
+if((Get-WindowsOptionalFeature -FeatureName 'SMB1Protocol' -Online).State -eq "Enabled") {
+    Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart
+}
+if((Get-WindowsOptionalFeature -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -Online).State -eq "Enabled") {
+    Disable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -NoRestart
+}
+
+set DNS1=1.1.1.1
+set DNS2=9.9.9.9
+if "%INTERFACE%"=="" for /f "tokens=3,*" %%i in ('netsh int show interface^|find "Connected"') do set INTERFACE=%%j
+if "%IP%"=="" for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "IP Address" ^| findstr [0-9]') do set IP=%%i
+if "%MASK%"=="" for /f "tokens=2 delims=()" %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr /r "(.*)"') do for %%j in (%%i) do set MASK=%%j
+if "%GATEWAY%"=="" for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "Default" ^| findstr [0-9]') do set GATEWAY=%%i
+if "%DNS1%"=="" for /f "tokens=2 delims=: " %%i in ('echo quit^|nslookup^|find "Address:"') do set DNS1=%%i
+call:isValidIP %IP%
+call:isValidIP %MASK%
+call:isValidIP %GATEWAY%
+call:isValidIP %DNS1%
+if defined DNS2 call:isValidIP %DNS2%
+if defined _notValidIP (
+echo  Setting a static IP failed. Exiting program . . .
+pause
+exit /b 2
+)
+netsh int ipv4 set address name="%INTERFACE%" static %IP% %MASK% %GATEWAY%
+netsh int ipv4 set dns name="%INTERFACE%" static %DNS1% primary
+if defined DNS2 netsh int ipv4 add dns name="%INTERFACE%" %DNS2% index=2
+for /f "tokens=3 delims=: " %%i in ('netsh int ip show config name^="%INTERFACE%" ^| findstr "DHCP" ^| findstr [a-z]') do set DHCP=%%i
+if "%DHCP%"=="Yes" (
+echo  Setting a static IP failed. Exiting program . . .
+pause
+exit /b 2
+) else (
+netsh int set interface name="%INTERFACE%" admin="disabled" && netsh int set interface name="%INTERFACE%" admin="enabled"
+)
+:isValidIP
+for /F "tokens=1-4 delims=./" %%a in ("%1") do (
+if %%a LSS 1 set _notValidIP=1
+if %%a GTR 255 set _notValidIP=1
+if %%b LSS 0 set _notValidIP=1
+if %%b GTR 255 set _notValidIP=1
+if %%c LSS 0 set _notValidIP=1
+if %%c GTR 255 set _notValidIP=1
+if %%d LSS 0 set _notValidIP=1
+if %%d GTR 255 set _notValidIP=1
+)
+
+LODCTR /R
+LODCTR /R
+
+setlocal ENABLEDELAYEDEXPANSION
+
+:: CHECK FOR ADMIN PRIVILEGES
+dism || (echo This script must be Run as Administrator. && pause && exit /b 1)
+
+set WHITELIST=ACPI AcpiDev AcpiPmi AFD AMDPCIDev amdgpio2 amdgpio3 AmdPPM amdpsp amdsata amdsbs amdxata asmtxhci atikmdag BasicDisplay BasicRender dc1-controll Disk DXGKrnl e1iexpress e1rexpress genericusbfn hwpolicy IntcAzAudAdd kbdclass kbdhid MMCSS monitor mouclass mouhid mountmgr mt7612US MTConfig NDIS nvdimm nvlddmkm pci PktMon Psched rt640x64 RTCore64 RzCommon RzDev_0244 Tcpip usbehci usbhub USBHUB3 USBXHCI Wdf01000 xboxgip xinputhid
+for /f %%i in ('driverquery ^| findstr "!WHITELIST!"') do set "DRIVERLIST=!DRIVERLIST!%%i\0"
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "LargePageDrivers" /t REG_MULTI_SZ /d "!DRIVERLIST!" /f
+
+:: Some settings are managed by organization
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Policies" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Policies" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies" /F
+REG DELETE "HKEY_CURRENT_USER\Software\Policies" /F
+REG DELETE "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies" /F
+
+
+for /F %%a in ('WMIC PATH Win32_USBHub GET DeviceID^| FINDSTR /L "VID_"') DO (
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "EnhancedPowerManagementEnabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "AllowIdleIrpInD3" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "DeviceSelectiveSuspended" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "SelectiveSuspendEnabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "SelectiveSuspendOn" /t REG_DWORD /d "0" /f	
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "fid_D1Latency" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "fid_D2Latency" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Enum\%%a\Device Parameters" /v "fid_D3Latency" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\usbflags" /v "fid_D1Latency" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\usbflags" /v "fid_D2Latency" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\usbflags" /v "fid_D3Latency" /t REG_DWORD /d "0" /f
+)
+for /F "tokens=*" %%a in ('reg query "HKLM\System\CurrentControlSet\Enum" /S /F "StorPort"^| FINDSTR /E "StorPort"') DO (
+reg add "%%a" /v "EnableIdlePowerManagement" /t REG_DWORD /d "0" /f
+)
+:: Remove Metadata Tracking
+reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Device Metadata" /f
+:: Remove Storage Sense
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense" /f
+:: Constantly pool interrupts, dynamic tick was implemented as a power saving feature for laptops
+bcdedit /set disabledynamictick yes
+:: Disable synthetic tick
+bcdedit /set useplatformtick Yes
+:: Enhanced Sync Policy
+bcdedit /set tscsyncpolicy Enhanced
+:: Disable Data Execution Prevention Security Feature
+bcdedit /set nx AlwaysOff
+:: Disable Emergency Management Services
+bcdedit /set ems No
+bcdedit /set bootems No
+:: Disable code integrity services
+bcdedit /set integrityservices disable
+:: Disable TPM Boot Entropy policy Security Feature
+bcdedit /set tpmbootentropy ForceDisable
+:: Change bootmenupolicy to be able to F8
+bcdedit /set bootmenupolicy Legacy
+:: Disable kernel ddebugger
+bcdedit /set debug No
+:: Disable Virtual Secure Mode from Hyper-V
+bcdedit /set hypervisorlaunchtype Off
+:: Disable the Controls the loading of Early Launch Antimalware (ELAM) drivers
+bcdedit /set disableelamdrivers Yes
+:: Disable some of the kernel memory mitigations, gamers dont use SGX under any possible circumstance
+bcdedit /set isolatedcontext No
+bcdedit /set allowedinmemorysettings 0x0
+:: Disable DMA memory protection and cores isolation
+bcdedit /set vm No
+bcdedit /set vsmlaunchtype Off
+:: Enable X2Apic and enable Memory Mapping for PCI-E devices
+:: (for best results, further more enable MSI mode for all devices using MSI utility or manually)
+bcdedit /set x2apicpolicy Enable
+bcdedit /set configaccesspolicy Default
+bcdedit /set MSI Default
+bcdedit /set usephysicaldestination No
+bcdedit /set usefirmwarepcisettings No
 
 echo Select Ultimate performance scheme from Power options, All set!
 PAUSE
