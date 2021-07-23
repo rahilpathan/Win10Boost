@@ -367,5 +367,12 @@ echo Final step, press any key to continue...
 PAUSE
 powercfg /h off
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+
+taskkill /f /im explorer.exe
+del /s /f /q C:\Windows\Prefetch\*.*
+del /s /f /q C:\Windows\Temp\*.*
+del /s /f /q %USERPROFILE%\appdata\local\temp\*.*
+explorer.exe
+
 echo Select Ultimate performance scheme from Power options, All set!
 PAUSE
