@@ -499,9 +499,10 @@ bcdedit /set usefirmwarepcisettings No
 echo | set /p=Restarting Explorer... 
 taskkill /f /im explorer.exe >nul & explorer.exe
 schtasks /delete /tn "CreateExplorerShellUnelevatedTask" /f > nul
+wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
+wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
 echo OK.
 
-echo.
 echo Deleting spyware tasks...
 set spy_tasks=^
 	"Microsoft\Office\Office 15 Subscription Heartbeat"^
