@@ -328,58 +328,90 @@ PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Pr
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Client-EmbeddedExp-Package' -NoRestart"
 
 echo  Tweaking Network (Be Patient...)
-netsh winsock reset
-netsh interface teredo set state disabled
-netsh interface 6to4 set state disabled
-netsh int isatap set state disable
-netsh int ip set global neighborcachelimit=4096
-netsh int ip set global taskoffload=disabled
-netsh int tcp set global autotuninglevel=disable
-netsh int tcp set global chimney=disabled
-netsh int tcp set global dca=enabled
-netsh int tcp set global ecncapability=disabled
-netsh int tcp set global netdma=enabled
-netsh int tcp set global nonsackrttresiliency=disabled
-netsh int tcp set global rsc=disabled
-netsh int tcp set global rss=enabled
-netsh int tcp set heuristics disabled
-netsh int tcp set security mpp=disabled
-netsh int tcp set security profiles=disabled
-netsh int tcp set global initialRto=3000
-netsh int tcp set global maxsynretransmissions=2
-netsh int tcp set global timestamps=disabled
-netsh int tcp set heuristics=disabled
-netsh int tcp set global congestionprovider=ctcp
-netsh int tcp set supplemental Internet congestionprovider=CTCP
-
-PowerShell Disable-NetAdapterChecksumOffload -Name "*"
-PowerShell Disable-NetAdapterLso -Name "*"
-PowerShell Disable-NetAdapterRsc -Name "*"
-PowerShell Disable-NetAdapterIPsecOffload -Name "*"
-PowerShell Disable-NetAdapterPowerManagement -Name "*"
-PowerShell Disable-NetAdapterQos -Name "*"
-PowerShell Disable-MMAgent -MemoryCompression
-PowerShell Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterLso -Name "*" -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterRsc -Name "*" -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterIPsecOffload -Name "*" -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterPowerManagement -Name "*" -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterChecksumOffload -Name "*" -ErrorAction SilentlyContinue
-PowerShell Disable-NetAdapterEncapsulatedPacketTaskOffload -Name "*" -ErrorAction SilentlyContinue
-
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "10" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d "1" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "18" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d "High" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d "20" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d "20" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 255 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
-reg add "HKLM\Software\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
+PAUSE
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "dnscachetimeout" /t reg_dword /d "7200" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "keepalivetimeout" /t reg_dword /d "300000" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsper1_0server" /t reg_dword /d "10" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsperserver" /t reg_dword /d "10" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "receivetimeout" /t reg_dword /d "60000" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "serverinfotimeout" /t reg_dword /d "300000" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "socketreceivebufferlength" /t reg_dword /d "65536" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "socketsendbufferlength" /t reg_dword /d "65536" /f
+reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "tcpautotuning" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "disablebandwidththrottling" /t reg_dword /d "00000001" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "disablelargemtu" /t reg_dword /d "00000000" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "keepconn" /t reg_dword /d "00015180" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "maxcmds" /t reg_dword /d "00000001" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "maxcollectioncount" /t reg_dword /d "00000020" /f
+reg add "HKEY_LOCAL_MACHINE\System\currentcontrolset\services\lanmanworkstation\parameters" /v "maxthreads" /t reg_dword /d "00000064" /f
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DnsClient" /v "EnableMulticast" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\NetBT\Parameters" /v "NameSrvQueryTimeout" /t REG_DWORD /d "3000" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters" /v "MaximumUdpPacketSize" /t REG_DWORD /d "1280" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d "384" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d "86400" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxNegativeCacheTtl" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxSOACacheEntryTtlLimit" /t REG_DWORD /d "300" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeSOACacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "ServiceDllUnloadOnStop" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "maxcachettl" /t REG_DWORD /d "13824" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "40" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableDeadGWDetect" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUBHDetect" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUDiscovery" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPA" /t REG_DWORD /d 00000001 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableWsd" /t REG_DWORD /d 00000000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "ForwardBroadcasts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "GlobalMaxTcpWindowSize" /t REG_DWORD /d "66550" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "IGMPLevel" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "IPEnableRouter" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "KeepAliveInterval" /t REG_DWORD /d "100" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "KeepAliveTime" /t REG_DWORD /d "500000" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxConnectionsPerServer" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxFreeTcbs" /t REG_DWORD /d "65536" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxHashTableSize" /t REG_DWORD /d "65535" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "NumTCBTablePartitions" /t REG_DWORD /d "4" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "SackOpts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "SynAttackProtect" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxDupAcks" /t REG_DWORD /d "2" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "30" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v DisableLargeMTU /t REG_DWORD /d 00000000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableConnectionRateLimiting /t REG_DWORD /d 00000000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableDCA /t REG_DWORD /d 00000001 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v QualifyingDestinationThreshold /t REG_DWORD /d 00000003 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TCPMaxDataRetransmissions /t REG_DWORD /d 00000005 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpCreateAndConnectTcbRateLimitDepth /t REG_DWORD /d 00000000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpNumConnections /t REG_DWORD /d 00000500 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "IPAutoconfigurationEnabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "MTU" /t REG_DWORD /d "1492" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "PerformRouterDiscovery" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpAckFrequency" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpWindowSize" /t REG_DWORD /d "66550" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d "16" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d "16" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "UseDelayedAcceptance" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "Class" /t REG_DWORD /d "8" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostsPriority" /t REG_DWORD /d "5" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "LocalPriority" /t REG_DWORD /d "4" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d "7" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "10" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "18" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d "High" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Psched" /v "MaxOutstandingSends" /t REG_DWORD /d "1" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Psched" /v "TimerResolution" /t REG_DWORD /d "1" /f
@@ -387,6 +419,14 @@ reg add "HKLM\Software\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureContr
 reg add "HKLM\Software\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER" /v "iexplore.exe" /t REG_DWORD /d "10" /f
 reg add "HKLM\Software\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER" /v "explorer.exe" /t REG_DWORD /d "10" /f
 reg add "HKLM\Software\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER" /v "iexplore.exe" /t REG_DWORD /d "10" /f
+reg add "HKLM\Software\microsoft\internet explorer\main\featurecontrol\feature_maxconnectionsper1_0server" /v "explorer.exe" /t reg_dword /d "10" /f
+reg add "HKLM\Software\microsoft\internet explorer\main\featurecontrol\feature_maxconnectionsper1_0server" /v "iexplore.exe" /t reg_dword /d "10" /f
+reg add "HKLM\Software\microsoft\internet explorer\main\featurecontrol\feature_maxconnectionsperserver" /v "explorer.exe" /t reg_dword /d "10" /f
+reg add "HKLM\Software\microsoft\internet explorer\main\featurecontrol\feature_maxconnectionsperserver" /v "iexplore.exe" /t reg_dword /d "10" /f
+reg add "HKLM\Software\microsoft\windows nt\currentversion\multimedia\systemprofile" /v "alwayson" reg_dword /d "00000001" /f
+reg add "HKLM\Software\microsoft\windows nt\currentversion\multimedia\systemprofile" /v "networkthrottlingindex" /t reg_dword /d "4294967295" /f
+reg add "HKLM\Software\microsoft\windows nt\currentversion\multimedia\systemprofile" /v "nolazymode" reg_dword /d "00000001" /f
+reg add "HKLM\Software\microsoft\windows nt\currentversion\multimedia\systemprofile" /v "systemresponsiveness" reg_dword /d "00000000" /f
 reg add "HKLM\System\CurrentControlSet\Services\AFD\Parameters" /v "DefaultReceiveWindow" /t REG_DWORD /d "16384" /f
 reg add "HKLM\System\CurrentControlSet\Services\AFD\Parameters" /v "DefaultSendWindow" /t REG_DWORD /d "16384" /f
 reg add "HKLM\System\CurrentControlSet\Services\AFD\Parameters" /v "DisableRawSecurity" /t REG_DWORD /d "1" /f
@@ -397,27 +437,120 @@ reg add "HKLM\System\CurrentControlSet\Services\AFD\Parameters" /v "IgnorePushBi
 reg add "HKLM\System\CurrentControlSet\Services\AFD\Parameters" /v "NonBlockingSendSpecialBuffering" /t REG_DWORD /d "1" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d "255" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d "1" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUBHDetect" /t REG_DWORD /d "0" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUDiscovery" /t REG_DWORD /d "1" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "GlobalMaxTcpWindowSize" /t REG_DWORD /d "5840" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxConnectionsPerServer" /t REG_DWORD /d "0" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "SackOpts" /t REG_DWORD /d "0" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "0" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxDupAcks" /t REG_DWORD /d "2" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "32" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpWindowSize" /t REG_DWORD /d "5840" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpAckFrequency" /t REG_DWORD /d "1" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d "16" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d "16" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "UseDelayedAcceptance" /t REG_DWORD /d "0" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostsPriority" /t REG_DWORD /d "5" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "LocalPriority" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d "7" /f
+reg add "HKLM\System\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d "20" /f
+reg add "HKLM\System\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d "20" /f
+reg add "HKLM\System\CurrentControlSet\services\TCPIP6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 255 /f
+reg add "HKLM\System\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
+reg add "HKLM\System\controlset001\services\netbt\parameters" /v "namesrvquery" /t reg_dword /d "3000" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "defaultreceivewindow" /t reg_dword /d "66550" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "defaultsendwindow" /t reg_dword /d "66550" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "dynamicbackloggrowthdelta" /t reg_dword /d "10" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "enabledynamicbacklog" /t reg_dword /d "1" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastcopyreceivethreshold" /t reg_dword /d "1500" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastsenddatagramthreshold" /t reg_dword /d "1500" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastsenddatagramthreshold" /t reg_dword /d 16384/f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "irpstacksize" /t reg_dword /d "50" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "largebuffersize" /t reg_dword /d "32768" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "maximumdynamicbacklog" /t reg_dword /d "20000" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "mediumbuffersize" /t reg_dword /d "12032" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "minimumdynamicbacklog" /t reg_dword /d "20" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "priorityboost" /t reg_dword /d "8" /f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "smallbuffersize" /t reg_dword /d "1024" /f
+reg add "HKLM\System\currentcontrolset\services\dns\parameters" /v "maximumudppacketsize" /t reg_dword /d "512" /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v disablebandwidththrottling /t reg_dword /d 00000001 /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v keepalivetime /t reg_dword /d "0" /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v maxmpxct /t reg_dword /d "2048" /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v maxworkitems /t reg_dword /d "8192" /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v size /t reg_dword /d "3" /f
+reg add "HKLM\System\currentcontrolset\services\lanmanserver\parameters" /v sizreqbuf /t reg_dword /d 00006300 /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v "globalmaxtcpwindowsize" /t reg_dword /d "65340" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v disablelargemtu /t reg_dword /d "00000000" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v enableconnectionratelimiting /t reg_dword /d "00000000" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v enabledca /t reg_dword /d "00000001" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v qualifyingdestinationthreshold /t reg_dword /d "00000003" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpcreateandconnecttcbratelimitdepth /t reg_dword /d "00000000" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpmaxdataretransmissions /t reg_dword /d "00000005" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpnumconnections /t reg_dword /d "00000500" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters\interfaces\%guid1%" /v "mtu" /t reg_dword /d "1500" /f
+reg add "HKLM\System\currentcontrolset\services\tcpip\parameters\interfaces\%guid1%" /v "tcpwindowsize" /t reg_dword /d "65340" /f
+reg add "hku\.default\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsper1_0server" /t reg_dword /d "10" /f
+reg add "hku\.default\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsperserver" /t reg_dword /d "10" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpInitialRTT" /f
+regsvr32 /s actxprxy.dll
+PowerShell Disable-MMAgent -MemoryCompression
+PowerShell Disable-NetAdapterChecksumOffload -Name "*"
+PowerShell Disable-NetAdapterChecksumOffload -Name "*" -ErrorAction SilentlyContinue
+PowerShell Disable-NetAdapterEncapsulatedPacketTaskOffload -Name "*" -ErrorAction SilentlyContinue
+PowerShell Disable-NetAdapterIPsecOffload -Name "*"
+PowerShell Disable-NetAdapterIPsecOffload -Name "*" -ErrorAction SilentlyContinue
+PowerShell Disable-NetAdapterLso -Name "*"
+PowerShell Disable-NetAdapterLso -Name "*" -ErrorAction SilentlyContinue
+PowerShell Disable-NetAdapterPowerManagement -Name "*"
+PowerShell Disable-NetAdapterPowerManagement -Name "*" -ErrorAction SilentlyContinue
+PowerShell Disable-NetAdapterQos -Name "*"
+PowerShell Disable-NetAdapterRsc -Name "*"
+PowerShell Disable-NetAdapterRsc -Name "*" -ErrorAction SilentlyContinue
+PowerShell Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue
+for /F %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do set GUID1=%%i
+ipconfig /flushdns
+ipconfig /release
+ipconfig /renew
+netsh branchcache flush
+netsh branchcache reset
+netsh int 6to4 set state disabled
+netsh int ip delete arpcache
+netsh int ip reset
+netsh int ip set global neighborcachelimit=4096
+netsh int ip set global taskoffload=disabled
+netsh int ipv4 reset reset.log
+netsh int ipv4 set interface "Ethernet" mtu=1500
+netsh int ipv4 set interface "Ethernet" mtu=1500 store=persistent
+netsh int ipv4 set interface "Local Area Connection" mtu=1500
+netsh int ipv4 set interface "Local Area Connection" mtu=1500 store=persistent
+netsh int ipv4 set interface "Wi-Fi" mtu=1500
+netsh int ipv4 set interface "Wi-Fi" mtu=1500 store=persistent
+netsh int ipv6 reset reset.log
+netsh int ipv6 set interface "Ethernet" mtu=1500 store=persistent
+netsh int ipv6 set interface "Local Area Connection" mtu=1500 store=persistent
+netsh int ipv6 set interface "Wi-Fi" mtu=1500 store=persistent
+netsh int isatap set state disable
+netsh int tcp reset
+netsh int tcp set global autotuninglevel=disable
+netsh int tcp set global autotuninglevel=disabled
+netsh int tcp set global chimney=disabled
+netsh int tcp set global congestionprovider=ctcp
+netsh int tcp set global dca=enabled
+netsh int tcp set global ecncapability=disabled
+netsh int tcp set global ecncapability=enabled
+netsh int tcp set global fastopen=enabled
+netsh int tcp set global initialRto=3000
+netsh int tcp set global maxsynretransmissions=2
+netsh int tcp set global netdma=enabled
+netsh int tcp set global nonsackrttresiliency=disabled
+netsh int tcp set global rsc=disabled
+netsh int tcp set global rss=enabled
+netsh int tcp set global timestamps=disabled
+netsh int tcp set heuristics disabled
+netsh int tcp set heuristics=disabled
+netsh int tcp set security mpp=disabled
+netsh int tcp set security profiles=disabled
+netsh int tcp set supplemental Internet congestionprovider=CTCP
+netsh int tcp set supplemental InternetCustom congestionprovider=CTCP
+netsh int tcp set supplemental custom congestionprovider=CTCP
+netsh int teredo set state disabled
+netsh interface 6to4 set state disabled
+netsh interface teredo set state disabled
+netsh winsock reset
+netsh winsock reset catalog
+netsh winsock set autotuning off
+PAUSE
 
 echo NTFS Tweaks
 fsutil behavior set disablelastaccess 3
@@ -501,6 +634,43 @@ taskkill /f /im explorer.exe >nul & explorer.exe
 schtasks /delete /tn "CreateExplorerShellUnelevatedTask" /f > nul
 wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
 wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
+del C:\Temp /S /Q /F
+del C:\Temp /S /Q /A:H
+FOR /D %%p IN ("C:\Temp\*") DO rmdir "%%p" /s /q
+del C:\Windows\Temp /S /Q /F
+del C:\Windows\Temp /S /Q /A:H
+FOR /D %%p IN ("C:\Windows\Temp\*") DO rmdir "%%p" /s /q
+del /s /f /q %windir%\temp\*.*    
+rd /s /q %windir%\temp    
+md %windir%\temp    
+del /s /f /q %windir%\Prefetch\*.*    
+rd /s /q %windir%\Prefetch    
+md %windir%\Prefetch    
+del /s /f /q %windir%\system32\dllcache\*.*    
+rd /s /q %windir%\system32\dllcache    
+md %windir%\system32\dllcache    
+del /s /f /q "%SysteDrive%\Temp"\*.*    
+rd /s /q "%SysteDrive%\Temp"    
+md "%SysteDrive%\Temp"    
+del /s /f /q %temp%\*.*    
+rd /s /q %temp%    
+md %temp%    
+del /s /f /q "%USERPROFILE%\Local Settings\History"\*.*    
+rd /s /q "%USERPROFILE%\Local Settings\History"    
+md "%USERPROFILE%\Local Settings\History"    
+del /s /f /q "%USERPROFILE%\Local Settings\Temporary Internet Files"\*.*    
+rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files"    
+md "%USERPROFILE%\Local Settings\Temporary Internet Files"    
+del /s /f /q "%USERPROFILE%\Local Settings\Temp"\*.*    
+rd /s /q "%USERPROFILE%\Local Settings\Temp"    
+md "%USERPROFILE%\Local Settings\Temp"    
+del /s /f /q "%USERPROFILE%\Recent"\*.*    
+rd /s /q "%USERPROFILE%\Recent"    
+md "%USERPROFILE%\Recent"    
+del /s /f /q "%USERPROFILE%\Cookies"\*.*    
+rd /s /q "%USERPROFILE%\Cookies"    
+md "%USERPROFILE%\Cookies"
+START %windir%\Explorer
 echo OK.
 
 echo Deleting spyware tasks...
@@ -881,39 +1051,8 @@ ipconfig /flushdns
 
 PAUSE
 echo Final step, press any key to continue...
-
 powercfg /h off
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 
-del /s /f /q %windir%\temp\*.*    
-rd /s /q %windir%\temp    
-md %windir%\temp    
-del /s /f /q %windir%\Prefetch\*.*    
-rd /s /q %windir%\Prefetch    
-md %windir%\Prefetch    
-del /s /f /q %windir%\system32\dllcache\*.*    
-rd /s /q %windir%\system32\dllcache    
-md %windir%\system32\dllcache    
-del /s /f /q "%SysteDrive%\Temp"\*.*    
-rd /s /q "%SysteDrive%\Temp"    
-md "%SysteDrive%\Temp"    
-del /s /f /q %temp%\*.*    
-rd /s /q %temp%    
-md %temp%    
-del /s /f /q "%USERPROFILE%\Local Settings\History"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\History"    
-md "%USERPROFILE%\Local Settings\History"    
-del /s /f /q "%USERPROFILE%\Local Settings\Temporary Internet Files"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files"    
-md "%USERPROFILE%\Local Settings\Temporary Internet Files"    
-del /s /f /q "%USERPROFILE%\Local Settings\Temp"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\Temp"    
-md "%USERPROFILE%\Local Settings\Temp"    
-del /s /f /q "%USERPROFILE%\Recent"\*.*    
-rd /s /q "%USERPROFILE%\Recent"    
-md "%USERPROFILE%\Recent"    
-del /s /f /q "%USERPROFILE%\Cookies"\*.*    
-rd /s /q "%USERPROFILE%\Cookies"    
-md "%USERPROFILE%\Cookies"
 echo Select Ultimate performance scheme from Power options, All set!
 PAUSE
