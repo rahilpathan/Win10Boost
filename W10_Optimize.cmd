@@ -51,8 +51,8 @@ for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName
 for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName" ^| find "NvProfileUpdaterDaily"') do schtasks /Change /TN "%%~t" /Disable
 for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName" ^| find "NvProfileUpdaterOnLogon"') do schtasks /Change /TN "%%~t" /Disable
 
-schtasks.exe /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack"
-schtasks.exe /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn"
+schtasks /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack"
+schtasks /Change /DISABLE /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn"
 schtasks /Change /TN "Microsoft\Windows\Defrag\ScheduledDefrag" /disable
 schtasks /Change /TN "Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /Disable
 schtasks /Change /TN "Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /Disable
