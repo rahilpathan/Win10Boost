@@ -7,44 +7,43 @@ goto end
 
 
 echo Windows Error Reporting Service
-net stop WerSvc
+sc stop WerSvc
 sc config WerSvc start= disabled
-net stop Spooler
+sc stop Spooler
 sc config Spooler start= disabled
-net stop DiagTrack
+sc stop DiagTrack
 sc config DiagTrack start= disabled
-net stop diagnosticshub.standardcollector.service
+sc stop diagnosticshub.standardcollector.service
 sc config diagnosticshub.standardcollector.service start= disabled
-net stop "IEEtwCollectorService"
+sc stop "IEEtwCollectorService"
 sc config "IEEtwCollectorService" start= disabled
-net stop dmwappushservice
+sc stop dmwappushservice
 sc config dmwappushservice start= disabled
-net stop Fax
+sc stop Fax
 sc config Fax start= disabled
-net stop MapsBroker
+sc stop MapsBroker
 sc config MapsBroker start= disabled
-net stop RemoteRegistry
+sc stop RemoteRegistry
 sc config RemoteRegistry start= disabled
-net stop SysMain
+sc stop SysMain
 sc config SysMain start= disabled
-net stop PhoneSvc
+sc stop PhoneSvc
 sc config PhoneSvc start= disabled
-net stop TrkWks
+sc stop TrkWks
 sc config TrkWks start= disabled
-net stop "wercplsupport"
+sc stop "wercplsupport"
 sc config "wercplsupport" start= disabled
-net stop "NvTelemetryContainer"
+sc stop "NvTelemetryContainer"
 sc config "NvTelemetryContainer" start= disabled
-
 sc config xbgm start=disabled
 sc stop xbgm
 sc config XboxGipSvc start=disabled
 sc stop XboxGipSvc
-
 sc config ClickToRunSvc start= demand
 sc config BITS start= demand
 sc stop NvTelemetryContainer
 sc config NvTelemetryContainer start= disabled
+
 for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName" ^| find "NvTmMon"') do schtasks /Change /TN "%%~t" /Disable
 for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName" ^| find "NvTmRep"') do schtasks /Change /TN "%%~t" /Disable
 for /f "tokens=1 delims=," %%t in ('schtasks /Query /FO CSV ^| find /v "TaskName" ^| find "NvTmRepOnLogon"') do schtasks /Change /TN "%%~t" /Disable
@@ -155,7 +154,34 @@ schtasks /change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack2016" /DISAB
 schtasks /change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn2016" /DISABLE
 schtasks /change /TN "\Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
 schtasks /change /TN "\Microsoft\Office\Office 16 Subscription Heartbeat" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Uploader" /Disable
+schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable
+schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /Disable
 
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d 0 /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t  REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DODownloadMode /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" /v value /t REG_DWORD /d 0 /f
+reg add "HKCU\Control Panel\International\User Profile" /v HttpAcceptLanguageOptOut /t REG_DWORD /d 1 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f > NUL 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d "58" /f
@@ -305,8 +331,6 @@ PowerShell -Command "Get-AppxPackage 3DBuilder | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *bingfinance* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *BubbleWitch3Saga* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *CandyCrush* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Duolingo* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Flipboard* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Paint3D* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *PandoraMediaInc* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *ScreenSketch* | Remove-AppxPackage"
@@ -322,6 +346,18 @@ PowerShell -Command "Get-AppxPackage WindowsPhone | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *WindowsFeedbackHub* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Drawboard PDF* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *zune* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *people* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *PhotoshopExpress* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *flipboard* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Facebook* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Duolingo* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Pandora* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *ActiproSoftwareLLC* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *OfficeHub* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *MicrosoftOfficeHub* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Sway* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsMaps* | Remove-AppxPackage"
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'Internet-Explorer-Optional-amd64' -NoRestart"
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
@@ -492,7 +528,6 @@ PowerShell Disable-NetAdapterRsc -Name "*"
 PowerShell Disable-NetAdapterRsc -Name "*" -ErrorAction SilentlyContinue
 PowerShell Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue
 for /F %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do set GUID1=%%i
-ipconfig /flushdns
 ipconfig /release
 ipconfig /renew
 netsh branchcache flush
@@ -543,7 +578,7 @@ netsh interface teredo set state disabled
 netsh winsock reset
 netsh winsock reset catalog
 netsh winsock set autotuning off
-PAUSE
+
 
 echo NTFS Tweaks
 fsutil behavior set disablelastaccess 3
