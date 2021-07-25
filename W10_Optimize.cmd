@@ -159,7 +159,7 @@ schtasks /change /TN "\Microsoft\Office\Office 16 Subscription Heartbeat" /DISAB
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d "58" /f
-reg add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t REG_DWORD /d 100
+reg add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t REG_DWORD /d 100 /f
 reg add "HKCU\Control Panel\Desktop" /v WaitToKillAppTimeOut /t REG_SZ /d 2000 /f
 reg add "HKCU\SOFTWARE\Classes\.bmp" /ve /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 reg add "HKCU\SOFTWARE\Classes\.gif" /ve /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
@@ -326,7 +326,7 @@ PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'Intern
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
 PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
 
-echo  Tweaking Network (Be Patient...)
+echo  Tweaking Network (Be Patient, network may disconnect, hit any key when ready...)
 PAUSE
 reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "dnscachetimeout" /t reg_dword /d "7200" /f
 reg add "HKCU\Software\microsoft\windows\currentversion\internet settings" /v "keepalivetimeout" /t reg_dword /d "300000" /f
@@ -388,13 +388,10 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v QualifyingD
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TCPMaxDataRetransmissions /t REG_DWORD /d 00000005 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpCreateAndConnectTcbRateLimitDepth /t REG_DWORD /d 00000000 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpNumConnections /t REG_DWORD /d 00000500 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "IPAutoconfigurationEnabled" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "MTU" /t REG_DWORD /d "1492" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "PerformRouterDiscovery" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpAckFrequency" /t REG_DWORD /d "1" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpWindowSize" /t REG_DWORD /d "66550" /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "IPAutoconfigurationEnabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "MTU" /t REG_DWORD /d "1500" /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "PerformRouterDiscovery" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpWindowSize" /t REG_DWORD /d "66550" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d "16" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d "16" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "UseDelayedAcceptance" /t REG_DWORD /d "0" /f
@@ -454,7 +451,7 @@ reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "dynamicbackl
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "enabledynamicbacklog" /t reg_dword /d "1" /f
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastcopyreceivethreshold" /t reg_dword /d "1500" /f
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastsenddatagramthreshold" /t reg_dword /d "1500" /f
-reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastsenddatagramthreshold" /t reg_dword /d 16384/f
+reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "fastsenddatagramthreshold" /t reg_dword /d "16384" /f
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "irpstacksize" /t reg_dword /d "50" /f
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "largebuffersize" /t reg_dword /d "32768" /f
 reg add "HKLM\System\currentcontrolset\services\afd\parameters" /v "maximumdynamicbacklog" /t reg_dword /d "20000" /f
@@ -477,11 +474,8 @@ reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v qualifyingd
 reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpcreateandconnecttcbratelimitdepth /t reg_dword /d "00000000" /f
 reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpmaxdataretransmissions /t reg_dword /d "00000005" /f
 reg add "HKLM\System\currentcontrolset\services\tcpip\parameters" /v tcpnumconnections /t reg_dword /d "00000500" /f
-reg add "HKLM\System\currentcontrolset\services\tcpip\parameters\interfaces\%guid1%" /v "mtu" /t reg_dword /d "1500" /f
-reg add "HKLM\System\currentcontrolset\services\tcpip\parameters\interfaces\%guid1%" /v "tcpwindowsize" /t reg_dword /d "65340" /f
 reg add "hku\.default\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsper1_0server" /t reg_dword /d "10" /f
 reg add "hku\.default\Software\microsoft\windows\currentversion\internet settings" /v "maxconnectionsperserver" /t reg_dword /d "10" /f
-reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%GUID1%" /v "TcpInitialRTT" /f
 regsvr32 /s actxprxy.dll
 PowerShell Disable-MMAgent -MemoryCompression
 PowerShell Disable-NetAdapterChecksumOffload -Name "*"
