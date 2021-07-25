@@ -4,7 +4,7 @@ echo This script needs to be run
 echo with Administrator rights.
 goto end
 )
-echo .
+
 
 echo Windows Error Reporting Service
 net stop WerSvc
