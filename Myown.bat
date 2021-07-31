@@ -1,5 +1,7 @@
 :: REMOVE BLOATWARES
-Get-AppxPackage *Microsoft.YourPhone* -AllUsers | Remove-AppxPackage.
+PowerShell -Command "Get-AppxPackage Microsoft.YourPhone -AllUsers| Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *xboxapp* -AllUsers| Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Microsoft.XboxGamingOverlay * -AllUsers| Remove-AppxPackage"
 
 
 
