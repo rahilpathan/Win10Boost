@@ -52,26 +52,64 @@ PowerShell -Command "Get-AppxPackage *Microsoft.XboxGamingOverlay * -AllUsers| R
 powershell "Get-NetAdapter -IncludeHidden | Set-NetIPInterface -WeakHostSend Enabled -WeakHostReceive Enabled -RetransmitTimeMs 0 -Forwarding Disabled -EcnMarking Disabled -AdvertiseDefaultRoute Disabled -ErrorAction SilentlyContinue"
 
 :: NETSH
-netsh int tcp set global rss=enable
-netsh int tcp set global ecncapability=disable
-netsh int tcp set global timestamps=enable
-netsh int tcp set global initialrto=300
-netsh int tcp set global rsc=disable
-netsh int tcp set global fastopen=enable
-netsh int tcp set global hystart=disable
-netsh int tcp set global pacingprofile=off
+netsh int tcp show global
+netsh interface teredo set state disabled
+netsh interface 6to4 set state disabled
+netsh interface isatap set state disable
+
+
+PowerShell Disable-MMAgent -MemoryCompression
+PowerShell Disable-NetAdapterChecksumOffload -Name "*"
+PowerShell Disable-NetAdapterIPsecOffload -Name "*"
+PowerShell Disable-NetAdapterLso -Name "*"
+PowerShell Disable-NetAdapterPowerManagement -Name "*"
+PowerShell Disable-NetAdapterQos -Name "*"
+PowerShell Disable-NetAdapterRsc -Name "*"
+
+netsh int tcp show global
+netsh advfirewall set allprofiles state off
+netsh int ip set global flowlabel=disabled
+netsh int ip set global groupforwardedfragments=disabled
+netsh int ip set global icmpredirects=disabled
 netsh int ip set global minmtu=576
-netsh int ip set global flowlabel=disable
+netsh int ip set global multicastforwarding=disabled
+netsh int tcp set global autotuninglevel=disabled
+netsh int tcp set global chimney=disabled
+
+netsh int tcp set global congestionprovider=ctcp
+netsh int set global congestionprovider=ctcp
+netsh int tcp set supplemental Internet congestionprovider=CTCP
+
+netsh int tcp set global dca=enabled
+netsh int tcp set global ecncapability=disabled
+netsh int tcp set global fastopen=enabled
+netsh int tcp set global hystart=disabled
+netsh int tcp set global initialrto=300
+netsh int tcp set global netdma=enabled
+netsh int tcp set global pacingprofile=off
+netsh int tcp set global rsc=disabled
+netsh int tcp set global rss=enabled
+netsh int tcp set global timestamps=disabled
+netsh int tcp set heur forcews=disable
+netsh interface tcp show heuristics
+netsh interface tcp set heuristics disabled
+netsh int tcp set heuristics disabled
+netsh int tcp set security mpp=disabled profiles=disabled
 netsh int tcp set supplemental internet congestionprovider=dctcp
 netsh int tcp set supplemental internet enablecwndrestart=disable
-netsh int ip set global icmpredirects=disabled
-netsh int ip set global multicastforwarding=disabled
-netsh int ip set global groupforwardedfragments=disable
-netsh int tcp set security mpp=disabled profiles=disabled
-netsh int tcp set heur forcews=disable
 netsh int tcp set supplemental template=internet
-netsh advfirewall set allprofiles state off
-netsh int tcp set global autotuninglevel=experimental
+
+::RESETS
+ipconfig/flushdns 
+netsh winsock reset
+netsh int ip reset c:\resetlog.txt
+ipconfig /release
+ipconfig /renew
+
+
+
+
+
 
 if %errorlevel% neq 0 (
 	echo Falling back to normal autotuning
