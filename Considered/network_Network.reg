@@ -1,0 +1,82 @@
+Windows Registry Editor Version 5.00
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters]
+"DefaultTTL"=dword:14
+"DisableTaskOffload"=dword:00000001
+"DisableLargeMtu"=dword:00000000
+"EnableConnectionRateLimiting"=dword:00000000
+"EnableDCA"=dword:00000001
+"EnablePMTUBHDetect"=dword:00000000
+"EnablePMTUDiscovery"=dword:00000001
+"EnableRSS"=dword:00000001
+"EnableTCPA"=dword:00000000
+"EnableWsd"=dword:00000000
+"GlobalMaxTcpWindowSize"=dword:FBB8
+"MaxConnectionsPer1_0Server"=dword:10
+"MaxConnectionsPerServer"=dword:10
+"MaxFreeTcbs"=dword:0000ffff
+"MaxHashTableSize"=dword:00010000
+"MaxUserPort"=dword:0000fffe
+"NumTcbTablePartitions"=dword:20
+"SackOpts"=dword:00000001
+"SynAttackProtect"=dword:00000001
+"Tcp1323Opts"=dword:00000001
+"TcpCreateAndConnectTcbRateLimitDepth"=dword:00000000
+"TcpMaxDataRetransmissions"=dword:00000003
+"TcpMaxDupAcks"=dword:00000002
+"TcpMaxSendFree"=dword:0000ffff
+"TcpNumConnections"=dword:00fffffe
+"TcpTimedWaitDelay"=dword:0000001e
+"TcpFinWait2Delay"=dword:0000001e
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\QoS]
+"Do not use NLA"="1"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters]
+"TCPNoDelay"=dword:1
+"IgnoreOSNameValidation"=dword:00000001
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings]
+"MaxConnectionsPerServer"=dword:10
+"MaxConnectionsPer1_0Server"=dword:10
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Internet Settings]
+"MaxConnectionsPerServer"=dword:10
+"MaxConnectionsPer1_0Server"=dword:10
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings]
+"MaxConnectionsPerServer"=dword:10
+"MaxConnectionsPer1_0Server"=dword:10
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile]
+"NetworkThrottlingIndex"=dword:ffffffff
+"SystemResponsiveness"=dword:0
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider]
+"LocalPriority"=dword:00000004
+"HostsPriority"=dword:00000005
+"DnsPriority"=dword:00000006
+"NetbtPriority"=dword:00000007
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched]
+"NonBestEffortLimit"=dword:00000000
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Psched]
+"NonBestEffortLimit"=dword:00000000
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters]
+"IRPStackSize"=dword:00000020
+"SizReqBuf"=dword:00004410
+"Size"=dword:00000003
+"MaxWorkItems"=dword:00002000
+"MaxMpxCt"=dword:00000800
+"MaxCmds"=dword:00000800
+"DisableStrictNameChecking"=dword:00000001
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters]
+"MaxCmds"=dword:0000001e
+"MaxThreads"=dword:0000001e
+"MaxCollectionCount"=dword:00000020
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management]
+"LargeSystemCache"=dword:0
+"IoPageLockLimit"=dword:000f0000
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters]
+"EnableDynamicBacklog"=dword:00000001	
+"MinimumDynamicBacklog"=dword:000000c8
+"MaximumDynamicBacklog"=dword:00004e20
+"DynamicBacklogGrowthDelta"=dword:00000064
+"KeepAliveInterval"=dword:00000001
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters]
+"NegativeSOACacheTime"=dword:00000000
+"NetFailureCacheTime"=dword:00000000
+"MaxCacheEntryTtlLimit"=dword:00002a30
+"MaxCacheTtl"=dword:00002a30
+"MaxNegativeCacheTtl"=dword:00000000
