@@ -4,7 +4,8 @@ powershell "Set-ExecutionPolicy -ExecutionPolicy Unrestricted"
 
 bcdedit /set allowedinmemorysettings 0
 bcdedit /set useplatformclock No
-bcdedit /set useplatformtick No
+bcdedit /set useplatformtick Yes
+bcdedit /set disabledynamictick Yes
 bcdedit /set tscsyncpolicy Enhanced
 bcdedit /set debug No
 bcdedit /set isolatedcontext No
@@ -12,7 +13,7 @@ bcdedit /set pae ForceEnable
 bcdedit /set bootmenupolicy Legacy
 bcdedit /set usefirmwarepcisettings No
 bcdedit /set sos Yes
-bcdedit /set disabledynamictick Yes
+
 bcdedit /set disableelamdrivers Yes
 bcdedit /set quietboot Yes
 bcdedit /set x2apicpolicy Enable
@@ -42,7 +43,6 @@ PowerShell -Command "Get-AppxPackage *xboxapp* -AllUsers| Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Microsoft.XboxGamingOverlay * -AllUsers| Remove-AppxPackage"
 
 
-
 ::REMOVE TELEMETRY
 
 
@@ -65,7 +65,6 @@ PowerShell Disable-NetAdapterLso -Name "*"
 PowerShell Disable-NetAdapterPowerManagement -Name "*"
 PowerShell Disable-NetAdapterQos -Name "*"
 PowerShell Disable-NetAdapterRsc -Name "*"
-
 netsh int tcp show global
 netsh advfirewall set allprofiles state off
 netsh int ip set global flowlabel=disabled
@@ -75,11 +74,9 @@ netsh int ip set global minmtu=576
 netsh int ip set global multicastforwarding=disabled
 netsh int tcp set global autotuninglevel=disabled
 netsh int tcp set global chimney=disabled
-
 netsh int tcp set global congestionprovider=ctcp
 netsh int set global congestionprovider=ctcp
 netsh int tcp set supplemental Internet congestionprovider=CTCP
-
 netsh int tcp set global dca=enabled
 netsh int tcp set global ecncapability=disabled
 netsh int tcp set global fastopen=enabled
