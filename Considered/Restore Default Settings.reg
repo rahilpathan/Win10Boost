@@ -1,0 +1,28 @@
+Windows Registry Editor Version 5.00
+
+;Created by Vishal Gupta for AskVG.com
+
+[-HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\Copy To]
+ 
+[-HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\Move To]
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"AutoEndTasks"=-
+"HungAppTimeout"=-
+"MenuShowDelay"="400"
+"WaitToKillAppTimeout"=-
+"LowLevelHooksTimeout"=-
+
+[HKEY_CURRENT_USER\Control Panel\Mouse]
+"MouseHoverTime"="400"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoLowDiskSpaceChecks"=-
+"LinkResolveIgnoreLinkInfo"=-
+"NoResolveSearch"=-
+"NoResolveTrack"=-
+"NoInternetOpenWith"=-
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control]
+"WaitToKillServiceTimeout"="5000"
+
