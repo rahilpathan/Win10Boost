@@ -42,6 +42,18 @@ PowerShell -Command "Get-AppxPackage *Drawboard PDF* | Remove-AppxPackagGet-Appx
 
 
 ::REMOVE TELEMETRY AND FEEDBACK
+sc stop DiagTrack
+sc stop diagnosticshub.standardcollector.service
+sc stop dmwappushservice
+sc stop WMPNetworkSvc
+sc stop WSearch
+sc config DiagTrack start= disabled
+sc config diagnosticshub.standardcollector.service start= disabled
+sc config dmwappushservice start= disabled
+sc config RemoteRegistry start= disabled
+sc config TrkWks start= disabled
+sc config WMPNetworkSvc start= disabled
+sc config WSearch start= disabled
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
