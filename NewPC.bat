@@ -2,40 +2,13 @@ powershell "Set-ExecutionPolicy -ExecutionPolicy Unrestricted"
 
 ::BCD POWERCHOKES
 
-bcdedit /set allowedinmemorysettings 0
 bcdedit /set useplatformclock No
 bcdedit /set useplatformtick Yes
 bcdedit /set disabledynamictick Yes
 bcdedit /set tscsyncpolicy Enhanced
 bcdedit /set debug No
-bcdedit /set isolatedcontext No
 bcdedit /set pae ForceEnable
-bcdedit /set bootmenupolicy Legacy
-bcdedit /set usefirmwarepcisettings No
-bcdedit /set sos Yes
-
-bcdedit /set disableelamdrivers Yes
-bcdedit /set quietboot Yes
-bcdedit /set x2apicpolicy Enable
-bcdedit /set vsmlaunchtype Off
-bcdedit /set usephysicaldestination No
-bcdedit /set ems No
-bcdedit /set firstmegabytepolicy UseAll
-bcdedit /set configaccesspolicy Default
-bcdedit /set linearaddress57 optin
-bcdedit /set noumex Yes
-bcdedit /set bootems No
-bcdedit /set graphicsmodedisabled No
-bcdedit /set extendedinput Yes
-bcdedit /set highestmode Yes
-bcdedit /set forcefipscrypto No
-bcdedit /set perfmem 0
-bcdedit /set clustermodeaddressing 1
-bcdedit /set configflags 0
-bcdedit /set uselegacyapicmode No
 bcdedit /set onecpu No
-bcdedit /set halbreakpoint No
-bcdedit /set forcelegacyplatform No
 
 :: REMOVE BLOATWARES
 PowerShell -Command "Get-AppxPackage Microsoft.YourPhone -AllUsers| Remove-AppxPackage"
