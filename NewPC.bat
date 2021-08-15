@@ -13,7 +13,32 @@ bcdedit /set onecpu No
 :: REMOVE BLOATWARES
 PowerShell -Command "Get-AppxPackage Microsoft.YourPhone -AllUsers| Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *xboxapp* -AllUsers| Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Microsoft.XboxGamingOverlay * -AllUsers| Remove-AppxPackage"
+PowerShell -Command "PowerShell -Command "Get-AppxPackage *3DBuilder* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Getstarted* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsAlarms* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsCamera* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *bing* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *MicrosoftOfficeHub* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *OneNote* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *people* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsPhone* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *photos* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *SkypeApp* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *solit* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsSoundRecorder* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *windowscommunicationsapps* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *xbox* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *zune* | Remove-AppxPackage"
+REM PowerShell -Command "Get-AppxPackage *WindowsCalculator* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *WindowsMaps* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Sway* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *CommsPhone* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *ConnectivityStore* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Facebook* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Twitter* | Remove-AppxPackage"
+PowerShell -Command "Get-AppxPackage *Drawboard PDF* | Remove-AppxPackagGet-AppxPackage *Microsoft.XboxGamingOverlay * -AllUsers| Remove-AppxPackage"
+
 
 
 ::REMOVE TELEMETRY AND FEEDBACK
@@ -41,7 +66,6 @@ schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable
 schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /Disable
-
 sc config WinDefend start= Disabled > nul 2>&1
 sc config WdNisSvc start= Disabled > nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d 1 /f > nul 2>&1
@@ -50,11 +74,13 @@ schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanu
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable > nul 2>&1
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable > nul 2>&1
 del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s > nul 2>&1
-
+Powershell Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting" -Name "Disabled" -Type DWord -Value 1
+    Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 
 
 ::INTERNET TWEAKS
 powershell "Get-NetAdapter -IncludeHidden | Set-NetIPInterface -WeakHostSend Enabled -WeakHostReceive Enabled -RetransmitTimeMs 0 -Forwarding Disabled -EcnMarking Disabled -AdvertiseDefaultRoute Disabled -ErrorAction SilentlyContinue"
+Powershell "Disable-MMAgent -MemoryCompression"
 
 :: NETSH
 netsh int tcp show global
@@ -125,10 +151,29 @@ if %errorlevel% neq 0 (
 )
 ::REGEDIT
 
+
+
+
 ::SYSTEM TWEAKS FOLDERS/WIN UPDATES
-PowerCfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-Powershell "Disable-MMAgent -MemoryCompression"
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t  REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /f /v BingSearchEnabled /t REG_DWORD /d 0
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /f /v AllowSearchToUseLocation /t REG_DWORD /d 0
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /f /v CortanaConsent /t REG_DWORD /d 0
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarGlomLevel" /t REG_DWORD /d 2 /f
+PowerShell -Command "((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq 'Microsoft Edge'}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}"
+PowerShell -Command "((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq 'Microsoft Store'}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}"
+REG add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t REG_DWORD /d 0 /f
+REG add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_DWORD /d 1 /f
+
+REM *** Remove Cortana Button taskbar shortcut ***
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowCortanaButton" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
+
+for /f "tokens=4" %g in ('powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61') do set GUID=%g
+powercfg /setactive %GUID%
 
 
-
-
+start /wait TASKKILL /f /IM explorer.exe
+start explorer.exe
