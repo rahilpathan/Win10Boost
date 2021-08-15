@@ -74,8 +74,7 @@ schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanu
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable > nul 2>&1
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable > nul 2>&1
 del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s > nul 2>&1
-Powershell Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting" -Name "Disabled" -Type DWord -Value 1
-    Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
+Powershell Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 
 
 ::INTERNET TWEAKS
