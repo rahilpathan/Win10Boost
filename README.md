@@ -6,5 +6,6 @@ Some attention to privacy tweaks as well.
 
 Suggestions are welcome. :)
 
-Note: Free to Use. Use at your own risk. 
-If you are using it, then you are liable for any damage caused to your system.
+**Note: Free to Use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
+
+_Buy me a CryptoCoffee? BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
