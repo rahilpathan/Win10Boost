@@ -1,7 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Servic es\Tcpip\Parameters]
-"TcpRecvSegmentSize"=dword:00000584
-"TcpSendSegmentSize"=dword:00000584
-"MTU"=dword:000005ac
-
