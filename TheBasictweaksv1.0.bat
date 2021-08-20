@@ -116,22 +116,51 @@ sc stop RemoteRegistry
 sc config RemoteRegistry start= disabled
 
 ::DISABLE MAPS
+sc stop MapsBroker
 sc config MapsBroker start= disabled
 
 ::DISABLE SYSMAIN/SUPERFETCH
+sc stop SysMain
 sc config SysMain start= disabled
 
-::DISBALE XBOX SERVICES
-rem Xbox Accessory Management Service
-sc config XboxGipSvc start= disabled
-rem Xbox Game Monitoring
+::DISBALE XBOX AND GAMING SERVICES
+::Xbox Game Monitoring
+sc stop xbgm
 sc config xbgm start= disabled
-rem Xbox Live Auth Manager
+::Xbox Live Auth Manager
+sc stop XblAuthManager
 sc config XblAuthManager start= disabled
-rem Xbox Live Game Save
+::Xbox Live Game Save
+sc stop XblGameSave
 sc config XblGameSave start= disabled
-rem Xbox Live Networking Service
+::Xbox Accessory Management Service
+sc stop XboxGipSvc
+sc config XboxGipSvc start= disabled
+::Xbox Live Networking Service
+sc stop XboxNetApiSvc
 sc config XboxNetApiSvc start= disabled
+::Xbox registries
+reg add "HKLM\System\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "CursorCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d "0" /f
+reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
+::Xbox SCH Tasks
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
+takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
+icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
+taskkill /im GameBarPresenceWriter.exe /f
+move "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.OLD"
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
+takeown /f "%WinDir%\System32\bcastdvr.exe" /a
+icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
+taskkill /im bcastdvr.exe /f
+move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
+
 
 ::DISABLE ALLJOYN
 rem  This service is used for routing the AllJoyn messages for AllJoyn clients.
