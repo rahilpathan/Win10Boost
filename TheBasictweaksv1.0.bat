@@ -1,7 +1,3 @@
-
-@echo off
-CLS
-
 :init
 setlocal disabledelayedExpansion
 set "batchPath=%~0"
@@ -15,7 +11,6 @@ if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
 
 :getPrivileges
 if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
-
 
 ECHO Set UAC = CreateObject^("Shell.Application"^) > "%vbsGetPrivileges%"
 ECHO args = "ELEV " >> "%vbsGetPrivileges%"
@@ -68,48 +63,62 @@ reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Ex
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DPS" /v "Start" /t REG_dWORD /d 4 /f
 
 ::REMOVE TELEMETRY
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f 
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f 
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f
+DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
+reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!dss-winrt-telemetry.js" /t REG_DWORD /d 0 /f
+reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-event_8ac43a41e5030538" /t REG_DWORD /d 0 /f
+reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-inter_58073761d33f144b" /t REG_DWORD /d 0 /f
+reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry.js" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f 
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f 
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
-DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl 
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!dss-winrt-telemetry.js" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry.js" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-event_8ac43a41e5030538" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-inter_58073761d33f144b" /t REG_DWORD /d 0 /f
 
-::DISABLE ERROR REPORTING
+::DISABLE ERROR REPORTING AND ADVERTISING
+sc stop WerSvc
+sc config WerSvc start= disabled
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI" /t REG_DWORD /d 1 /f
-sc config WerSvc start= disabled
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v Enabled /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f
+reg add "HKCU\Control Panel\International\User Profile" /v HttpAcceptLanguageOptOut /t REG_DWORD /d 1 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d 1 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d 1 /f
 schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable
 schtasks /Change /TN "Microsoft\Windows\WindowsUpdate\Automatic App Update" /Disable
-schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Application Experience\AitAgent" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /Disable 
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\HypervisorFlightingTask" /Disable 
+schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\AitAgent" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable
+schtasks /Change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
+schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\HypervisorFlightingTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Uploader" /Disable
 schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable 
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d 1 /f 
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d 1 /f 
+
+
+::DISABLE OFFICE TELEMETRY
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable
+schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /Disable
 
 ::DISABLE REMOTE REGISTRY FOR SECURITY
 sc stop RemoteRegistry
@@ -122,6 +131,12 @@ sc config MapsBroker start= disabled
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
 sc config SysMain start= disabled
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d 0 /f 
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d 0 /f 
+
+::DISABLE WINDOWS SEARCH
+sc stop WSearch
+sc config WSearch start= disabled
 
 ::DISBALE XBOX AND GAMING SERVICES
 ::Xbox Game Monitoring
@@ -284,45 +299,100 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".tif" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".tiff" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 
-::REMOVE WINDOWS DEFAULT APPS (Only Unnecessary)
-powershell "Get-AppxPackage -AllUsers *3d* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *alarm* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *oneconnect* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *bing* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *zune* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *gethelp* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *feedback* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *groove* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *sway* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *communi* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *connectivity* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *solit* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *phone* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *soundrec* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *people* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *office* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *xbox* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *reality* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *maps* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Getstarted* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Microsoft.MSPaint* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *tiktok* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *photoshop* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *ActiproSoftwareLLC* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *CandyCrush* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Duolingo* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *EclipseManager* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *king.com.FarmHeroesSaga* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Flipboard* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *HiddenCityMysteryofShadows* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Pandora* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Plex* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *Wunderlist* | Remove-AppxPackage"
-powershell "Get-AppxPackage -AllUsers *photos* | Remove-AppxPackage"
-PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
-PowerShell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
+::REMOVE WINDOWS DEFAULT APPS (Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype) 
+powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
+powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
+powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ActiproSoftwareLLC* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AdobePhotoshopExpress* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Advertising.Xaml* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AppConnector* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Asphalt8Airborne* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AutodeskSketchBook* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingFinance* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingNews* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingSports* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingTranslator* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BubbleWitch3Saga* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *CandyCrush* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *CyberLinkMediaSuiteEssentials* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *DisneyMagicKingdoms* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *DrawboardPDF* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Duolingo-LearnLanguagesforFree* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *EclipseManager* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *FarmVille2CountryEscape* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Flipboard* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *GetHelp* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Getstarted* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *HiddenCity* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *HiddenCityMysteryofShadows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Keeper* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Lens* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *LinkedInforWindows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MarchofEmpires* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Messaging* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Microsoft.MSPaint* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftPowerBIForWindows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *NetworkSpeedTest* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneCalendar* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneConnect* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *PandoraMediaInc* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Plex* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RemoteDesktop* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Roblox* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RoyalRevolt* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RoyalRevolt2* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ScreenSketch* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *SolitaireCollection* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *SpeedTest* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Sway* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Wallet* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Whiteboard* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WinZipUniversal* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsAlarms* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Wunderlist* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *XING* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Duolingo* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Pandora* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *alarm* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *bing* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *communi* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *connectivity* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *feedback* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *groove* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *king.com.FarmHeroesSaga* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *maps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *office* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *phone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *photos* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *photoshop* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *reality* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *soundrec* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *tiktok* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
+
+
 
 taskkill /f /im explorer.exe
 ::ADJUSTING THE PAGE FILE
@@ -404,6 +474,46 @@ netsh interface tcp set heuristics disabled
 ipconfig/flushdns
 netsh winsock reset
 netsh int ip reset c:\resetlog.txt
+
+
+
+for /f %%x in (‘reg query HKLM\System\CurrentControlSet\Services\TcpIp\Parameters\Interfaces’) do (
+echo %%x
+reg add ^”%%x^” /v “TCPNoDelay” /t REG_DWORD /D 1 /F
+reg add ^”%%x^” /v “TcpAckFrequency” /t REG_DWORD /D 1 /F
+reg add ^”%%x^” /v “TcpWindowSize” /t REG_DWORD /D 8388608 /F
+)
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “TcpWindowSize” /t REG_DWORD /D 8388608 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “KeepAliveInterval” /t REG_DWORD /D 120000 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “KeepAliveTime” /t REG_DWORD /D 120000 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “Tcp1323Opts” /t REG_DWORD /D 1 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “SackOpts” /t REG_DWORD /D 1 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “EnablePMTUDiscovery” /t REG_DWORD /D 1 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “EnablePMTUBHDetect” /t REG_DWORD /D 0 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “DefaultTTL” /t REG_DWORD /D 64 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “TcpMaxDupAcks” /t REG_DWORD /D 2 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider /v “LocalPriority” /t REG_DWORD /D 50 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider /v “HostsPriority” /t REG_DWORD /D 60 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider /v “DnsPriority” /t REG_DWORD /D 70 /F
+reg add HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider /v “NetBtPriority” /t REG_DWORD /D 80 /F
+
+
+::CLEARING EVENTS & LOGS (Source:WinAero)
+FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
+IF (%adminTest%)==(Access) goto noAdmin
+for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
+echo.
+echo Event Logs have been cleared!
+goto theEnd
+:do_clear
+echo clearing %1
+wevtutil.exe cl %1
+goto :eof
+:noAdmin
+echo You must run this script as an Administrator!
+echo.
+:theEnd
+PAUSE
 
 start explorer.exe
 
