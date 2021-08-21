@@ -24,6 +24,10 @@ exit /B
 :gotPrivileges
 setlocal & pushd .
 
+::CREATING RESTORE POINT
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d "0" /f
+powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description "PreTweaksBackup" -RestorePointType "MODIFY_SETTINGS""
+
 ::SHOW THIS PC ON DESKTOP
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel /v {20D04FE0-3AEA-1069-A2D8-08002B30309D} /t REG_DWORD /d 0 /f
 
@@ -304,9 +308,11 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
 powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
 powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *ActiproSoftwareLLC* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AdobePhotoshopExpress* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Advertising.Xaml* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AppConnector* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Asphalt8Airborne* | Remove-AppxPackage"
@@ -320,6 +326,7 @@ powershell -Command "Get-AppxPackage -allusers *CandyCrush* | Remove-AppxPackage
 powershell -Command "Get-AppxPackage -allusers *CyberLinkMediaSuiteEssentials* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *DisneyMagicKingdoms* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *DrawboardPDF* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Duolingo* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Duolingo-LearnLanguagesforFree* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *EclipseManager* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage"
@@ -344,10 +351,12 @@ powershell -Command "Get-AppxPackage -allusers *NetworkSpeedTest* | Remove-AppxP
 powershell -Command "Get-AppxPackage -allusers *OneCalendar* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *OneConnect* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Pandora* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *PandoraMediaInc* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Plex* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *RemoteDesktop* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Roblox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *RoyalRevolt* | Remove-AppxPackage"
@@ -367,15 +376,7 @@ powershell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | Remove-A
 powershell -Command "Get-AppxPackage -allusers *Wunderlist* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *XING* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Duolingo* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Pandora* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *alarm* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *bing* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *communi* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *connectivity* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *feedback* | Remove-AppxPackage"
@@ -390,9 +391,10 @@ powershell -Command "Get-AppxPackage -allusers *reality* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *soundrec* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *tiktok* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
-
+powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
 
 
 taskkill /f /im explorer.exe
