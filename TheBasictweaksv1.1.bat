@@ -118,6 +118,15 @@ schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Uploader" /Disable
 schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable 
 
+::DISABLE APP SUGGESTIONS. MICROSOFT ACCOUNT SIGN IN REQ
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f
+
+::DISABLE NEWS & INTERESTS
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
 
 ::DISABLE OFFICE TELEMETRY
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
@@ -138,9 +147,9 @@ sc config SysMain start= disabled
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d 0 /f 
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d 0 /f 
 
-::DISABLE WINDOWS SEARCH
-sc stop WSearch
-sc config WSearch start= disabled
+::DISABLE WINDOWS SEARCH (ENABLE THIS IF YOU DON'T HAVE OUTLOOK)
+::sc stop WSearch
+::sc config WSearch start= disabled
 
 ::DISBALE XBOX AND GAMING SERVICES
 ::Xbox Game Monitoring
@@ -248,7 +257,6 @@ schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanu
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
 del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s
-
 
 ::RESTORE OLD PHOTOVIEWER AND SET AS DEFAULT
 reg add "HKCR\Applications\photoviewer.dll\shell\open" /v "MuiVerb" /t REG_SZ /d "@photoviewer.dll,-3043" /f
