@@ -14,7 +14,7 @@ ______________
 ______________
 
 
-You could thank me by buying a Crypto-Coffee.
+Thanks me with crypto:
 
 BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
 
