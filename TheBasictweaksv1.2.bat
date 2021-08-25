@@ -28,11 +28,14 @@ setlocal & pushd .
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d "0" /f
 powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description "PreTweaksBackup" -RestorePointType "MODIFY_SETTINGS""
 
+
 ::SHOW THIS PC ON DESKTOP
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel /v {20D04FE0-3AEA-1069-A2D8-08002B30309D} /t REG_DWORD /d 0 /f
 
+
 ::DISABLE TASK VIEW BUTTON
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t REG_DWORD /d "0" /f
+
 
 ::DISABLE CORTANA SEARCH BAR
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d "0" /f
@@ -45,29 +48,41 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelem
 ::WINDOWS UPDATE TWEAKS
 ::DELIVERY OPTIMIZATION
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f
+::TWEAKS TO WINDOWS UPDATES
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "AllowBuildPreview" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableConfigFlighting" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f
+
 
 ::OPEN THIS PC instead of QUICK ACCESS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d 1 /f
+
 
 ::ENABLE DARK THEME
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
 reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
 
+
 ::SHOW FILE EXTENSIONS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+
 
 ::SHOW HIDDEN FILES
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
 
+
 ::DISABLE COMBINE IN TASKBAR ONLY WHEN FULL
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v "TaskbarGlomLevel" /t REG_dWORD /d 1 /f
+
 
 ::DISABLE MEET NOW
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer /v "HideSCAMeetNow" /t REG_dWORD /d 1 /f
 
+
 ::DISABLE DIAGNOSTIC POLICY
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DPS" /v "Start" /t REG_dWORD /d 4 /f
+
 
 ::REMOVE TELEMETRY
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
@@ -99,10 +114,12 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsof
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant/Analytic" /v "Enabled" /t REG_DWORD /d 0 /f 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant" /v "Enabled" /t REG_DWORD /d 0 /f 
 
+
 ::DISABLE APP COMPATIBILITY
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
+
 
 ::DISABLE ERROR REPORTING AND ADVERTISING
 sc stop WerSvc
@@ -141,9 +158,11 @@ schtasks /Change /TN "Microsoft\Windows\ErrorDetails\ErrorDetailsUpdate" /Disabl
 schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 schtasks /Change /TN "Microsoft\Windows\DiskFootprint\Diagnostics" /Disable
 
+
 ::DISABLE SMART SCREEN AND TELEMETRY
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableSmartScreen" /t REG_DWORD /d 0 /f
 schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable
+
 
 ::DISABLE APP SUGGESTIONS. MICROSOFT ACCOUNT SIGN IN REQ
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f
@@ -152,21 +171,26 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f
 
+
 ::DISABLE NEWS & INTERESTS
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
+
 
 ::DISABLE OFFICE TELEMETRY
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable
 schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /Disable
 
+
 ::DISABLE REMOTE REGISTRY FOR SECURITY
 sc stop RemoteRegistry
 sc config RemoteRegistry start= disabled
 
+
 ::DISABLE MAPS
 sc stop MapsBroker
 sc config MapsBroker start= disabled
+
 
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
@@ -174,9 +198,11 @@ sc config SysMain start= disabled
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d 0 /f 
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d 0 /f 
 
+
 ::DISABLE WINDOWS SEARCH (ENABLE THIS IF YOU DON'T HAVE OUTLOOK)
 ::sc stop WSearch
 ::sc config WSearch start= disabled
+
 
 ::DISBALE XBOX AND GAMING SERVICES
 ::Xbox Game Monitoring
@@ -217,31 +243,32 @@ icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
 taskkill /im bcastdvr.exe /f
 move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
-::TWEAKS TO WINDOWS UPDATES
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "AllowBuildPreview" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableConfigFlighting" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f
 
 ::DISABLE ALLJOYN
 rem  This service is used for routing the AllJoyn messages for AllJoyn clients.
 net stop AJRouter
 sc config AJRouter start= disabled
 
+
 ::DISABLE GEOLOCATION (IF IT IS DESKTOP AND YOU DON'T NEED TRACKING SERVICES)
 net stop lfsvc
 sc config lfsvc start= disabled
+
 
 ::DISABLE PHONE SERVICES
 net stop PhoneSvc
 sc config PhoneSvc start= disabled
 
+
 ::DISABLE WINDOWS MEDIA PLAYER SHARING SERVICES
 net stop WMPNetworkSvc
 sc config WMPNetworkSvc start= disabled
 
+
 ::DISABLE INDEXING
 net stop DiagTrack
 sc config DiagTrack start= disabled
+
 
 ::DISABLE TELEMETRY
 net stop dmwappushservice
@@ -249,30 +276,37 @@ sc config dmwappushservice start= disabled
 net stop diagnosticshub.standardcollector.service
 sc config diagnosticshub.standardcollector.service start= disabled
 
+
 ::STOP WINDOWS MEDIA SHARING SERVICES
 sc stop WMPNetworkSvc
 sc config WMPNetworkSvc start= disabled
+
 
 ::DISABLE Diagnostic System Host
 sc config WdiSystemHost start= disabled
 sc config WdiServiceHost start= disabled
 
+
 ::DISABLE INFRARED MONITOR
 sc config irmon start= disabled
+
 
 ::DISABLE IP HELPER SVC (only for ipv6) AND IE ETW COLLECTOR
 sc config iphlpsvc start= disabled
 sc config IEEtwCollectorService start= disabled
 
+
 ::DISABLE PARENTAL CONTROL
 sc stop WpcMonSvc
 sc config WpcMonSvc start= disabled
+
 
 ::DISABLE WINDOWS DEFENDER SAMPLE SUBMISSION
 ::%SystemRoot%\System32\setaclx64 -on "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" -ot reg -actn setowner -ownr "n:Administrators" -rec yes
 ::%SystemRoot%\System32\setaclx64 -on "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" -ot reg -actn ace -ace "n:Administrators;p:full" -rec yes
 ::reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SpyNetReporting" /t REG_DWORD /d 0 /f
 ::reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SubmitSamplesConsent" /t REG_DWORD /d 0 /f
+
 
 ::DISABLE WINDOWS DEFENDER (DISABLED AS FLAGGED BY SOME AV as MALWR)
 ::net stop WinDefend
@@ -291,6 +325,7 @@ schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanu
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
 del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s
+
 
 ::RESTORE OLD PHOTOVIEWER AND SET AS DEFAULT
 reg add "HKCR\Applications\photoviewer.dll\shell\open" /v "MuiVerb" /t REG_SZ /d "@photoviewer.dll,-3043" /f
@@ -345,6 +380,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".gif" /t REG_SZ /d "PhotoViewer.FileAssoc.Gif" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".tif" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".tiff" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
+
 
 ::REMOVE WINDOWS DEFAULT APPS (Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype) 
 powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
@@ -437,12 +473,13 @@ powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Rem
 powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
-
-
 taskkill /f /im explorer.exe
+
+
 ::ADJUSTING THE PAGE FILE
 wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
 wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
+
 
 ::REMOVING SYSTEM CACHE
 del C:\Temp /S /Q /F
@@ -519,7 +556,6 @@ netsh interface tcp set heuristics disabled
 ipconfig/flushdns
 netsh winsock reset
 netsh int ip reset c:\resetlog.txt
-
 
 
 for /f %%x in (‘reg query HKLM\System\CurrentControlSet\Services\TcpIp\Parameters\Interfaces’) do (
