@@ -9,8 +9,8 @@ Verify the system startup time before you run the script and compare after you a
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster.
 
 
-You could thank me by buying a Crypto-Coffee. BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
-Suggestions are welcome. :)
+You could thank me by buying a Crypto-Coffee. 
+BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
 
 ![image](https://user-images.githubusercontent.com/20379786/130716746-be93a427-ea4a-460f-ad79-da9be6e2073d.png)
 
