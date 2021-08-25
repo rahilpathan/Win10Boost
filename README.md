@@ -3,24 +3,24 @@ Optimize Windows 10 services _(Minimal system modification tweaks, Script is ver
 
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster.
 
- 
+_______________ 
 
- 
+_______________ 
 
 **Note: This tool is free to use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
  
-
+______________
  
-
+______________
 
 
 You could thank me by buying a Crypto-Coffee.
 
 BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
 
-
+________
  
-
+________
  
 
 
