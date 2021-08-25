@@ -42,7 +42,6 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTas
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowCortanaButton" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 
 
 ::WINDOWS UPDATE TWEAKS
@@ -52,6 +51,8 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Con
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "AllowBuildPreview" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableConfigFlighting" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f
+::MALICIOUS REMOVAL TOOLS NOT THRU WINDOWS UPDATE
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 
 
 ::OPEN THIS PC instead of QUICK ACCESS
@@ -90,7 +91,6 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEn
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
@@ -102,7 +102,6 @@ reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemet
 reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-inter_58073761d33f144b" /t REG_DWORD /d 0 /f
 reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry.js" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Steps-Recorder" /v "Enabled" /t REG_DWORD /d 0 /f
@@ -244,7 +243,6 @@ takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
 icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
 taskkill /im GameBarPresenceWriter.exe /f
 move "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.OLD"
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
 takeown /f "%WinDir%\System32\bcastdvr.exe" /a
 icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
 taskkill /im bcastdvr.exe /f
@@ -284,11 +282,6 @@ net stop diagnosticshub.standardcollector.service
 sc config diagnosticshub.standardcollector.service start= disabled
 
 
-::STOP WINDOWS MEDIA SHARING SERVICES
-sc stop WMPNetworkSvc
-sc config WMPNetworkSvc start= disabled
-
-
 ::DISABLE Diagnostic System Host
 sc config WdiSystemHost start= disabled
 sc config WdiServiceHost start= disabled
@@ -321,10 +314,8 @@ sc config WpcMonSvc start= disabled
 ::sc config WinDefend start= disabled (DISABLED AS FLAGGED BY SOME AV as MALWR)
 ::sc config WdNisSvc start= disabled (DISABLED AS FLAGGED BY SOME AV as MALWR)
 ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d 1 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d 4 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d 4 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d 4 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d 4 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d 1 /f
 schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
@@ -480,12 +471,16 @@ powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Rem
 powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
+
+
+::ADJUSTING THE PAGE FILE (DISABLED, NOT NEEDED FOR ALL SYSTEMS ONLY IF YOU HAVE 
+::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
+::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
+
+
+echo Clearing Cache...
+timeout /t 2
 taskkill /f /im explorer.exe
-
-
-::ADJUSTING THE PAGE FILE
-wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
-wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
 
 
 ::REMOVING SYSTEM CACHE
@@ -529,16 +524,23 @@ del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\thu
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\iconcache_*.db
 
 
-::REMOVING CHROME CACHE
-taskkill /F /IM "chrome.exe"
-set ChromeDataDir=C:\Users\%USERNAME%\AppData\Local\Google\Chrome\User Data\Default
-set ChromeCache=%ChromeDataDir%\Cache
-del /q /s /f "%ChromeCache%\*.*"  
-del /q /f "%ChromeDataDir%\*Cookies*.*"
-set ChromeDataDir=C:\Users\%USERNAME%\Local Settings\Application Data\Google\Chrome\User Data\Default
-set ChromeCache=%ChromeDataDir%\Cache
-del /q /s /f "%ChromeCache%\*.*"
-del /q /f "%ChromeDataDir%\*Cookies*.*"
+
+::REMOVING CHROME CACHE (ENABLE ONLY IF RUNNING FIRST TIME, DISABLED)
+::taskkill /F /IM "chrome.exe"
+::set ChromeDataDir=C:\Users\%USERNAME%\AppData\Local\Google\Chrome\User Data\Default
+::set ChromeCache=%ChromeDataDir%\Cache
+::del /q /s /f "%ChromeCache%\*.*"  
+::del /q /f "%ChromeDataDir%\*Cookies*.*"
+::set ChromeDataDir=C:\Users\%USERNAME%\Local Settings\Application Data\Google\Chrome\User Data\Default
+::set ChromeCache=%ChromeDataDir%\Cache
+::del /q /s /f "%ChromeCache%\*.*"
+::del /q /f "%ChromeDataDir%\*Cookies*.*"
+
+
+::CLEAR WINDOWS UPDATE CACHE (MAKE SURE THIS TOOLS IS NOT RUN AFTER SYSTEM UPDATES)
+::del /q /s /f "C:\Windows\SoftwareDistribution\*.*"  
+
+
 
 ::NETWORK TWEAKS
 REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v DefaultTTL /t REG_DWORD /d 00000030 /f
@@ -562,6 +564,7 @@ netsh interface tcp show heuristics
 netsh interface tcp set heuristics disabled
 ipconfig/flushdns
 netsh winsock reset
+netsh winsock reset proxy
 netsh int ip reset c:\resetlog.txt
 
 
