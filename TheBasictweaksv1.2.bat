@@ -541,23 +541,30 @@ del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\ico
 
 
 ::NETWORK TWEAKS
-REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v DefaultTTL /t REG_DWORD /d 00000030 /f
-REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v SynAttackProtect /t REG_DWORD /d 00000000 /f
-REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v TcpMaxDataRetransmissions /t REG_DWORD /d 00000002 /f
-REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v DisableLargeMTU /t REG_DWORD /d 00000000 /f
-REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v DisableTaskOffload /t REG_DWORD /d 00000000 /f
-REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters /v TCPNoDelay /t REG_DWORD /d 0000001 /f
-REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters /v EnableICMPRedirect /t REG_DWORD /d 00000000 /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v Affinity /t REG_DWORD /d 00000000 /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d False /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Clock Rate" /t REG_DWORD /d 00000100 /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 0000008 /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d 00000008 /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d High /f
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d High /f
-netsh int tcp show global
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d ffffffff /f 
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f 
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f 
+
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v DefaultTTL /t REG_DWORD /d 00000030 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v SynAttackProtect /t REG_DWORD /d 00000000 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tcpip\Parameters /v TcpMaxDataRetransmissions /t REG_DWORD /d 00000002 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v DisableLargeMTU /t REG_DWORD /d 00000000 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v DisableTaskOffload /t REG_DWORD /d 00000000 /f
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters /v TCPNoDelay /t REG_DWORD /d 0000001 /f
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters /v EnableICMPRedirect /t REG_DWORD /d 00000000 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d 6 /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d High /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d High /f
+netsh int tcp show 
+netsh int tcp set global ecncapability=disabled
+netsh int tcp set global timestamps=disabled
 netsh int tcp set global dca=enabled
-netsh int tcp set global autotuninglevel=normal 
+netsh int tcp set global initialRto=2000
+netsh int tcp set global autotuninglevel=disabled
+netsh int tcp set global rsc=disabled
+netsh int tcp set global fastopen=enabled
+netsh int tcp set global maxsynretransmissions=2 
 netsh interface tcp show heuristics
 netsh interface tcp set heuristics disabled
 ipconfig/flushdns
@@ -570,7 +577,6 @@ for /f %%x in (‘reg query HKLM\System\CurrentControlSet\Services\TcpIp\Paramet
 echo %%x
 reg add ^”%%x^” /v “TCPNoDelay” /t REG_DWORD /D 1 /F
 reg add ^”%%x^” /v “TcpAckFrequency” /t REG_DWORD /D 1 /F
-reg add ^”%%x^” /v “TcpWindowSize” /t REG_DWORD /D 8388608 /F
 )
 reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “TcpWindowSize” /t REG_DWORD /D 8388608 /F
 reg add HKLM\System\CurrentControlSet\Services\TcpIp\Parameters /v “KeepAliveInterval” /t REG_DWORD /D 120000 /F
