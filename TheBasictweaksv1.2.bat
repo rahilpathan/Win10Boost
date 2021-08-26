@@ -56,6 +56,9 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "H
 
 ::SHOW HIDDEN FILES
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+::SHOW  SUPERHIDDEN (OS) FILES - NOT RECOMMENDED
+:: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ShowSuperHidden /t REG_DWORD /d 1 /f
+
 
 
 ::DISABLE COMBINE IN TASKBAR ONLY WHEN FULL
