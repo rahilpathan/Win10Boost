@@ -280,7 +280,9 @@ net stop diagnosticshub.standardcollector.service
 sc config diagnosticshub.standardcollector.service start= disabled
 
 
-::DISABLE Diagnostic System Host
+::DISABLE DIAGNOSTIC SYSTEM HOST
+net stop WdiSystemHost
+net stop WdiServiceHost
 sc config WdiSystemHost start= disabled
 sc config WdiServiceHost start= disabled
 
