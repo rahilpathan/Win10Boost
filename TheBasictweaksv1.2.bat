@@ -161,7 +161,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableEngine" 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableWizard" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisablePCA" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "SbEnable" /t REG_DWORD /d 0 /f
-REG ADD "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d 00000000 /f
+REG ADD "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d 00000000 /f
 
 
 ::DISABLE ERROR REPORTING AND ADVERTISING
@@ -184,7 +184,7 @@ REG ADD "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport"
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoSecondLevelCollection" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoFileCollection" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoExternalURL" /t REG_DWORD /d 1 /f
-REG ADD "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "EnableDeviceHealthAttestationService" /t REG_DWORD /d 00000000 /f
+REG ADD "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "EnableDeviceHealthAttestationService" /t REG_DWORD /d 00000000 /f
 
 ::::SCHEDULED TASKS::::
 schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable
@@ -589,8 +589,8 @@ del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\ico
 ::del /q /s /f "C:\Windows\SoftwareDistribution\*.*"  
 
 ::DISABLE MEMORY DUMP
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
 
 
 ::NETWORK TWEAKS
@@ -599,56 +599,76 @@ netsh int ipv6 set state disabled
 netsh int isatap set state disabled
 netsh int teredo set state disabled
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
-
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d ffffffff /f 
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f 
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f 
-reg add "HKLM\SYSTEM\CurrentControlSet\services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d 00000030 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\services\Tcpip\Parameters" /v "SynAttackProtect" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\services\Tcpip\Parameters" /v "TcpMaxDataRetransmissions" /t REG_DWORD /d 00000002 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableLargeMTU" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 0000001 /f
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d 6 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d High /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d High /f
-netsh int tcp show 
-netsh int tcp set global ecncapability=disabled
-netsh int tcp set global timestamps=disabled
-netsh int tcp set global dca=enabled
-netsh int tcp set global initialRto=2000
-netsh int tcp set global autotuninglevel=disabled
-netsh int tcp set global rsc=disabled
-netsh int tcp set global fastopen=enabled
-netsh int tcp set global maxsynretransmissions=2 
-netsh interface tcp show heuristics
-netsh interface tcp set heuristics disabled
+netsh interface ip delete arpcache
 ipconfig/flushdns
+ipconfig /release
+ipconfig /renew
+netsh int ip reset
 netsh winsock reset
 netsh winsock reset proxy
+netsh advfirewall reset
 netsh int ip reset c:\resetlog.txt
-
-
-for /f %%x in (‘reg query HKLM\System\CurrentControlSet\Services\TcpIp\Parameters\Interfaces’) do (
-echo %%x
-reg add ^”%%x^” /v “TCPNoDelay” /t REG_DWORD /D 1 /F
-reg add ^”%%x^” /v “TcpAckFrequency” /t REG_DWORD /D 1 /F
-)
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “TcpWindowSize” /t REG_DWORD /D 8388608 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “KeepAliveInterval” /t REG_DWORD /D 120000 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “KeepAliveTime” /t REG_DWORD /D 120000 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “Tcp1323Opts” /t REG_DWORD /D 1 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “SackOpts” /t REG_DWORD /D 1 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “EnablePMTUDiscovery” /t REG_DWORD /D 1 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “EnablePMTUBHDetect” /t REG_DWORD /D 0 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “DefaultTTL” /t REG_DWORD /D 64 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\Parameters" /v “TcpMaxDupAcks” /t REG_DWORD /D 2 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider" /v “LocalPriority” /t REG_DWORD /D 50 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider" /v “HostsPriority” /t REG_DWORD /D 60 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider" /v “DnsPriority” /t REG_DWORD /D 70 /F
-reg add "HKLM\System\CurrentControlSet\Services\TcpIp\ServiceProvider" /v “NetBtPriority” /t REG_DWORD /D 80 /F
+netsh interface ip delete arpcache
+netsh int tcp set supplemental Custom
+netsh int tcp set supplemental InternetCustom
+netsh int tcp set global rsc=disabled >nul
+powershell -Command "& {Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled;}"
+powershell -Command "& {Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled;}"
+powershell -Command "& {Enable-NetAdapterChecksumOffload -Name *;}"
+powershell -Command "& {Disable-NetAdapterLso -Name *;}"
+netsh int tcp set global timestamps=disabled
+netsh int tcp set global initialRto=2500 >nul
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -MinRto 300;}"
+netsh int tcp set global congestionprovider=ctcp
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName Custom -CongestionProvider CTCP;}"
+netsh int tcp set supplemental Custom congestionprovider=ctcp
+netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
+netsh int tcp set global ecn=enabled	
+netsh int tcp set heuristics disabled
+netsh int tcp set global autotuninglevel=normal
+netsh int tcp set global chimney=disabled
+netsh int tcp set global rss=enabled
+netsh interface tcp set heuristics wsh=enabled
+netsh int tcp set global dca=enabled
+netsh int tcp set global nonsackrttresiliency=enabled >nul	
+netsh int tsp set global maxsynretransmissions=2 >nul
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -InitialCongestionWindow 10;}"
+netsh int tcp set supplemental template=custom icw=10
+netsh int tcp set supplemental template=InternetCustom icw=10
+netsh int tcp set security mpp=disabled
+netsh int tcp set security profiles=disabled
+netsh winsock set autotuning on
+netsh int tcp set global ecncapability=disabled
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v DefaultTTL /t REG_DWORD /d "64" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v MaxUserPort /t REG_DWORD /d "65534" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpTimedWaitDelay /t REG_DWORD /d "30" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v LocalPriority /t REG_DWORD /d "4" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v HostPriority /t REG_DWORD /d "5" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v DnsPriority /t REG_DWORD /d "6" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v NetbtPriority /t REG_DWORD /d "7" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v NonBestEffortLimit /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v LargeSystemCache /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v Size /t REG_DWORD /d "3" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v NetworkThrottlingIndex /t REG_DWORD /d "4294967295" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v SystemResponsiveness /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableHeuristics" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableWsd" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "1" /f		
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters" /v "MaximumUdpPacketSize" /t REG_DWORD /d "1280" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeSOACacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Affinity" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Clock Rate" /t REG_DWORD /d "2710" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "8" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v TCPNoDelay /t REG_DWORD /d "1" /f
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f 
 
 
 ::CLEARING EVENTS & LOGS (Source:WinAero)
