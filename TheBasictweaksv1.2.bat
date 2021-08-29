@@ -594,10 +594,10 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled
 
 
 ::NETWORK TWEAKS
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
 netsh int ipv6 set state disabled
 netsh int isatap set state disabled
 netsh int teredo set state disabled
+
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
 netsh interface ip delete arpcache
 ipconfig/flushdns
@@ -608,38 +608,55 @@ netsh winsock reset
 netsh winsock reset proxy
 netsh advfirewall reset
 netsh int ip reset c:\resetlog.txt
-netsh interface ip delete arpcache
 netsh int tcp set supplemental Custom
 netsh int tcp set supplemental InternetCustom
-netsh int tcp set global rsc=disabled >nul
-powershell -Command "& {Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled;}"
-powershell -Command "& {Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled;}"
-powershell -Command "& {Enable-NetAdapterChecksumOffload -Name *;}"
-powershell -Command "& {Disable-NetAdapterLso -Name *;}"
+netsh int tcp set global rsc=disabled
 netsh int tcp set global timestamps=disabled
-netsh int tcp set global initialRto=2500 >nul
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -MinRto 300;}"
+netsh int tcp set global initialRto=2500
 netsh int tcp set global congestionprovider=ctcp
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP;}"
-powershell -Command "& {Set-NetTCPSetting -SettingName Custom -CongestionProvider CTCP;}"
 netsh int tcp set supplemental Custom congestionprovider=ctcp
+netsh int tcp set supplemental Internet congestionprovider=ctcp
 netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
-netsh int tcp set global ecn=enabled	
+netsh int tcp set global ecn=enabled
 netsh int tcp set heuristics disabled
 netsh int tcp set global autotuninglevel=normal
 netsh int tcp set global chimney=disabled
 netsh int tcp set global rss=enabled
 netsh interface tcp set heuristics wsh=enabled
 netsh int tcp set global dca=enabled
-netsh int tcp set global nonsackrttresiliency=enabled >nul	
-netsh int tsp set global maxsynretransmissions=2 >nul
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -InitialCongestionWindow 10;}"
+netsh int tcp set global nonsackrttresiliency=enabled
+netsh int tsp set global maxsynretransmissions=2
 netsh int tcp set supplemental template=custom icw=10
 netsh int tcp set supplemental template=InternetCustom icw=10
 netsh int tcp set security mpp=disabled
 netsh int tcp set security profiles=disabled
 netsh winsock set autotuning on
-netsh int tcp set global ecncapability=disabled
+::netsh int ip set global taskoffload=enabled
+::netsh int ip set global neighborcachelimit=4096
+::netsh int tcp set global netdma=enabled
+::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 2
+::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 4
+::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 2
+::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 4
+
+powershell -Command "& {Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled;}"
+powershell -Command "& {Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled;}"
+powershell -Command "& {Enable-NetAdapterChecksumOffload -Name *;}"
+powershell -Command "& {Disable-NetAdapterLso -Name *;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName Custom -CongestionProvider CTCP;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -MinRto 300;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -InitialCongestionWindow 10;}"
+
+::PowerShell Disable-NetAdapterChecksumOffload -Name "*"
+::PowerShell Disable-NetAdapterLso -Name "*"
+::PowerShell Disable-NetAdapterRsc -Name "*"
+::PowerShell Disable-NetAdapterIPsecOffload -Name "*"
+::PowerShell Disable-NetAdapterPowerManagement -Name "*"
+::PowerShell Disable-NetAdapterQos -Name "*"
+
+reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v DefaultTTL /t REG_DWORD /d "64" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v MaxUserPort /t REG_DWORD /d "65534" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpTimedWaitDelay /t REG_DWORD /d "30" /f
