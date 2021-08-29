@@ -87,6 +87,10 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
 ::sc stop WSearch
 ::sc config WSearch start= disabled
 
+::DISABLE MEMORY COMPRESSION
+powershell "Disable-MMAgent -MemoryCompression"
+
+
 ::DISABLE CORTANA SEARCH BAR
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d "0" /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f
