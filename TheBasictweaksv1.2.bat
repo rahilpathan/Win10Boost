@@ -91,6 +91,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
 ::DISABLE MEMORY COMPRESSION
 powershell "Disable-MMAgent -MemoryCompression"
 
+::DISABLE PAGING COMBINE TRYING TO SAVE RAM
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "DisablePagingCombining" /t REG_DWORD /d "1" /f
 
 ::DISABLE CORTANA SEARCH BAR
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d "0" /f
@@ -176,6 +178,15 @@ del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s
 ::ADJUSTING THE PAGE FILE (DISABLED, NOT NEEDED FOR ALL SYSTEMS ONLY IF YOU HAVE 
 ::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
 ::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
+
+::DISABLE TSX/MELTDOWN/SPECTRE PATCHES (DISABLE BELOW IF SERVER OR WORK ENVIRONMENT)
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Kernel" /v "DisableTsx" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "EnableCfg" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "FeatureSettings" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d "3" /f
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d "3" /f
+
+
 
 :::::: WINDOWS UPDATE TWEAKS ::::::
 
@@ -291,7 +302,7 @@ sc stop MapsBroker
 sc config MapsBroker start= disabled
 ::DISABLE MAPS DOWNLOAD
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v AutoDownloadAndUpdateMapData /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v AllowUntriggeredNetworkTrafficOnSettingsPage /t REG_DWORD /d 0 /fa
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v AllowUntriggeredNetworkTrafficOnSettingsPage /t REG_DWORD /d 0 /f
 
 
 ::DISBALE XBOX AND GAMING SERVICES
