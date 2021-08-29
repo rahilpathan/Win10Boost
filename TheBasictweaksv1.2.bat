@@ -51,7 +51,7 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "H
 ::DISABLE COMBINE IN TASKBAR ONLY WHEN FULL
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarGlomLevel" /t REG_dWORD /d 1 /f
 
-::Disable Windows tips
+::DISABLE WINDOWS TIPS
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableSoftLanding /t REG_DWORD /d 1 /f
 
 
