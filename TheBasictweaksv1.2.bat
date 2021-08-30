@@ -144,7 +144,7 @@ sc stop dmwappushservice
 sc delete DiagTrack
 sc delete dmwappushservice
 
-:: Disable windows insider experiments.
+::DISABLE WINDOWS INSIDER EXPERIMENTS
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\System" /v "AllowExperimentation" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\System\AllowExperimentation" /v "value" /t "REG_DWORD" /d "0" /f
 
