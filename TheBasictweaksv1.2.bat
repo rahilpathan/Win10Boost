@@ -682,11 +682,11 @@ netsh int tcp set supplemental Custom congestionprovider=ctcp
 netsh int tcp set supplemental Internet congestionprovider=ctcp
 netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
 netsh int tcp set global ecn=enabled
+netsh int tcp set global ecncapability=disabled
 netsh int tcp set heuristics disabled
 netsh int tcp set global autotuninglevel=normal
 netsh int tcp set global chimney=disabled
 netsh int tcp set global rss=enabled
-netsh interface tcp set heuristics wsh=enabled
 netsh int tcp set global dca=enabled
 netsh int tcp set global nonsackrttresiliency=enabled
 netsh int tsp set global maxsynretransmissions=2
@@ -695,6 +695,8 @@ netsh int tcp set supplemental template=InternetCustom icw=10
 netsh int tcp set security mpp=disabled
 netsh int tcp set security profiles=disabled
 netsh winsock set autotuning on
+::netsh interface tcp set heuristics wsh=enabled
+
 ::netsh int ip set global taskoffload=enabled
 ::netsh int ip set global neighborcachelimit=4096
 ::netsh int tcp set global netdma=enabled
