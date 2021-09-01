@@ -91,6 +91,16 @@ reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ad
 
 ::::OPTIMIZATION TWEAKS::::::
 
+::BOOST FOR GAMING
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d 16 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d "High" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Affinity" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Clock Rate" /t REG_DWORD /d "2710" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "8" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
+
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
 sc config SysMain start= disabled
@@ -232,6 +242,12 @@ reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\defragsvc" /v "Start" /t REG_DWORD /d "4" /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\vds" /v "Start" /t REG_DWORD /d "4" /f
 
+::DECREASE SHUTDOWN TIME
+reg add "HKCU\Control Panel\Desktop" /v WaitToKillAppTimeOut /t REG_SZ /d 2000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v WaitToKillServiceTimeout /t REG_SZ /d 2000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v HungAppTimeout /t REG_SZ /d 2000 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v AutoEndTasks /t REG_SZ /d 1 /f
+
 :::::: WINDOWS UPDATE TWEAKS ::::::
 
 ::DELIVERY OPTIMIZATION
@@ -333,12 +349,22 @@ schtasks /Change /TN "Microsoft\Windows\DiskFootprint\Diagnostics" /Disable
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWORD /d 0x00000003 /f
 
 ::DISABLE APP SUGGESTIONS. MICROSOFT ACCOUNT SIGN IN REQ
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f
-
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "FeatureManagementEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "OemPreInstalledAppsEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEverEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RemediationRequired" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d 0 /f
 
 ::DISABLE REMOTE REGISTRY FOR SECURITY
 sc stop RemoteRegistry
@@ -590,12 +616,137 @@ powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
 
 
+::REMOVING CHROME CACHE (ENABLE ONLY IF RUNNING FIRST TIME, DISABLED)
+::taskkill /F /IM "chrome.exe"
+::set ChromeDataDir=C:\Users\%USERNAME%\AppData\Local\Google\Chrome\User Data\Default
+::set ChromeCache=%ChromeDataDir%\Cache
+::del /q /s /f "%ChromeCache%\*.*"  
+::del /q /f "%ChromeDataDir%\*Cookies*.*"
+::set ChromeDataDir=C:\Users\%USERNAME%\Local Settings\Application Data\Google\Chrome\User Data\Default
+::set ChromeCache=%ChromeDataDir%\Cache
+::del /q /s /f "%ChromeCache%\*.*"
+::del /q /f "%ChromeDataDir%\*Cookies*.*"
+
+
+::CLEAR WINDOWS UPDATE CACHE (MAKE SURE THIS TOOLS IS NOT RUN AFTER SYSTEM UPDATES)
+::del /q /s /f "C:\Windows\SoftwareDistribution\*.*"  
+
+::DISABLE MEMORY DUMP
+reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+
+
+::NETWORK TWEAKS
+ipconfig/flushdns
+ipconfig /release
+ipconfig /renew
+netsh int ip reset
+netsh int tcp reset
+netsh winsock reset
+netsh winsock reset proxy
+netsh winsock reset catalog
+netsh advfirewall reset
+netsh int ip reset c:\resetlog.txt
+
+netsh interface ip delete arpcache
+netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
+
+netsh int tcp set supplemental custom congestionprovider = ctcp
+
+netsh int ipv6 set state disabled
+netsh int isatap set state disabled
+netsh int tcp set global autotuninglevel=normal
+netsh int tcp set global chimney=disabled
+netsh int tcp set global dca=enabled
+netsh int tcp set global ecn=enabled
+netsh int tcp set global ecncapability=disabled
+netsh int tcp set global initialRto=2000
+netsh int tcp set global maxsynretransmissions=2
+netsh int tcp set global netdma=enabled
+netsh int tcp set global nonsackrttresiliency=disabled
+netsh int tcp set global rsc=disabled
+netsh int tcp set global rss=enabled
+netsh int tcp set global timestamps=disabled
+netsh int tcp set heuristics disabled
+netsh int tcp set security mpp=disabled
+netsh int tcp set security profiles=disabled
+netsh int tcp set supplemental Custom
+netsh int tcp set supplemental Custom congestionprovider=ctcp
+netsh int tcp set supplemental Internet congestionprovider=ctcp
+netsh int tcp set supplemental InternetCustom
+netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
+netsh int teredo set state disabled
+netsh int tsp set global maxsynretransmissions=2
+netsh winsock set autotuning on
+
+::netsh interface tcp set heuristics wsh=enabled
+::netsh int ip set global taskoffload=enabled
+::netsh int ip set global neighborcachelimit=4096
+
+
+powershell -Command "& {Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled;}"
+powershell -Command "& {Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled;}"
+powershell -Command "& {Enable-NetAdapterChecksumOffload -Name *;}"
+powershell -Command "& {Disable-NetAdapterLso -Name *;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName Custom -CongestionProvider CTCP;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -MinRto 300;}"
+powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -InitialCongestionWindow 10;}"
+::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 2
+::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 4
+::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 2
+::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 4
+
+::PowerShell Disable-NetAdapterChecksumOffload -Name "*"
+::PowerShell Disable-NetAdapterLso -Name "*"
+::PowerShell Disable-NetAdapterRsc -Name "*"
+::PowerShell Disable-NetAdapterIPsecOffload -Name "*"
+::PowerShell Disable-NetAdapterPowerManagement -Name "*"
+::PowerShell Disable-NetAdapterQos -Name "*"
+
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "LocalPriority" /t REG_DWORD /d "4" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostPriority" /t REG_DWORD /d "5" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d "7" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableHeuristics" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableWsd" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "30" /f
+
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "4294967295" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /t REG_SZ /v "Disabled" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /v "Teredo_State" /d "Disabled" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters" /v "MaximumUdpPacketSize" /t REG_DWORD /d "1280" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeSOACacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v Size /t REG_DWORD /d "3" /f
+
+reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
+
+::CLEARING  SYSTEM CACHE, EVENTS & LOGS (Source:WinAero)
 echo Clearing Cache...
 timeout /t 2
 taskkill /f /im explorer.exe
 
+deltree /y c:\windows\tempor~1
+deltree /y c:\windows\temp
+deltree /y c:\windows\tmp
+deltree /y c:\windows\ff*.tmp
+deltree /y c:\windows\history
+deltree /y c:\windows\cookies
+deltree /y c:\windows\recent
+deltree /y c:\windows\spool\printers
 
-::REMOVING SYSTEM CACHE
 del C:\Temp /S /Q /F
 del C:\Temp /S /Q /A:H
 FOR /D %%p IN ("C:\Temp\*") DO rmdir "%%p" /s /q
@@ -634,127 +785,6 @@ rd /s /q "%USERPROFILE%\Cookies"
 md "%USERPROFILE%\Cookies"
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\thumbcache_*.db
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\iconcache_*.db
-
-
-
-::REMOVING CHROME CACHE (ENABLE ONLY IF RUNNING FIRST TIME, DISABLED)
-::taskkill /F /IM "chrome.exe"
-::set ChromeDataDir=C:\Users\%USERNAME%\AppData\Local\Google\Chrome\User Data\Default
-::set ChromeCache=%ChromeDataDir%\Cache
-::del /q /s /f "%ChromeCache%\*.*"  
-::del /q /f "%ChromeDataDir%\*Cookies*.*"
-::set ChromeDataDir=C:\Users\%USERNAME%\Local Settings\Application Data\Google\Chrome\User Data\Default
-::set ChromeCache=%ChromeDataDir%\Cache
-::del /q /s /f "%ChromeCache%\*.*"
-::del /q /f "%ChromeDataDir%\*Cookies*.*"
-
-
-::CLEAR WINDOWS UPDATE CACHE (MAKE SURE THIS TOOLS IS NOT RUN AFTER SYSTEM UPDATES)
-::del /q /s /f "C:\Windows\SoftwareDistribution\*.*"  
-
-::DISABLE MEMORY DUMP
-reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
-
-
-::NETWORK TWEAKS
-netsh int ipv6 set state disabled
-netsh int isatap set state disabled
-netsh int teredo set state disabled
-
-netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
-netsh interface ip delete arpcache
-ipconfig/flushdns
-ipconfig /release
-ipconfig /renew
-netsh int ip reset
-netsh winsock reset
-netsh winsock reset proxy
-netsh advfirewall reset
-netsh int ip reset c:\resetlog.txt
-netsh int tcp set supplemental Custom
-netsh int tcp set supplemental InternetCustom
-netsh int tcp set global rsc=disabled
-netsh int tcp set global timestamps=disabled
-netsh int tcp set global initialRto=2500
-netsh int tcp set global congestionprovider=ctcp
-netsh int tcp set supplemental Custom congestionprovider=ctcp
-netsh int tcp set supplemental Internet congestionprovider=ctcp
-netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
-netsh int tcp set global ecn=enabled
-netsh int tcp set global ecncapability=disabled
-netsh int tcp set heuristics disabled
-netsh int tcp set global autotuninglevel=normal
-netsh int tcp set global chimney=disabled
-netsh int tcp set global rss=enabled
-netsh int tcp set global dca=enabled
-netsh int tcp set global nonsackrttresiliency=enabled
-netsh int tsp set global maxsynretransmissions=2
-netsh int tcp set supplemental template=custom icw=10
-netsh int tcp set supplemental template=InternetCustom icw=10
-netsh int tcp set security mpp=disabled
-netsh int tcp set security profiles=disabled
-netsh winsock set autotuning on
-::netsh interface tcp set heuristics wsh=enabled
-
-::netsh int ip set global taskoffload=enabled
-::netsh int ip set global neighborcachelimit=4096
-::netsh int tcp set global netdma=enabled
-::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 2
-::powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 4
-::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 2
-::powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 4
-
-powershell -Command "& {Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled;}"
-powershell -Command "& {Set-NetOffloadGlobalSetting -PacketCoalescingFilter disabled;}"
-powershell -Command "& {Enable-NetAdapterChecksumOffload -Name *;}"
-powershell -Command "& {Disable-NetAdapterLso -Name *;}"
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP;}"
-powershell -Command "& {Set-NetTCPSetting -SettingName Custom -CongestionProvider CTCP;}"
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -MinRto 300;}"
-powershell -Command "& {Set-NetTCPSetting -SettingName InternetCustom -InitialCongestionWindow 10;}"
-
-::PowerShell Disable-NetAdapterChecksumOffload -Name "*"
-::PowerShell Disable-NetAdapterLso -Name "*"
-::PowerShell Disable-NetAdapterRsc -Name "*"
-::PowerShell Disable-NetAdapterIPsecOffload -Name "*"
-::PowerShell Disable-NetAdapterPowerManagement -Name "*"
-::PowerShell Disable-NetAdapterQos -Name "*"
-
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "4294967295" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "0" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Affinity" /t REG_DWORD /d "0" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d "False" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Clock Rate" /t REG_DWORD /d "2710" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "GPU Priority" /t REG_DWORD /d "8" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d "6" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d "High" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /t REG_SZ /v "Disabled" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /v "Teredo_State" /d "Disabled" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters" /v "MaximumUdpPacketSize" /t REG_DWORD /d "1280" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeCacheTime" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeSOACacheTime" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v Size /t REG_DWORD /d "3" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableHeuristics" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableWsd" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "1" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "30" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostPriority" /t REG_DWORD /d "5" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "LocalPriority" /t REG_DWORD /d "4" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d "7" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
-
-::CLEARING EVENTS & LOGS (Source:WinAero)
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
@@ -769,9 +799,7 @@ goto :eof
 echo You must run this script as an Administrator!
 echo.
 :theEnd
-
 start explorer.exe
-
 
 echo. "Please Restart the System to take Effect! "
 
