@@ -367,32 +367,24 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d 0 /f
 
 ::DISABLE REMOTE REGISTRY FOR SECURITY
-sc stop RemoteRegistry
 sc config RemoteRegistry start= disabled
 
 ::DISABLE MAPS
-sc stop MapsBroker
 sc config MapsBroker start= disabled
 ::DISABLE MAPS DOWNLOAD
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v AutoDownloadAndUpdateMapData /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v AllowUntriggeredNetworkTrafficOnSettingsPage /t REG_DWORD /d 0 /f
 
-
 ::DISBALE XBOX AND GAMING SERVICES
 ::Xbox Game Monitoring
-sc stop xbgm
 sc config xbgm start= disabled
 ::Xbox Live Auth Manager
-sc stop XblAuthManager
 sc config XblAuthManager start= disabled
 ::Xbox Live Game Save
-sc stop XblGameSave
 sc config XblGameSave start= disabled
 ::Xbox Accessory Management Service
-sc stop XboxGipSvc
 sc config XboxGipSvc start= disabled
 ::Xbox Live Networking Service
-sc stop XboxNetApiSvc
 sc config XboxNetApiSvc start= disabled
 ::Xbox registries
 reg add "HKLM\System\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d "4" /f
@@ -405,6 +397,7 @@ reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d 
 reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
+
 ::Xbox SCH Tasks
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
 takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
@@ -417,32 +410,24 @@ taskkill /im bcastdvr.exe /f
 move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 ::DISABLE ALLJOYN (This service is used for routing the AllJoyn messages for AllJoyn clients.)
-net stop AJRouter
 sc config AJRouter start= disabled
 
 ::DISABLE GEOLOCATION (IF IT IS DESKTOP AND YOU DON'T NEED TRACKING SERVICES)
-net stop lfsvc
 sc config lfsvc start= disabled
 
 ::DISABLE PHONE SERVICES
-net stop PhoneSvc
 sc config PhoneSvc start= disabled
 
 ::DISABLE WINDOWS INSIDER UPDATER SERVICE
-net stop wisvc
 sc config wisvc start=disabled
 
 ::DISABLE WINDOWS MEDIA PLAYER SHARING SERVICES
-net stop WMPNetworkSvc
 sc config WMPNetworkSvc start= disabled
 
 ::DISABLE INDEXING
-net stop DiagTrack
 sc config DiagTrack start= disabled
 
 ::DISABLE DIAGNOSTIC SYSTEM HOST
-net stop WdiSystemHost
-net stop WdiServiceHost
 sc config WdiSystemHost start= disabled
 sc config WdiServiceHost start= disabled
 
@@ -454,7 +439,6 @@ sc config iphlpsvc start= disabled
 sc config IEEtwCollectorService start= disabled
 
 ::DISABLE PARENTAL CONTROL
-sc stop WpcMonSvc
 sc config WpcMonSvc start= disabled
 
 ::DISABLE HIBERNATE
