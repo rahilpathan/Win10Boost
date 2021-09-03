@@ -248,6 +248,10 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v WaitToKillServiceTimeout /t R
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v HungAppTimeout /t REG_SZ /d 2000 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v AutoEndTasks /t REG_SZ /d 1 /f
 
+::DISABLING IRIS (9/2/21)
+reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\IrisService /f
+
+
 :::::: WINDOWS UPDATE TWEAKS ::::::
 
 ::DELIVERY OPTIMIZATION
