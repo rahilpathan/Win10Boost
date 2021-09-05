@@ -110,13 +110,13 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedS
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowIndexingEncryptedStoresOrItems" /t REG_DWORD /d "0" /f
 ::DISABLE DISK DIAGNOSTICS
-schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"
-schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable
-schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver"
-schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable
-schtasks /end /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem"
-schtasks /change /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable
-schtasks /change /tn "\Microsoft\Windows\DiskFootprint\StorageSense" /disable
+schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"
+schtasks /change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable
+schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver"
+schtasks /change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable
+schtasks /end /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem"
+schtasks /change /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable
+schtasks /change /tn "Microsoft\Windows\DiskFootprint\StorageSense" /disable
 ::DISABLE DIAGNOSTIC DATA POLICY
 reg add "HKEY_Current_User\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableTailoredExperiencesWithDiagnosticData /t REG_DWORD /d 1 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f
@@ -208,8 +208,9 @@ reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\IrisService /f
 ::DISABLE ACTIVEX
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWORD /d 0x00000003 /f
 ::DISABLE FAMILY SAFETY MONITOR SERVICE
-schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" /disable
-schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" /disable
+schtasks /change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /disable
+schtasks /change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /disable
+schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
 :::::: WINDOWS UPDATE TWEAKS ::::::
 ::FORCE WINDOWS UPDATE BETWEEN MORNING 4 to 6.
 reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursStart" /t REG_DWORD /d 6 /f
@@ -313,7 +314,6 @@ schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compati
 schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable
 schtasks /Change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /Disable
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
-schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable
@@ -326,7 +326,7 @@ schtasks /Change /TN "Microsoft\Windows\ErrorDetails\ErrorDetailsUpdate" /Disabl
 schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 schtasks /Change /TN "Microsoft\Windows\DiskFootprint\Diagnostics" /Disable
 schtasks /Change /TN "Microsoft\Windows\Maintenance\WinSAT" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /disable
+schtasks /Change /TN "Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /disable
 ::3rd Party tools
 schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /Disable
 schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /Disable
@@ -402,7 +402,7 @@ sc config wisvc start=disabled
 sc config WMPNetworkSvc start= disabled
 ::DISABLE INDEXING
 sc config DiagTrack start= disabled
-schtasks /change /TN "\Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /Disable
+schtasks /change /TN "Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /Disable
 sc config "PimIndexMaintenanceSvc" start=disabled
 ::DISABLE DIAGNOSTIC SYSTEM HOST
 sc config WdiSystemHost start= disabled
