@@ -13,7 +13,7 @@ if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
 ECHO Set UAC = CreateObject^("Shell.Application"^) > "%vbsGetPrivileges%"
 ECHO args = "ELEV " >> "%vbsGetPrivileges%"
 ECHO For Each strArg in WScript.Arguments >> "%vbsGetPrivileges%"
-ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
+ECHO args = args ^& strArg ^& " " >> "%vbsGetPrivileges%"
 ECHO Next >> "%vbsGetPrivileges%"
 ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
 "%SystemRoot%\System32\WScript.exe" "%vbsGetPrivileges%" %*
@@ -45,7 +45,7 @@ reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Current
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
 ::SHOW HIDDEN FILES
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
-::SHOW  SUPERHIDDEN (OS) FILES - NOT RECOMMENDED
+::SHOW SUPERHIDDEN (OS) FILES - NOT RECOMMENDED
 :: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ShowSuperHidden /t REG_DWORD /d 1 /f
 ::DISABLE COMBINE IN TASKBAR ONLY WHEN FULL
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarGlomLevel" /t REG_dWORD /d 1 /f
@@ -644,7 +644,7 @@ powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-A
 ::taskkill /F /IM "chrome.exe"
 ::set ChromeDataDir=C:\Users\%USERNAME%\AppData\Local\Google\Chrome\User Data\Default
 ::set ChromeCache=%ChromeDataDir%\Cache
-::del /q /s /f "%ChromeCache%\*.*"  
+::del /q /s /f "%ChromeCache%\*.*" 
 ::del /q /f "%ChromeDataDir%\*Cookies*.*"
 ::set ChromeDataDir=C:\Users\%USERNAME%\Local Settings\Application Data\Google\Chrome\User Data\Default
 ::set ChromeCache=%ChromeDataDir%\Cache
@@ -653,11 +653,11 @@ powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-A
 
 
 ::CLEAR WINDOWS UPDATE CACHE (MAKE SURE THIS TOOLS IS NOT RUN AFTER SYSTEM UPDATES)
-::del /q /s /f "C:\Windows\SoftwareDistribution\*.*"  
+::del /q /s /f "C:\Windows\SoftwareDistribution\*.*" 
 
 ::DISABLE MEMORY DUMP
-reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+::reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
+::reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
 
 ::RESTORE ORIGINAL BCDEDITS
 ::bcdedit /deletevalue {current} safeboot
@@ -773,55 +773,47 @@ powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Serv
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TCPNoDelay -Value 1"
 
-::CLEARING  SYSTEM CACHE, EVENTS & LOGS (Source:WinAero)
+::CLEARING SYSTEM CACHE, EVENTS & LOGS (Source:WinAero)
 echo Clearing Cache...
 timeout /t 2
 taskkill /f /im explorer.exe
 
-deltree /y c:\windows\tempor~1
-deltree /y c:\windows\temp
-deltree /y c:\windows\tmp
-deltree /y c:\windows\ff*.tmp
-deltree /y c:\windows\history
-deltree /y c:\windows\cookies
-deltree /y c:\windows\recent
-deltree /y c:\windows\spool\printers
-
 del C:\Temp /S /Q /F
 del C:\Temp /S /Q /A:H
-FOR /D %%p IN ("C:\Temp\*") DO rmdir "%%p" /s /q
 del C:\Windows\Temp /S /Q /F
 del C:\Windows\Temp /S /Q /A:H
-FOR /D %%p IN ("C:\Windows\Temp\*") DO rmdir "%%p" /s /q
-del /s /f /q %windir%\temp\*.*    
-rd /s /q %windir%\temp    
-md %windir%\temp    
-del /s /f /q %windir%\Prefetch\*.*    
-rd /s /q %windir%\Prefetch    
-md %windir%\Prefetch    
-del /s /f /q %windir%\system32\dllcache\*.*    
-rd /s /q %windir%\system32\dllcache    
-md %windir%\system32\dllcache    
-del /s /f /q "%SysteDrive%\Temp"\*.*    
-rd /s /q "%SysteDrive%\Temp"    
-md "%SysteDrive%\Temp"    
-del /s /f /q %temp%\*.*    
-rd /s /q %temp%    
-md %temp%    
-del /s /f /q "%USERPROFILE%\Local Settings\History"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\History"    
-md "%USERPROFILE%\Local Settings\History"    
-del /s /f /q "%USERPROFILE%\Local Settings\Temporary Internet Files"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files"    
-md "%USERPROFILE%\Local Settings\Temporary Internet Files"    
-del /s /f /q "%USERPROFILE%\Local Settings\Temp"\*.*    
-rd /s /q "%USERPROFILE%\Local Settings\Temp"    
-md "%USERPROFILE%\Local Settings\Temp"    
-del /s /f /q "%USERPROFILE%\Recent"\*.*    
-rd /s /q "%USERPROFILE%\Recent"    
-md "%USERPROFILE%\Recent"    
+del /s /f /q %windir%\temp\*.*
+rd /s /q %windir%\temp
+md %windir%\temp
+del /s /f /q %windir%\spool\printers\*.*
+rd /s /q %windir%\spool\printers
+md %windir%\spool\printers
+del /s /f /q %windir%\Prefetch\*.* 
+rd /s /q %windir%\Prefetch 
+md %windir%\Prefetch 
+del /s /f /q %windir%\system32\dllcache\*.* 
+rd /s /q %windir%\system32\dllcache 
+md %windir%\system32\dllcache 
+del /s /f /q "%SysteDrive%\Temp"\*.* 
+rd /s /q "%SysteDrive%\Temp" 
+md "%SysteDrive%\Temp" 
+del /s /f /q %temp%\*.* 
+rd /s /q %temp% 
+md %temp% 
+del /s /f /q "%USERPROFILE%\Local Settings\History"\*.* 
+rd /s /q "%USERPROFILE%\Local Settings\History" 
+md "%USERPROFILE%\Local Settings\History" 
+del /s /f /q "%USERPROFILE%\Local Settings\Temporary Internet Files"\*.* 
+rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 
+md "%USERPROFILE%\Local Settings\Temporary Internet Files" 
+del /s /f /q "%USERPROFILE%\Local Settings\Temp"\*.* 
+rd /s /q "%USERPROFILE%\Local Settings\Temp" 
+md "%USERPROFILE%\Local Settings\Temp" 
+del /s /f /q "%USERPROFILE%\Recent"\*.* 
+rd /s /q "%USERPROFILE%\Recent" 
+md "%USERPROFILE%\Recent" 
 del /s /f /q "%USERPROFILE%\Cookies"\*.* 
-rd /s /q "%USERPROFILE%\Cookies"    
+rd /s /q "%USERPROFILE%\Cookies" 
 md "%USERPROFILE%\Cookies"
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\thumbcache_*.db
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\iconcache_*.db
