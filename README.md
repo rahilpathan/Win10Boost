@@ -5,7 +5,9 @@ Optimize Windows 10 services _(System modification tweaks and optimization for o
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster. Feel free if you have any suggestions by navigating to the issues tab.
  
 ______________
- 
+ How to use:
+1. Download 'TheBasicTweak.bat file' or copy paste the entire content to notepad and save it as batch file. 
+2. Then right click and run as administrator.
 ______________
 
 
