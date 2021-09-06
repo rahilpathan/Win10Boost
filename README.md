@@ -1,13 +1,8 @@
 # win10boost
 Optimize Windows 10 services _(System modification tweaks and optimization for overall performance of Windows 10, Script is very well labelled what each command does)_
 
-This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster.
-
-_______________ 
-
-_______________ 
-
 **Note: This tool is free to use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
+This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster. Feel free if you have any suggestions by navigating to the issues tab.
  
 ______________
  
