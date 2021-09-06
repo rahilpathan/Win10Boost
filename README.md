@@ -9,7 +9,7 @@ ______________
 ______________
 
 
-Thanks me with crypto:
+Thank me with cryptocurrency:
 
 BTC: 15gRWjrnD9UJQMJjsiBYUa3UzrfXNwQ9hZ
 
