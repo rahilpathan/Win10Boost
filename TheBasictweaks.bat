@@ -38,9 +38,9 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider" /v "RestoreConne
 ::OPEN THIS PC instead of QUICK ACCESS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d 1 /f
 ::ENABLE DARK THEME
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
-reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
+::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
+::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
+::reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
 ::SHOW FILE EXTENSIONS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
 ::SHOW HIDDEN FILES
@@ -651,7 +651,12 @@ powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *XboxSpeechToTextOverlay* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Xbox.TCUI"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1 | Remove-AppxPackage"
+::REMOVING CORTANA
+powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage"
+
+
+
+
 
 ::REMOVING CHROME CACHE (ENABLE ONLY IF RUNNING FIRST TIME, DISABLED)
 ::taskkill /F /IM "chrome.exe"
