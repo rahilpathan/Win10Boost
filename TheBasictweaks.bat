@@ -264,13 +264,18 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWOR
 schtasks /change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /disable
 schtasks /change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /disable
 schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
-:::::: WINDOWS UPDATE TWEAKS ::::::
+
+
+
+::::::: WINDOWS UPDATE TWEAKS :::::::
+
+
 ::FORCE WINDOWS UPDATE BETWEEN MORNING 4 to 6.
 reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursStart" /t REG_DWORD /d 6 /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursEnd" /t REG_DWORD /d 4 /f
 ::DELIVERY OPTIMIZATION
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d "0" /f
+::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d "0" /f+
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" /v "SystemSettingsDownloadMode" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "start" /t REG_DWORD /d 2 /f
@@ -281,14 +286,14 @@ reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\System\AllowExperimentati
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableConfigFlighting" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f
 ::MALICIOUS REMOVAL TOOLS NOT THRU WINDOWS UPDATE
-reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
+::reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
 ::ENABLE CHECKING OF WINDOWS UPDATE EVERY HOUR
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "DetectionFrequencyEnabled" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "DetectionFrequency" /t REG_DWORD /d 1 /f
 ::INSTALL SECURITY UPDATES IMMEDIATELY
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferQualityUpdates" /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferQualityUpdatesPeriodInDays" /d 0 /f
-::DEFER FEATURE UPDATE 360 DAYS
+::DEFER FEATURE UPDATES FOR 360 DAYS
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferFeatureUpdates" /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferFeatureUpdatesPeriodInDays" /d 360 /f
 reg add	"HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /t REG_DWORD /v "EnableFeaturedSoftware" /D 0 /f
@@ -448,6 +453,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "HistoricalC
 reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
 reg add "HKLM\System\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d "4" /f
+
 ::Xbox SCH Tasks
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
@@ -669,13 +675,6 @@ powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-
 ::del /q /s /f "%ChromeCache%\*.*"
 ::del /q /f "%ChromeDataDir%\*Cookies*.*"
 
-
-::CLEAR WINDOWS UPDATE CACHE (MAKE SURE THIS TOOLS IS NOT RUN AFTER SYSTEM UPDATES)
-::del /q /s /f "C:\Windows\SoftwareDistribution\*.*" 
-
-::DISABLE MEMORY DUMP
-::reg add "HKLM\SYSTEM\ControlSet001\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
-::reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v CrashDumpEnabled /t REG_DWORD /d 0x7 /f
 
 ::RESTORE ORIGINAL BCDEDITS
 ::bcdedit /deletevalue {current} safeboot
