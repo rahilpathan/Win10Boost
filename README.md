@@ -24,7 +24,3 @@ Author: www.linkedin.com/in/rahilpathan
 
 Source: Data from public sources available on the internet
 
-Verify the system startup time before you run the script and compare after you apply this script and reboot your system. :)
-
-![image](https://user-images.githubusercontent.com/20379786/130716746-be93a427-ea4a-460f-ad79-da9be6e2073d.png)
-
