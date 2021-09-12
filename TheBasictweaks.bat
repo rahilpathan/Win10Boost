@@ -747,7 +747,7 @@ powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPac
 powershell -Command "Get-AppxPackage -allusers *ActiproSoftwareLLC* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AdobePhotoshopExpress* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Advertising.Xaml* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Advertising.Xml* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AppConnector* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Asphalt8Airborne* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *AutodeskSketchBook* | Remove-AppxPackage"
@@ -826,7 +826,6 @@ powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *soundrec* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *tiktok* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *XboxSpeechToTextOverlay* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *Xbox.TCUI"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
@@ -847,14 +846,13 @@ netsh winsock reset
 netsh winsock reset proxy
 netsh winsock reset catalog
 netsh advfirewall reset
-netsh int ip reset c:\resetlog.txt
 netsh interface ip delete arpcache
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
 netsh int tcp set supplemental custom congestionprovider = ctcp
 netsh int ipv6 set state disabled
 netsh int isatap set state disabled
 netsh int tcp set global autotuninglevel=normal
-netsh int tcp set global chimney=disabled
+::netsh int tcp set global chimney=disabled
 netsh int tcp set global dca=enabled
 netsh int tcp set global ecn=enabled
 netsh int tcp set global ecncapability=enabled
