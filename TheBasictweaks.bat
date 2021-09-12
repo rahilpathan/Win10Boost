@@ -747,7 +747,10 @@ move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 ::::: SECURITY TWEAKS ::::::
 
-
+::CVE-2020-
+reg add HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters /v TcpReceivePacketSize /t REG_DWORD /d 0xFF00
+net stop "DNS Server"
+net start "DNS Server"
 
 ::DISABLE REMOTE ASSISTANCE AND RELATED
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fAllowToGetHelp /t REG_DWORD /d 0 /f
