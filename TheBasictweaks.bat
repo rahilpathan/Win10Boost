@@ -230,6 +230,8 @@ reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "En
 ::DISABLE ERROR REPORTING AND ADVERTISING
 sc stop WerSvc
 sc config WerSvc start= disabled
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\W3SVC" /v Start /t REG_DWORD /d 0 /f
+
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d 00000000 /f
 reg add "HKCU\Control Panel\International\User Profile" /v HttpAcceptLanguageOptOut /t REG_DWORD /d 1 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v Enabled /t REG_DWORD /d 0 /f
@@ -536,9 +538,6 @@ schtasks /Change /TN "\Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
 schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
 schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
 
-::SSD TWEAK
-SET Prefetch=0
-
 ::3RD PARTY TOOLS
 schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /Disable
 schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /Disable
@@ -547,6 +546,9 @@ schtasks /Change /TN "GoogleUpdateTaskMachineUA" /Disable
 reg add "HKLM\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown" /v "bUpdater" /t REG_DWORD /d 0 /f
 
 ::DISABLE APP SUGGESTIONS. MICROSOFT ACCOUNT SIGN IN REQ
+reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v ConfigureWindowsSpotlight /t REG_DWORD /d 2 /f
+reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v DisableThirdPartySuggestions /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsSpotlightFeatures /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f
@@ -563,9 +565,6 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d 0 /f
-
-::DISABLE REMOTE REGISTRY FOR SECURITY
-sc config RemoteRegistry start= disabled
 
 ::DISABLE MAPS
 sc config MapsBroker start= disabled
@@ -630,7 +629,11 @@ sc config XblGameSave start= disabled
 sc config XboxGipSvc start= disabled
 sc config XboxNetApiSvc start= disabled
 
-::Xbox registries
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d "0" /f
@@ -664,6 +667,15 @@ move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 ::::: SECURITY TWEAKS ::::::
 
 
+
+::DISABLE SMB1
+powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
+powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb10" /v Start /t REG_DWORD /d 0 /f
+
+
+::DISABLE REMOTE REGISTRY FOR SECURITY
+sc config RemoteRegistry start= disabled
 
 :: DISABLE TYPE INFO SHARING
 reg add "HKCU\Software\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d "0" /f
@@ -739,8 +751,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 
 
 ::(Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype)
-powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
-powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
 powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPackage"
