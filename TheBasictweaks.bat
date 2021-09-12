@@ -521,6 +521,7 @@ wevtutil sl "Microsoft-Windows-PowerShell/Operational" /ms:24048576
 wevtutil sl "Microsoft-Windows-Sysmon/Operational" /ms:24048576
 wevtutil sl "Microsoft-Windows-TaskScheduler/Operational" /e:true
 wevtutil sl "Microsoft-Windows-DNS-Client/Operational" /e:true
+
 ::TRACK ONLY IMPORTANT FAILURE EVENTS
 Auditpol /set /subcategory:"Process Termination" /success:disable /failure:enable
 Auditpol /set /subcategory:"RPC Events" /success:disable /failure:enable
@@ -531,7 +532,6 @@ Auditpol /set /subcategory:"Other System Events" /success:disable /failure:enabl
 Auditpol /set /subcategory:"Security State Change" /success:disable /failure:enable
 Auditpol /set /subcategory:"Security System Extension" /success:disable /failure:enable
 Auditpol /set /subcategory:"System Integrity" /success:disable /failure:enable
-
 ::reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\WiFiSession" /v "Start" /t REG_DWORD /d 0 /f
 ::reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\UBPM" /v "Start" /t REG_DWORD /d 0 /f
 ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\TCPIPLOGGER" /v "Start" /t REG_DWORD /d 0 /f
@@ -627,7 +627,7 @@ schtasks /Change /TN "GoogleUpdateTaskMachineCore" /Disable
 schtasks /Change /TN "GoogleUpdateTaskMachineUA" /Disable
 reg add "HKLM\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown" /v "bUpdater" /t REG_DWORD /d 0 /f
 
-::DISABLE APP SUGGESTIONS. MICROSOFT ACCOUNT SIGN IN REQ
+::DISABLE APP SUGGESTIONS AND CLOUD CONTENT DELIVERY
 reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v ConfigureWindowsSpotlight /t REG_DWORD /d 2 /f
 reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v DisableThirdPartySuggestions /t REG_DWORD /d 1 /f
 reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsSpotlightFeatures /t REG_DWORD /d 1 /f
@@ -704,13 +704,13 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "Hiberb
 ::::: DISBALE XBOX AND GAMING SERVICES :::::
 
 
-::Xbox Game Monitoring
+
+::DISABLE XBOX GAME MONITORING SERVICES
 sc config xbgm start= disabled
 sc config XblAuthManager start= disabled
 sc config XblGameSave start= disabled
 sc config XboxGipSvc start= disabled
 sc config XboxNetApiSvc start= disabled
-
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v Start /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
@@ -731,7 +731,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "HistoricalC
 reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
 
-::Xbox SCH Tasks
+::REMOVE XBOX SCHEDULED TASKS
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
 schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
 takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
@@ -746,6 +746,7 @@ move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 
 ::::: SECURITY TWEAKS ::::::
+
 
 
 ::DISABLE REMOTE ASSISTANCE AND RELATED
