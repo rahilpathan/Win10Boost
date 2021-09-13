@@ -32,6 +32,9 @@ reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "ExplorerRibbonSt
 ::RESTORE NETWORK FOLDER CONNECTION (UNABLE TO FIND)
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider" /v "RestoreConnection" /t REG_DWORD /d 0 /f
 
+::AUTO-ARRANGE ICONS ON DESKTOP
+::reg add "HKCU\Software\Microsoft\Windows\Shell\Bags\1\Desktop" /v "FFlags" /t REG_DWORD /d "1075839525" /f
+
 ::OPEN THIS PC instead of QUICK ACCESS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "1" /f
 
@@ -289,9 +292,6 @@ del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s
 ::%SystemRoot%\System32\setaclx64 -on "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" -ot reg -actn ace -ace "n:Administrators;p:full" -rec yes
 ::reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SpyNetReporting" /t REG_DWORD /d 0 /f
 ::reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SubmitSamplesConsent" /t REG_DWORD /d 0 /f
-::ADJUSTING THE PAGE FILE (DISABLED, NOT NEEDED FOR ALL SYSTEMS ONLY IF YOU HAVE <8GB OF RAM)
-::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
-::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
 
 ::DISABLE DISK MANAGEMENT
 reg add "HKLM\SYSTEM\ControlSet001\Services\defragsvc" /v "Start" /t REG_DWORD /d "4" /f
@@ -302,6 +302,7 @@ reg add "HKCU\Control Panel\Desktop" /v WaitToKillAppTimeOut /t REG_SZ /d 2000 /
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v WaitToKillServiceTimeout /t REG_SZ /d 2000 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v HungAppTimeout /t REG_SZ /d 2000 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v AutoEndTasks /t REG_SZ /d 1 /f
+reg add "HKCU\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d "1" /f
 
 ::DISABLING IRIS (9/2/21)
 reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\IrisService /f
@@ -647,6 +648,10 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Policies\Microsoft\PushToInstall" /v "DisablePushToInstall" /t REG_DWORD /d "1" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /f
+
 
 ::DISABLE MAPS
 sc config MapsBroker start= disabled
@@ -698,6 +703,15 @@ sc config WpcMonSvc start= disabled
 
 ::DISABLE HIBERNATE
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
+
+::ADJUSTING THE PAGE FILE (FOR ALL SYSTEMS ONLY IF YOU HAVE <=8GB OF RAM)
+::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
+::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
+
+::SET ZERO PAGE FILE (>8GB RAM)
+wmic computersystem where name="%computername%" set AutomaticManagedPagefile=False
+wmic pagefileset where name="%SystemDrive%\\pagefile.sys" set InitialSize=0,MaximumSize=0
+wmic pagefileset where name="%SystemDrive%\\pagefile.sys" delete
 
 
 
@@ -928,8 +942,9 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "Negativ
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v Size /t REG_DWORD /d "3" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICSIPv6" /t REG_DWORD /d 0 /f
-reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
+reg add "HKLM\System\CurrentControlSet\Services\Dnscache\Parameters" /v "EnableAutoDoh" /t REG_DWORD /d "2" /f
+reg add "HKLM\System\CurrentControlSet\Services\NetBT\Parameters" /v "EnableLMHOSTS" /t REG_DWORD /d "0" /f
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpAckFrequency -Value 1"
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TCPNoDelay -Value 1"
@@ -1000,7 +1015,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"" /v "Di
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v "FullSecureChannelProtection" /t REG_DWORD /d 1 /f
 
 ::CVE-2021-24094
-reg add "HKLM\system\currentcontrolset\services\tcpip6\parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
+reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
+
 
 ::CVE-2021-24074
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableIPSourceRouting" /t REG_DWORD /d 1 /f
@@ -1097,7 +1113,7 @@ echo.
 :theEnd
 start explorer.exe
 
-::RESTORE ORIGINAL BCDEDITS
+::RESTORE ORIGINAL BCDEDITS (ONLY IF EVER MODIFIED)
 ::bcdedit /deletevalue {current} safeboot
 ::bcdedit /deletevalue {current} safebootalternateshell
 ::bcdedit /deletevalue {current} removememory
@@ -1108,6 +1124,21 @@ start explorer.exe
 ::bcdedit /deletevalue {default} removememory
 ::bcdedit /deletevalue {default} truncatememory
 ::bcdedit /deletevalue {default} useplatformclock
+::bcdedit /set {bootmgr} displaybootmenu no
+::bcdedit /set {current} advancedoptions false
+::bcdedit /set {current} bootems no
+::bcdedit /set {current} bootmenupolicy legacy
+::bcdedit /set {current} bootstatuspolicy IgnoreAllFailures
+::bcdedit /set {current} disabledynamictick yes
+::bcdedit /set {current} lastknowngood yes
+::bcdedit /set {current} recoveryenabled no
+::bcdedit /set {default} advancedoptions false
+::bcdedit /set {default} bootems no
+::bcdedit /set {default} bootmenupolicy legacy
+::bcdedit /set {default} bootstatuspolicy IgnoreAllFailures
+::bcdedit /set {default} disabledynamictick yes
+::bcdedit /set {default} lastknowngood yes
+::bcdedit /set {default} recoveryenabled no
 
 
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 95533644-e700-4a79-a56c-a89e8cb109d9
