@@ -1,0 +1,1 @@
+sc create icue binPath= "C:\Program Files (x86)\Corsair\CORSAIR iCUE Software\iCUE Launcher.exe"
