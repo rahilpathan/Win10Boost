@@ -354,7 +354,10 @@ schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagno
 schtasks /Change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable
 schtasks /end /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem"
 schtasks /Change /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable
+
+::DISABLE STORAGE SENSE
 schtasks /Change /tn "Microsoft\Windows\DiskFootprint\StorageSense" /disable
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v "01" /t REG_DWORD /d "0" /f
 
 ::DISABLE SCHEDULED MAINTENANCE
 reg add "HKLM\Software\Microsoft\Windows\ScheduledDiagnostics" /v "EnabledExecution" /t REG_DWORD /d "0" /f
@@ -520,14 +523,16 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 ::::::: WINDOWS UPDATE TWEAKS :::::::
 
 
+::UPDATE APPS AUTOMATICALLY
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate" /v "AutoDownload" /t REG_DWORD /d "4" /f
 
-::FORCE WINDOWS UPDATE BETWEEN MORNING 1AM to 6AM.
+::FORCE WINDOWS UPDATE BETWEEN MORNING 1 AM to 6 AM
 reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursStart" /t REG_DWORD /d 6 /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursEnd" /t REG_DWORD /d 1 /f
 
 ::DELIVERY OPTIMIZATION
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f
-::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" /v "SystemSettingsDownloadMode" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "start" /t REG_DWORD /d 2 /f
@@ -540,7 +545,10 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableConfi
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f
 
 ::MALICIOUS REMOVAL TOOLS NOT THRU WINDOWS UPDATE
-::reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
+reg add "HKLM\Software\Microsoft\RemovalTools\MpGears" /v "HeartbeatTrackingIndex" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Microsoft\RemovalTools\MpGears" /v "SpyNetReportingLocation" /t REG_MULTI_SZ /d "" /f
+reg add "HKLM\Software\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\MRT" /v "DontReportInfectionInformation" /t REG_DWORD /d "1" /f
 
 ::ENABLE CHECKING OF WINDOWS UPDATE EVERY 2 HOURS
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "DetectionFrequencyEnabled" /t REG_DWORD /d 1 /f
@@ -1226,12 +1234,13 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v No
 ::del /q /s /f "%ChromeCache%\*.*"
 ::del /q /f "%ChromeDataDir%\*Cookies*.*"
 
-::CLEANING LOGS, TEMP FILES, CACHED IMAGES, ETC
+:::::  CLEANING LOGS, TEMP FILES, CACHED IMAGES, ETC ::::::
 
 taskkill /f /im explorer.exe
 @echo Please wait......
 timeout /t 3
 
+::SYSTEM CLEAN
 del C:\Temp /S /Q /F
 del C:\Temp /S /Q /A:H
 del C:\Windows\Temp /S /Q /F
@@ -1274,7 +1283,6 @@ del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\ico
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
-echo Event Logs have been cleared!
 goto theEnd
 :do_clear
 echo clearing %1
@@ -1285,6 +1293,37 @@ echo You must run this script as an Administrator!
 echo.
 :theEnd
 start explorer.exe
+
+
+::DISCORD CACHE CLEAN
+taskkill /im discord.exe /f
+rd "%AppData%\Discord\Cache" /s /q
+rd "%AppData%\Discord\Code Cache" /s /q
+md "%AppData%\Discord\Cache"
+md "%AppData%\Discord\Code Cache"
+
+::EDGE CACHE CLEAN
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\*history*." /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\LOG" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\LOG.old" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Login Data" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Login Data-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Media History" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Media History-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Action Predictor" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Action Predictor-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Persistent State" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Reporting and NEL" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Reporting and NEL-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\QuotaManager" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\QuotaManager-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Shortcuts" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Shortcuts-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Top Sites" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Top Sites-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Visited Links" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data-journal" /s /f /q
 
 ::RESTORE ORIGINAL BCDEDITS (ONLY IF EVER MODIFIED)
 ::bcdedit /deletevalue {current} safeboot
@@ -1313,10 +1352,13 @@ start explorer.exe
 ::bcdedit /set {default} lastknowngood yes
 ::bcdedit /set {default} recoveryenabled no
 
-
+::POWER BOOSTER
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 95533644-e700-4a79-a56c-a89e8cb109d9
 powercfg -changename 95533644-e700-4a79-a56c-a89e8cb109d9 EXTREME-SPEED
 powercfg -setactive 95533644-e700-4a79-a56c-a89e8cb109d9
+powercfg -change -monitor-timeout-ac 15
+powercfg -change -monitor-timeout-dc 5
 
-@echo ....#####   Please Restart the System to take Effect!   #####......
+@echo off 
+....#####   Please Restart the System to take Effect!   #####......
 PAUSE
