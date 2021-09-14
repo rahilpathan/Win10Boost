@@ -1360,5 +1360,5 @@ powercfg -change -monitor-timeout-ac 15
 powercfg -change -monitor-timeout-dc 5
 
 @echo off 
-....#####   Please Restart the System to take Effect!   #####......
+echo ....#####   Please Restart the System to take Effect!   #####......
 PAUSE
