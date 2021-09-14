@@ -1,4 +1,4 @@
-# win10boost = OPTIMIZE + PERSONALIZE + SECURE
+# Win10Boost = OPTIMIZE + PERSONALIZE + SECURE
 Optimize Windows 10 services _(System modification tweaks and optimization for overall performance of Windows 10, Script is very well labelled what each command does)_
 
 **Note: This tool is free to use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
