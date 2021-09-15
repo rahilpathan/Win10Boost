@@ -2,6 +2,100 @@
 %SystemRoot%\System32\reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /f /t REG_SZ /v "C:\WINDOWS\system32\cmd.exe" /d "RUNASADMIN"
 
 
+::::: REMOVE WINDOWS DEFAULT APPS ::::: 
+
+
+::(Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype)
+powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ActiproSoftwareLLC* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AdobePhotoshopExpress* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Advertising.Xml* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AppConnector* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Asphalt8Airborne* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *AutodeskSketchBook* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingFinance* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingNews* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingSports* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BingTranslator* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *BubbleWitch3Saga* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *CandyCrush* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *CyberLinkMediaSuiteEssentials* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *DisneyMagicKingdoms* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *DrawboardPDF* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Duolingo* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Duolingo-LearnLanguagesforFree* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *EclipseManager* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *FarmVille2CountryEscape* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Flipboard* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *GetHelp* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Getstarted* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *HiddenCity* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *HiddenCityMysteryofShadows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Keeper* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Lens* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *LinkedInforWindows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MarchofEmpires* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Messaging* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Microsoft.MSPaint* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftPowerBIForWindows* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *NetworkSpeedTest* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneCalendar* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneConnect* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Pandora* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *PandoraMediaInc* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Plex* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RemoteDesktop* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Roblox* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RoyalRevolt* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *RoyalRevolt2* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *ScreenSketch* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *SolitaireCollection* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *SpeedTest* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Sway* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Wallet* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Whiteboard* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WinZipUniversal* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsAlarms* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Wunderlist* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *XING* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *alarm* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *communi* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *connectivity* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *feedback* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *groove* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *king.com.FarmHeroesSaga* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *maps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *office* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *phone* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *photos* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *photoshop* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *reality* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *soundrec* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *tiktok* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *XboxSpeechToTextOverlay* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Xbox* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Xbox.TCUI* | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
+
 ::::::VISUAL OPTIMIZATIONS::::::
 
 
@@ -38,21 +132,11 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider" /v "RestoreConne
 ::OPEN THIS PC instead of QUICK ACCESS
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "1" /f
 
-::ENABLE DARK THEME
-::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
-::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
-::reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
+::DISABLE MEET NOW
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_dWORD /d 1 /f
 
-::SHOW FILE EXTENSIONS
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
-reg add "HKCR\lnkfile" /v "NeverShowExt" /f
-reg add "HKCR\IE.AssocFile.URL" /v "NeverShowExt" /f
-reg add "HKCR\IE.AssocFile.WEBSITE" /v "NeverShowExt" /f
-reg add "HKCR\InternetShortcut" /v "NeverShowExt" /f
-reg add "HKCR\Microsoft.Website" /v "NeverShowExt" /f
-reg add "HKCR\piffile" /v "NeverShowExt" /f
-reg add "HKCR\SHCmdFile" /v "NeverShowExt" /f
-reg add "HKCR\LibraryFolder" /v "NeverShowExt" /f
+::DISABLE NEWS & INTERESTS
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
 
 ::SHOW HIDDEN FILES
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
@@ -79,6 +163,22 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "S
 
 ::DISABLE STARTUP DELAY (LOAD ALL STARTUP APP ASAP)
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t REG_DWORD /d "0" /f
+
+::SHOW FILE EXTENSIONS
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+reg add "HKCR\lnkfile" /v "NeverShowExt" /f
+reg add "HKCR\IE.AssocFile.URL" /v "NeverShowExt" /f
+reg add "HKCR\IE.AssocFile.WEBSITE" /v "NeverShowExt" /f
+reg add "HKCR\InternetShortcut" /v "NeverShowExt" /f
+reg add "HKCR\Microsoft.Website" /v "NeverShowExt" /f
+reg add "HKCR\piffile" /v "NeverShowExt" /f
+reg add "HKCR\SHCmdFile" /v "NeverShowExt" /f
+reg add "HKCR\LibraryFolder" /v "NeverShowExt" /f
+
+::ENABLE DARK THEME
+::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
+::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d "0" /f
+::reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
 
 
 :::::: GAMING OPTIMIZATION TWEAKS ::::::
@@ -127,6 +227,12 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProf
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /t REG_DWORD /v SystemResponsiveness /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /t REG_DWORD /v NoLazyMode /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /t REG_DWORD /v AlwaysOn /d 1 /f
+
+::DISABLE MEMORY COMPRESSION AND PAGE COMBINE (REQUIRES SYSMAIN)
+sc config SysMain start= auto
+sc start SysMain
+powershell "Disable-MMAgent -MemoryCompression"
+powershell "Disable-MMAgent -PageCombining"
 
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
@@ -295,8 +401,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdkmdag\UMD" /v "Main3D_SET" /t
 ::sc stop WSearch
 ::sc config WSearch start= disabled
 
-::DISABLE MEMORY COMPRESSION
-powershell "Disable-MMAgent -MemoryCompression"
+
 
 ::DISABLE PAGING COMBINE TRYING TO SAVE RAM
 reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "DisablePagingCombining" /t REG_DWORD /d "1" /f
@@ -901,11 +1006,11 @@ sc config XblAuthManager start= disabled
 sc config XblGameSave start= disabled
 sc config XboxGipSvc start= disabled
 sc config XboxNetApiSvc start= disabled
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
+::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
+::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
+::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
+::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d "0" /f
@@ -935,105 +1040,8 @@ move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 
 
-::::: REMOVE WINDOWS DEFAULT APPS ::::: 
 
 
-::(Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype)
-powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *3d* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *ACGMediaPlayer* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *ActiproSoftwareLLC* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *AdobePhotoshopExpress* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *AdobeSystemsIncorporated.AdobePhotoshopExpress* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Advertising.Xml* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *AppConnector* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Asphalt8Airborne* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *AutodeskSketchBook* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *BingFinance* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *BingNews* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *BingSports* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *BingTranslator* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *BubbleWitch3Saga* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *CandyCrush* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *CyberLinkMediaSuiteEssentials* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *DisneyMagicKingdoms* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *DrawboardPDF* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Duolingo* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Duolingo-LearnLanguagesforFree* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *EclipseManager* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *FarmVille2CountryEscape* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Flipboard* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *GetHelp* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Getstarted* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *HiddenCity* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *HiddenCityMysteryofShadows* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Keeper* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Lens* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *LinkedInforWindows* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *MarchofEmpires* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Messaging* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Microsoft.MSPaint* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *MicrosoftPowerBIForWindows* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *NetworkSpeedTest* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *OneCalendar* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *OneConnect* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Pandora* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *PandoraMediaInc* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Plex* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *ROBLOXCORPORATION.ROBLOX* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *RemoteDesktop* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Roblox* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *RoyalRevolt* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *RoyalRevolt2* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *ScreenSketch* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *SolitaireCollection* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *SpeedTest* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Sway* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Wallet* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Whiteboard* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WinZipUniversal* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WindowsAlarms* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Wunderlist* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *XING* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *alarm* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *communi* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *connectivity* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *feedback* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *groove* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *king.com.FarmHeroesSaga* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *maps* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *office* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *phone* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *photos* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *photoshop* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *reality* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *soundrec* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *tiktok* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *XboxSpeechToTextOverlay* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Xbox* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Xbox.TCUI* | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
-
-::DISABLE MEET NOW
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_dWORD /d 1 /f
-
-::DISABLE NEWS & INTERESTS
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
 
 ::NETWORK TWEAKS
 ipconfig/flushdns
