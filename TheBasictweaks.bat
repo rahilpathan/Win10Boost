@@ -2,10 +2,8 @@
 %SystemRoot%\System32\reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /f /t REG_SZ /v "C:\WINDOWS\system32\cmd.exe" /d "RUNASADMIN"
 
 
-
 ::::: REMOVING WINDOWS DEFAULT APPS ::::: 
 ::(Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype)
-
 
 
 powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage"
@@ -98,9 +96,7 @@ powershell -Command "Get-AppxPackage -allusers *Xbox* | Remove-AppxPackage"
 powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
 
 
-
 ::::::VISUAL OPTIMIZATIONS::::::
-
 
 
 ::WALLPAPER QUALITY TWEAK
@@ -185,9 +181,7 @@ reg add "HKCR\LibraryFolder" /v "NeverShowExt" /f
 ::reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
 
 
-
 :::::: GAMING OPTIMIZATION TWEAKS ::::::
-
 
 
 ::DISABLE STICKY KEYS
@@ -293,7 +287,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProf
 
 ::OTHER TWEAKS
 reg add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "FeatureTestControl" /t REG_DWORD /d 0x0000ffff /f
-
 
 
 :::::::: PERFORMANCE TWEAKS ::::::::
@@ -609,9 +602,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociati
 reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".tiff" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 
 
-
 ::::::: WINDOWS UPDATE TWEAKS ::::::::
-
 
 
 ::UPDATE APPS AUTOMATICALLY
@@ -654,9 +645,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AutoInst
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f
 
 
-
 :::::: REMOVE TELEMETRY (+PRIVACY) ::::::
-
 
 
 ::DISABLE PRIVACY EXPERIENCE AND TELEMETRY SETTINGS
@@ -951,10 +940,7 @@ reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManage
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /f
 
 
-
-
 ::::: DISBALE XBOX AND GAMING SERVICES :::::
-
 
 
 ::DISABLE XBOX GAME MONITORING SERVICES
@@ -996,9 +982,7 @@ taskkill /im bcastdvr.exe /f
 move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 
-
 :::::: NETWORKING TWEAKS :::::::
-
 
 
 ::ENABLE IF RUNNING FIRST TIME, SHOULD NOT BE ON SCHEDULER
@@ -1090,7 +1074,9 @@ powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Serv
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TCPNoDelay -Value 1"
 
+
 ::::: SECURITY TWEAKS ::::::
+
 
 ::PROTECT AGAINST SPECULATIVE CPU UPDATE
 ::AMD CPU 
@@ -1198,7 +1184,8 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v NoAutoplayfornonV
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\Explorer" /v NoDriveTypeAutoRun /t REG_DWORD /d 255 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoAutorun /t REG_DWORD /d 1 /f
 
-:::::  CLEARING SYSTEM CACHE, EVENTS & LOGS ::::::
+
+::::: CLEANING LOGS, TEMP FILES, CACHED IMAGES, ETC  ::::::
 
 
 ::REMOVING CHROME CACHE (ENABLE ONLY IF RUNNING FIRST TIME, DISABLED)
@@ -1212,7 +1199,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v No
 ::del /q /s /f "%ChromeCache%\*.*"
 ::del /q /f "%ChromeDataDir%\*Cookies*.*"
 
-:::::  CLEANING LOGS, TEMP FILES, CACHED IMAGES, ETC ::::::
 
 taskkill /f /im explorer.exe
 @echo Please wait......
@@ -1271,7 +1257,6 @@ echo You must run this script as an Administrator!
 echo.
 :theEnd
 start explorer.exe
-
 
 ::DISCORD CACHE CLEAN
 taskkill /im discord.exe /f
