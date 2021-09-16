@@ -6,7 +6,7 @@ This is my personal library of optimizing Windows 10, preserving the constant se
  
 ______________
  How to use:
-1. Download 'TheBasicTweak.bat file' or copy paste the entire content to notepad and save it as batch file. 
+1. Download 'Win10Boost.bat file' or copy paste the entire content to notepad and save it as batch file. 
 2. Then right click and run as administrator.
 ______________
 
