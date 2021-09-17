@@ -1,5 +1,6 @@
 # Win10Boost = OPTIMIZE + PERSONALIZE + SECURE
-Optimize Windows 10 services _(System modification tweaks and optimization for overall performance of Windows 10, Script is very well labelled what each command does)_
+ _Operating System optimization using registry modifications, disabling services and logging. Also added Gaming tweaks and Windows hardening scripts to make the script versatile.
+ Script is labelled what each command does, edit the script using notepad - add double colons (::) to disable any command line._
 
 **Note: This tool is free to use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster. Feel free if you have any suggestions by navigating to the issues tab.
@@ -23,4 +24,3 @@ ________
 Author: www.linkedin.com/in/rahilpathan
 
 Source: Data from public sources available on the internet
-
