@@ -181,7 +181,7 @@ reg add "HKCR\LibraryFolder" /v "NeverShowExt" /f
 ::reg add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "Theme" /t REG_DWORD /d "1" /f
 
 
-:::::: GAMING OPTIMIZATION TWEAKS ::::::
+:::::: GAMING TWEAKS ::::::
 
 
 ::DISABLE STICKY KEYS
@@ -284,6 +284,44 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProf
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio" /v "Priority" /t REG_DWORD /d "6" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio" /v "Scheduling Category" /t REG_SZ /d "Medium" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio" /v "SFIO Priority" /t REG_SZ /d "Normal" /f
+
+::DISABLE XBOX GAME MONITORING SERVICES
+sc config xbgm start= disabled
+sc config XblAuthManager start= disabled
+sc config XblGameSave start= disabled
+sc config XboxGipSvc start= disabled
+sc config XboxNetApiSvc start= disabled
+reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d "2" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_HonorUserFSEBehaviorMode" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "CursorCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "HistoricalCaptureEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
+
+::REMOVE XBOX SCHEDULED TASKS
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
+takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
+icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
+taskkill /im GameBarPresenceWriter.exe /f
+move "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.OLD"
+takeown /f "%WinDir%\System32\bcastdvr.exe" /a
+icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
+taskkill /im bcastdvr.exe /f
+move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
 
 ::OTHER TWEAKS
 reg add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "FeatureTestControl" /t REG_DWORD /d 0x0000ffff /f
@@ -940,46 +978,10 @@ reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManage
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /f
 
 
-::::: DISBALE XBOX AND GAMING SERVICES :::::
 
 
-::DISABLE XBOX GAME MONITORING SERVICES
-sc config xbgm start= disabled
-sc config XblAuthManager start= disabled
-sc config XblGameSave start= disabled
-sc config XboxGipSvc start= disabled
-sc config XboxNetApiSvc start= disabled
-reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d "2" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_HonorUserFSEBehaviorMode" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\GameBar" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "CursorCaptureEnabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "HistoricalCaptureEnabled" /t REG_DWORD /d "0" /f
-reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d "0" /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowgameDVR" /t REG_DWORD /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
 
-::REMOVE XBOX SCHEDULED TASKS
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
-takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
-icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
-taskkill /im GameBarPresenceWriter.exe /f
-move "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.OLD"
-takeown /f "%WinDir%\System32\bcastdvr.exe" /a
-icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
-taskkill /im bcastdvr.exe /f
-move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
+
 
 
 :::::: NETWORKING TWEAKS :::::::
@@ -1314,13 +1316,6 @@ del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data-journal" /s /f /q
 ::bcdedit /set {default} disabledynamictick yes
 ::bcdedit /set {default} lastknowngood yes
 ::bcdedit /set {default} recoveryenabled no
-
-::POWER BOOSTER
-powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 95533644-e700-4a79-a56c-a89e8cb109d9
-powercfg -changename 95533644-e700-4a79-a56c-a89e8cb109d9 EXTREME-SPEED
-powercfg -setactive 95533644-e700-4a79-a56c-a89e8cb109d9
-powercfg -change -monitor-timeout-ac 15
-powercfg -change -monitor-timeout-dc 5
 
 @echo off 
 echo ....#####   Please Restart the System to take Effect!   #####......
