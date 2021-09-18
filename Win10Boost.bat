@@ -215,6 +215,8 @@ sc config SysMain start= auto
 sc start SysMain
 powershell "Disable-MMAgent -MemoryCompression"
 powershell "Disable-MMAgent -PageCombining"
+sc stop SysMain
+sc config SysMain start= disabled
 
 ::OPTIMIZE GAMING RELATED SERVICES
 reg add "HKCU\SOFTWARE\Microsoft\Games" /v "FpsAll" /t REG_DWORD /d "1" /f
