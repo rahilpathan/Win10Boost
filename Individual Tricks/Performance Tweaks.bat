@@ -70,6 +70,9 @@ sc config WpcMonSvc start= disabled
 ::DISABLE HIBERNATE
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
 
+::DISABLE BITS
+sc config "BITS" start=disabled
+
 ::ADJUSTING THE PAGE FILE (FOR ALL SYSTEMS ONLY IF YOU HAVE <=8GB OF RAM)
 ::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
 ::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
