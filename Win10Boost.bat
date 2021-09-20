@@ -786,21 +786,17 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\App
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\TelemetryController" /f
 
 ::DISABLE FEEDBACK DATA
-reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v DoNotShowFeedbackNotifications /t REG_DWORD /d 1 /f
-reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f
-reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d 0 /f
-reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v NoExplicitFeedback /t REG_DWORD /d 1 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "DoNotShowFeedbackNotifications" /t REG_DWORD /d "1" /f
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d "0" /f
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d "1" /f
 
-::DISABLE APP TRACKING
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 0 /f
+::DISABLE APP TRACKING (WILL NOT REMEMBER SEARCH OR RUN HISTORY, ENABLE IF YOU WANT PRIVACY)
+::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 1 /f
 
 ::DISABLE DATA COLLECTION
 DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Internet Explorer\Main" /v "RunOnceComplete" /t REG_DWORD /d 1 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!dss-winrt-telemetry.js" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-event_8ac43a41e5030538" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry-inter_58073761d33f144b" /t REG_DWORD /d 0 /f
-reg add "HKLM\COMPONENTS\DerivedData\Components\amd64_microsoft-windows-c..lemetry.lib.cortana_31bf3856ad364e35_10.0.10240.16384_none_40ba2ec3d03bceb0" /v "f!proactive-telemetry.js" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant" /v "Enabled" /t REG_DWORD /d 0 /f
@@ -1065,7 +1061,6 @@ netsh int tcp set supplemental custom congestionprovider = ctcp
 netsh int ipv6 set state disabled
 netsh int isatap set state disabled
 netsh int tcp set global autotuninglevel=normal
-::netsh int tcp set global chimney=disabled
 netsh int tcp set global dca=enabled
 netsh int tcp set global ecn=enabled
 netsh int tcp set global ecncapability=disabled
@@ -1092,7 +1087,7 @@ powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 2
 powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 4
 powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 2
 powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 4
-PowerShell Disable-NetAdapterChecksumOffload -Name "*"
+PowerShell Enable-NetAdapterChecksumOffload -Name "*"
 PowerShell Disable-NetAdapterLso -Name "*"
 PowerShell Disable-NetAdapterRsc -Name "*"
 PowerShell Disable-NetAdapterIPsecOffload -Name "*"
@@ -1100,7 +1095,6 @@ PowerShell Disable-NetAdapterPowerManagement -Name "*"
 PowerShell Disable-NetAdapterQos -Name "*"
 
 reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /t REG_SZ /v "Disabled" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /v "Teredo_State" /d "Disabled" /f
@@ -1112,7 +1106,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "Negativ
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "IRPStackSize" /t REG_DWORD /d 32 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SizReqBuf" /t REG_DWORD /d 16384 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "Size" /t REG_DWORD /d 3 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "Size" /t REG_DWORD /d "3" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableLargeMtu" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableConnectionRateLimiting" /t REG_DWORD /d "0" /f
@@ -1135,7 +1129,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICS
 reg add "HKLM\System\CurrentControlSet\Services\Dnscache\Parameters" /v "EnableAutoDoh" /t REG_DWORD /d "2" /f
 reg add "HKLM\System\CurrentControlSet\Services\NetBT\Parameters" /v "EnableLMHOSTS" /t REG_DWORD /d "0" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
-
 
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpAckFrequency -Value 1"
 powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
@@ -1266,51 +1259,25 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v No
 ::del /q /s /f "%ChromeCache%\*.*"
 ::del /q /f "%ChromeDataDir%\*Cookies*.*"
 
-
+::SYSTEM CLEAN
 taskkill /f /im explorer.exe
 @echo Please wait......
 timeout /t 3
+pushd "C:\Temp" && (rd /s /q "C:\Temp" 2>nul & popd)
+pushd "%windir%\temp" && (rd /s /q "%windir%\temp" 2>nul & popd)
+pushd "%temp%" && (rd /s /q "%temp%" 2>nul & popd)
+pushd "C:\Windows\Temp" && (rd /s /q "C:\Windows\Temp" 2>nul & popd)
+pushd "%windir%\Prefetch " && (rd /s /q "%windir%\Prefetch" 2>nul & popd)
+pushd "%windir%\system32\dllcache" && (rd /s /q "%windir%\system32\dllcache" 2>nul & popd)
+pushd "%windir%\spool\printers" && (rd /s /q "%windir%\spool\printers" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Settings\Temp" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
+pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
 
-::SYSTEM CLEAN
-del C:\Temp /S /Q /F
-del C:\Temp /S /Q /A:H
-del C:\Windows\Temp /S /Q /F
-del C:\Windows\Temp /S /Q /A:H
-del /s /f /q %windir%\temp\*.*
-rd /s /q %windir%\temp
-md %windir%\temp
-del /s /f /q %windir%\spool\printers\*.*
-rd /s /q %windir%\spool\printers
-md %windir%\spool\printers
-del /s /f /q %windir%\Prefetch\*.* 
-rd /s /q %windir%\Prefetch 
-md %windir%\Prefetch 
-del /s /f /q %windir%\system32\dllcache\*.* 
-rd /s /q %windir%\system32\dllcache 
-md %windir%\system32\dllcache 
-del /s /f /q "%SysteDrive%\Temp"\*.* 
-rd /s /q "%SysteDrive%\Temp" 
-md "%SysteDrive%\Temp" 
-del /s /f /q %temp%\*.* 
-rd /s /q %temp% 
-md %temp% 
-del /s /f /q "%USERPROFILE%\Local Settings\History"\*.* 
-rd /s /q "%USERPROFILE%\Local Settings\History" 
-md "%USERPROFILE%\Local Settings\History" 
-del /s /f /q "%USERPROFILE%\Local Settings\Temporary Internet Files"\*.* 
-rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 
-md "%USERPROFILE%\Local Settings\Temporary Internet Files" 
-del /s /f /q "%USERPROFILE%\Local Settings\Temp"\*.* 
-rd /s /q "%USERPROFILE%\Local Settings\Temp" 
-md "%USERPROFILE%\Local Settings\Temp" 
-del /s /f /q "%USERPROFILE%\Recent"\*.* 
-rd /s /q "%USERPROFILE%\Recent" 
-md "%USERPROFILE%\Recent" 
-del /s /f /q "%USERPROFILE%\Cookies"\*.* 
-rd /s /q "%USERPROFILE%\Cookies" 
-md "%USERPROFILE%\Cookies"
-del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\thumbcache_*.db
-del /s /f /q "%userprofile%\AppData\Local\Microsoft\WindowsWindows\Explorer"\iconcache_*.db
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
