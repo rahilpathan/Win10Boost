@@ -1,6 +1,8 @@
 ::RUN CMD AD ADMIN
 %SystemRoot%\System32\reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /f /t REG_SZ /v "C:\WINDOWS\system32\cmd.exe" /d "RUNASADMIN"
 
+::PREFETCH SETTINGS (If Windows installed on SSD drive - set 0, HDD - 3)
+SET Prefetch=0
 
 ::::: REMOVING WINDOWS DEFAULT APPS ::::: 
 ::(Keeping Calculator,BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype)
@@ -98,6 +100,8 @@ powershell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage"
 
 ::::::VISUAL OPTIMIZATIONS::::::
 
+::ENABLE PEEK
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisablePreviewDesktop" /t REG_DWORD /d "0" /f 1>NUL 2>NUL
 
 ::WALLPAPER QUALITY TWEAK
 reg add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t "REG_DWORD" /d "100" /f
@@ -196,11 +200,9 @@ reg add "HKEY_USERS\.DEFAULT\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_S
 :::::: GAMING TWEAKS ::::::
 
 
-::DISABLE STICKY KEYS
+::DISABLE STICKY AND TOGGLE KEYS
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
-reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_DWORD /d "0" /f
-reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_DWORD /d "0" /f
-reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_DWORD /d "58" /f
+reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d "58" /f
 
 ::DISABLE FILTER KEYS
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
@@ -271,8 +273,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableDrmdmaPowerGating" /t REG_DWORD /d "1" /f
 
 ::NVIDIA GPU TWEAKS
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
@@ -287,8 +289,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchedMode"
 
 ::MSI MODE ENABLE
 for /f %%g in ('wmic path win32_videocontroller get PNPDeviceID ^| findstr /L "VEN_"') do (
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v MSISupported /t REG_DWORD /d 0x00000001 /f 
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy" /v DevicePriority /t REG_DWORD /d 3 /f 
+reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v MSISupported /t REG_DWORD /d 0x00000001 /f 
+reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy" /v DevicePriority /t REG_DWORD /d 3 /f 
 )
 
 ::GAME AUDIO
@@ -326,8 +328,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWO
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
 
 ::REMOVE XBOX SCHEDULED TASKS
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /Disable
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /DISABLE
+schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /DISABLE
 takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
 icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
 taskkill /im GameBarPresenceWriter.exe /f
@@ -388,7 +390,7 @@ sc config wisvc start=disabled
 sc config WMPNetworkSvc start= disabled
 
 ::DISABLE INDEXING
-schtasks /Change /TN "Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /Disable
+schtasks /Change /TN "Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /DISABLE
 sc config "PimIndexMaintenanceSvc" start=disabled
 DEL "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb" /s
 DEL "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /s
@@ -418,6 +420,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "Hiberb
 
 ::DISABLE BITS
 sc config "BITS" start=disabled
+reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v EnableBITSMaxBandwidth /t REG_DWORD /d 0 /f
+reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v MaxDownloadTime /t REG_DWORD /d 1 /f
 
 ::ADJUSTING THE PAGE FILE (FOR ALL SYSTEMS ONLY IF YOU HAVE <=8GB OF RAM)
 ::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
@@ -429,9 +433,9 @@ wmic pagefileset where name="%SystemDrive%\\pagefile.sys" set InitialSize=0,Maxi
 wmic pagefileset where name="%SystemDrive%\\pagefile.sys" delete
 
 ::DISABLE OFFICE TELEMETRY
-schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable
-schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable
-schtasks /Change /TN "\Microsoft\Office\Office 15 Subscription Heartbeat" /Disable
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
+schtasks /Change /TN "\Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
 reg add "HKCU\Software\Microsoft\Office\Common\ClientTelemetry" /v "DisableTelemetry" /t REG_DWORD /d "1" /f
 reg add "HKCU\Software\Microsoft\Office\16.0\Common" /v "sendcustomerdata" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Office\16.0\Common\Feedback" /v "enabled" /t REG_DWORD /d "0" /f
@@ -525,14 +529,14 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "DoNotUseWe
 
 ::DISABLE DISK DIAGNOSTICS
 schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"
-schtasks /Change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable
+schtasks /Change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE
 schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver"
-schtasks /Change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable
+schtasks /Change /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /DISABLE
 schtasks /end /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem"
-schtasks /Change /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable
+schtasks /Change /tn "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /DISABLE
 
 ::DISABLE STORAGE SENSE
-schtasks /Change /tn "Microsoft\Windows\DiskFootprint\StorageSense" /disable
+schtasks /Change /tn "Microsoft\Windows\DiskFootprint\StorageSense" /DISABLE
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v "01" /t REG_DWORD /d "0" /f
 
 ::DISABLE SCHEDULED MAINTENANCE
@@ -605,10 +609,10 @@ reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI
 ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d 4 /f
 ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d 1 /f
 ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d 1 /f
-::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
-::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
-::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
-::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /DISABLE
+::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /DISABLE
+::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /DISABLE
+::schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /DISABLE
 ::del "C:\ProgramData\Microsoft\Windows Defender\Scans\mpcache*" /s
 
 ::DISABLE WINDOWS DEFENDER SAMPLE SUBMISSION
@@ -635,9 +639,9 @@ reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\IrisService /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWORD /d 0x00000003 /f
 
 ::DISABLE FAMILY SAFETY MONITOR SERVICE
-schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /disable
-schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /disable
-schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable
+schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
+schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /DISABLE
 
 ::RESTORE OLD PHOTOVIEWER AND SET AS DEFAULT
 reg add "HKCR\Applications\photoviewer.dll\shell\open" /v "MuiVerb" /t REG_SZ /d "@photoviewer.dll,-3043" /f
@@ -726,7 +730,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v
 ::DEFER FEATURE UPDATES FOR 360 DAYS
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferFeatureUpdates" /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /t REG_DWORD /v "DeferFeatureUpdatesPeriodInDays" /d 360 /f
-reg add"HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /t REG_DWORD /v "EnableFeaturedSoftware" /D 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /t REG_DWORD /v "EnableFeaturedSoftware" /d "0" /f
 
 ::DISABLE AUTO INSTALL UPDATE INSTALL
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AutoInstallMinorUpdates" /t REG_DWORD /d 0 /f
@@ -747,7 +751,7 @@ reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore" /f
 reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore\Settings" /f
 reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" /v "HasAccepted" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" /v "HasAccepted" /t REG_DWORD /d "0" /f
-reg add"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /T REG_DWORD /V "AllowTelemetry" /D 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /T REG_DWORD /V "AllowTelemetry" /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t "REG_DWORD" /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "MaxTelemetryAllowed" /t "REG_DWORD" /d "0" /f
 reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t "REG_DWORD" /d "0" /f
@@ -766,7 +770,7 @@ sc config "DcpSvc" start=disabled
 ::DISABLE SMART SCREEN AND TELEMETRY
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableSmartScreen" /t REG_DWORD /d 0 /f
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f
-schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable
+schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
 
 ::DISABLE CEIP (WINDOWS CUSTOMER EXPERIENCE INDEX)
 reg add "HKLM\SOFTWARE\Microsoft\SQMClient\IE" /v "CEIPEnable" /t REG_DWORD /d "0" /f
@@ -794,9 +798,10 @@ reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitF
 ::DISABLE APP TRACKING (WILL NOT REMEMBER SEARCH OR RUN HISTORY, ENABLE IF YOU WANT PRIVACY)
 ::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 1 /f
 
-::DISABLE DATA COLLECTION
-DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
+::IE RUN ONCE 
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Internet Explorer\Main" /v "RunOnceComplete" /t REG_DWORD /d 1 /f
+
+::DISABLE DATA COLLECTION
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant" /v "Enabled" /t REG_DWORD /d 0 /f
@@ -819,6 +824,7 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "MicrosoftE
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Visibility" /v DiagnosticErrorText /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Strings" /v DiagnosticErrorText /t REG_SZ /d "" /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Strings" /v DiagnosticLinkText /t REG_SZ /d "" /f
+DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
 
 ::DISABLE APP COMPATIBILITY DATA LOGGING
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d 1 /f
@@ -889,124 +895,124 @@ reg add "HKLM\Software\Policies\Microsoft\Edge" /v "PromotionalTabsEnabled" /t R
 reg add "HKLM\Software\Policies\Microsoft\Edge" /v "ShowRecommendationsEnabled" /t REG_DWORD /d "0" /f
 
 ::::: DISABLE BLOAT SCHEDULED TASKS:::::
-schtasks /Change /TN "\Microsoft\Windows\AppID\SmartScreenSpecific" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\AitAgent" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\StartupAppTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierdaily" /Disable
-schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierinstall" /Disable
-schtasks /Change /TN "\Microsoft\Windows\AppxDeploymentClient\Pre-staged app cleanup" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Autochk\Proxy" /Disable
-schtasks /Change /TN "\Microsoft\Windows\CertificateServicesClient\UserTask-Roam" /Disable
-schtasks /Change /TN "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\HypervisorFlightingTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable
-schtasks /Change /TN "\Microsoft\Windows\DUSM\dusmtask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan for Crash Recovery" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Device Information\Device" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Diagnosis\Scheduled" /Disable
-schtasks /Change /TN "\Microsoft\Windows\DiskCleanup\SilentCleanup" /Disable
-schtasks /Change /TN "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable
-schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\Diagnostics" /Disable
-schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\StorageSense" /Disable
-schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /Disable
-schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\ErrorDetailsUpdate" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Feedback\Siuf\DmClient" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" /Disable
-schtasks /Change /TN "\Microsoft\Windows\File Classification Infrastructure\Property Definition Sync" /Disable
-schtasks /Change /TN "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /Disable
-schtasks /Change /TN "\Microsoft\Windows\IME\SQM data sender" /Disable
-schtasks /Change /TN "\Microsoft\Windows\License Manager\TempSignedLicenseExchange" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Location\Notifications" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Location\WindowsActionDialog" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Maintenance\WinSAT" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Management\Provisioning\Logon" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Maps\MapsToastTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Maps\MapsUpdateTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ActivateWindowsSearch" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ConfigureInternetTimeService" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\DispatchRecoveryTasks" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\InstallPlayReady" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\MediaCenterRecoveryTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURActivate" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURDiscovery" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscovery" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW1" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW2" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrRecoveryTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrScheduleTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\RegisterSearch" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ReindexSearchRoot" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\SqlLiteRecoveryTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\UpdateRecordPath" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ehDRMInit" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Media Center\mcupdate" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Mobile Broadband Accounts\MNO Metadata Parser" /Disable
-schtasks /Change /TN "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /Disable
-schtasks /Change /TN "\Microsoft\Windows\NlaSvc\WiFiTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\PI\Sqm-Tasks" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /Disable
-schtasks /Change /TN "\Microsoft\Windows\RemoteAssistance\RemoteAssistanceTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\RetailDemo\CleanupOfflineContent" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SettingSync\BackgroundUploadTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SettingSync\NetworkStateChangeTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitor" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitorToastTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefresh" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefreshTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SpacePort\SpaceAgentTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\SpacePort\SpaceManagerTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Speech\SpeechModelDownloadTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Sysmain\ResPriStaticDbSync" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Sysmain\WsSwapAssessmentTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WCM\WiFiTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WDI\ResolutionHost" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Management" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Validation" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WS\WSTask" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Windows Filtering Platform\BfeOnServiceStartTypeChange" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Windows Media Sharing\UpdateLibrary" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\Automatic App Update" /Disable
-schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\sih" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization" /Disable
-schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Maintenance Work" /Disable
-schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTask" /Disable
-schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTaskLogon" /Disable
-schtasks /Change /TN "\NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /Disable
-schtasks /Change /TN "\NvTmRepOnLogon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /Disable
-schtasks /Change /TN "\NvTmRep_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /Disable
+schtasks /Change /TN "\Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Application Experience\AitAgent" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Application Experience\StartupAppTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierdaily" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierinstall" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\AppxDeploymentClient\Pre-staged app cleanup" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Autochk\Proxy" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\CertificateServicesClient\UserTask-Roam" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\HypervisorFlightingTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DUSM\dusmtask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan for Crash Recovery" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Device Information\Device" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Diagnosis\Scheduled" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DiskCleanup\SilentCleanup" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\Diagnostics" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\StorageSense" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\ErrorDetailsUpdate" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Feedback\Siuf\DmClient" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\File Classification Infrastructure\Property Definition Sync" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\IME\SQM data sender" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\License Manager\TempSignedLicenseExchange" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Location\Notifications" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Location\WindowsActionDialog" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Maintenance\WinSAT" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Management\Provisioning\Logon" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Maps\MapsToastTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Maps\MapsUpdateTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ActivateWindowsSearch" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ConfigureInternetTimeService" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\DispatchRecoveryTasks" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\InstallPlayReady" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\MediaCenterRecoveryTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURActivate" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURDiscovery" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscovery" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW1" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW2" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrRecoveryTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrScheduleTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\RegisterSearch" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ReindexSearchRoot" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\SqlLiteRecoveryTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\UpdateRecordPath" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ehDRMInit" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\mcupdate" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Mobile Broadband Accounts\MNO Metadata Parser" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\NlaSvc\WiFiTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\PI\Sqm-Tasks" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\RemoteAssistance\RemoteAssistanceTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\RetailDemo\CleanupOfflineContent" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SettingSync\BackgroundUploadTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SettingSync\NetworkStateChangeTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitorToastTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefreshTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskNetwork" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SpacePort\SpaceAgentTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\SpacePort\SpaceManagerTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Speech\SpeechModelDownloadTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Sysmain\ResPriStaticDbSync" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Sysmain\WsSwapAssessmentTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WCM\WiFiTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WDI\ResolutionHost" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Management" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Validation" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WS\WSTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Windows Filtering Platform\BfeOnServiceStartTypeChange" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Windows Media Sharing\UpdateLibrary" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\Automatic App Update" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\sih" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Maintenance Work" /DISABLE
+schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTask" /DISABLE
+schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTaskLogon" /DISABLE
+schtasks /Change /TN "\NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
+schtasks /Change /TN "\NvTmRepOnLogon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
+schtasks /Change /TN "\NvTmRep_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
 
 ::3RD PARTY TOOLS TELEMETRY DISABLE
 ::ADOBE
 sc stop "AdobeARMservice" & sc config "AdobeARMservice" start=disabled
 sc stop "adobeupdateservice" & sc config "adobeupdateservice" start=disabled
 sc stop "adobeflashplayerupdatesvc" & sc config "adobeflashplayerupdatesvc" start=disabled
-schtasks /change /tn "Adobe Acrobat Update Task" /disable
-schtasks /change /tn "Adobe Flash Player Updater" /disable
+schtasks /change /tn "Adobe Acrobat Update Task" /DISABLE
+schtasks /change /tn "Adobe Flash Player Updater" /DISABLE
 reg add "HKLM\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown" /v "bUpdater" /t REG_DWORD /d 0 /f
 
 ::MICROSOFT
 reg add "HKCU\SOFTWARE\Microsoft\MediaPlayer\Preferences" /v "UsageTracking" /t REG_DWORD /d 0 /f
-schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /Disable
-schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /Disable
+schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /DISABLE
 
 ::GOOGLE CHROME
-schtasks /Change /TN "GoogleUpdateTaskMachineCore" /Disable
-schtasks /Change /TN "GoogleUpdateTaskMachineUA" /Disable
+schtasks /Change /TN "GoogleUpdateTaskMachineCore" /DISABLE
+schtasks /Change /TN "GoogleUpdateTaskMachineUA" /DISABLE
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "MetricsReportingEnabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "ChromeCleanupReportingEnabled" /t REG_DWORD /d 0 /f
 
@@ -1137,14 +1143,17 @@ powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Serv
 
 ::::: SECURITY TWEAKS ::::::
 
+::DISABLE RDP (DISABLE THIS, IF YOU USE RDP)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 1 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v fLogonDisabled /t REG_DWORD /d 1 /f
 
 ::PROTECT AGAINST SPECULATIVE CPU UPDATE
 ::AMD CPU 
 ::reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d "72" /f
 ::NON AMD
 reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d "8" /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization" /v MinVmVersionForCpuBasedMitigations /t REG_SZ /d "1.0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization" /v MinVmVersionForCpuBasedMitigations /t REG_SZ /d "1.0" /f
 
 ::FORCE ENABLE LDAP ENFORCE CHANNEL BINDING
 reg add "HKLM\System\CurrentControlSet\Services\NTDS\Parameters" /v "LdapEnforceChannelBinding" /t REG_DWORD /d 2 /f
@@ -1197,7 +1206,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v ProtectionMod
 powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SMB1Protocol' -NoRestart"
 powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDirect' -NoRestart"
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb10" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v SMB1 /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SMB1" /t REG_DWORD /d "0" /f
+
 
 ::DISABLE REMOTE REGISTRY FOR SECURITY
 sc config RemoteRegistry start= disabled
@@ -1216,7 +1226,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"" /v "Di
 ::CVE-2020-1472
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v "FullSecureChannelProtection" /t REG_DWORD /d 1 /f
 
-::CVE-2021-24094
+::CVE-2021-24094 (DISABLE IPV6)
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0xFF /f
 
 ::CVE-2021-24074
@@ -1233,8 +1243,8 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settin
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /v 1004 /t REG_DWORD /d 00000003 /f
 
 ::CVE-2017-8529
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ENABLE_PRINT_INFO_DISCLOSURE_FIX" /v iexplore.exe /t REG_DWORD /d 1 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ENABLE_PRINT_INFO_DISCLOSURE_FIX" /v iexplore.exe /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ENABLE_PRINT_INFO_DISCLOSURE_FIX" /v iexplore.exe /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ENABLE_PRINT_INFO_DISCLOSURE_FIX" /v iexplore.exe /t REG_DWORD /d 1 /f
 
 ::3rd PARTY - CHROME SECURITY
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "AdvancedProtectionAllowed" /t REG_DWORD /d 1 /f
@@ -1277,7 +1287,16 @@ pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Loc
 pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
-
+DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
+DEL /f /s /q %systemdrive%\*.tmp
+DEL /f /s /q %systemdrive%\*._mp
+DEL /f /s /q %systemdrive%\*.log
+DEL /f /s /q %systemdrive%\*.gid
+DEL /f /s /q %systemdrive%\*.chk
+DEL /f /s /q %systemdrive%\*.old
+DEL /f /s /q %systemdrive%\recycled\*.*
+DEL /f /s /q %systemdrive%\$Recycle.Bin\*.*
+DEL /f /s /q %windir%\*.bak
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
