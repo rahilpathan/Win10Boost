@@ -364,6 +364,15 @@ powercfg -changename 95533644-e700-4a79-a56c-a89e8cb109d9 EXTREME-SPEED
 powercfg -setactive 95533644-e700-4a79-a56c-a89e8cb109d9
 powercfg -change -monitor-timeout-ac 15
 powercfg -change -monitor-timeout-dc 5
+powercfg -change -disk-timeout-ac 0
+powercfg -change -disk-timeout-dc 0
+powercfg -change -standby-timeout-ac 0
+powercfg -change -standby-timeout-dc 0
+
+::DISABLE HIBERNATE
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
+powercfg /x -hibernate-timeout-ac 0
+powercfg /x -hibernate-timeout-dc 0
 
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
@@ -426,9 +435,6 @@ sc config IEEtwCollectorService start= disabled
 
 ::DISABLE PARENTAL CONTROL
 sc config WpcMonSvc start= disabled
-
-::DISABLE HIBERNATE
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
 
 ::DISABLE BITS
 sc config "BITS" start=disabled
@@ -512,6 +518,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "CortanaConse
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Windows Search" /v "CortanaConsent" /t REG_DWORD /d "0" /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v "DisableVoice" /t REG_DWORD /d "1" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "VoiceShortcut" /t REG_DWORD /d 0 /f
 
 ::DISABLE USE OF BING IN SEARCH
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
