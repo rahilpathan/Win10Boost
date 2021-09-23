@@ -142,7 +142,7 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "L
 ::DISABLE MEET NOW
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_dWORD /d 1 /f
 
-::DISABLE NEWS & INTERESTS
+::DISABLE NEWS & WEATHER
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
 
 ::SHOW HIDDEN FILES
@@ -150,6 +150,12 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "H
 
 ::SHOW SUPERHIDDEN (OS) FILES - NOT RECOMMENDED
 :: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ShowSuperHidden /t REG_DWORD /d 1 /f
+
+::REMOVE EDGE SHORTCUT
+PowerShell -Command "((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq 'Microsoft Edge'}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}"
+
+::REMOVE STORE SHORTCUT
+PowerShell -Command "((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq 'Microsoft Store'}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}"
 
 ::DISABLE COMBINE IN TASKBAR ONLY WHEN FULL
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarGlomLevel" /t REG_dWORD /d 1 /f
@@ -914,13 +920,16 @@ reg add "HKLM\Software\Policies\Microsoft\Edge" /v "PromotionalTabsEnabled" /t R
 reg add "HKLM\Software\Policies\Microsoft\Edge" /v "ShowRecommendationsEnabled" /t REG_DWORD /d "0" /f
 
 ::::: DISABLE BLOAT SCHEDULED TASKS:::::
+schtasks /Change /TN "\Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierdaily" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierinstall" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Application Experience\AitAgent" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Application Experience\StartupAppTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierdaily" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\ApplicationData\appuriverifierinstall" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\AppxDeploymentClient\Pre-staged app cleanup" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Autochk\Proxy" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\CertificateServicesClient\UserTask-Roam" /DISABLE
@@ -931,9 +940,8 @@ schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program
 schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\DUSM\dusmtask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan for Crash Recovery" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan for Crash Recovery" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Device Information\Device" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Diagnosis\Scheduled" /DISABLE
@@ -941,6 +949,7 @@ schtasks /Change /TN "\Microsoft\Windows\DiskCleanup\SilentCleanup" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\Diagnostics" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\DiskFootprint\StorageSense" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\DUSM\dusmtask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\ErrorDetails\ErrorDetailsUpdate" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Feedback\Siuf\DmClient" /DISABLE
@@ -958,11 +967,13 @@ schtasks /Change /TN "\Microsoft\Windows\Maps\MapsUpdateTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\ActivateWindowsSearch" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\ConfigureInternetTimeService" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\DispatchRecoveryTasks" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ehDRMInit" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\InstallPlayReady" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\mcupdate" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\MediaCenterRecoveryTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURActivate" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURDiscovery" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscovery" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW1" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW2" /DISABLE
@@ -972,8 +983,6 @@ schtasks /Change /TN "\Microsoft\Windows\Media Center\RegisterSearch" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\ReindexSearchRoot" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\SqlLiteRecoveryTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Media Center\UpdateRecordPath" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ehDRMInit" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\mcupdate" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Mobile Broadband Accounts\MNO Metadata Parser" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\NlaSvc\WiFiTask" /DISABLE
@@ -987,6 +996,7 @@ schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyMonitorToastTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyRefreshTask" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\Shell\FamilySafetyUpload" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon" /DISABLE
@@ -999,16 +1009,16 @@ schtasks /Change /TN "\Microsoft\Windows\Sysmain\WsSwapAssessmentTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\WCM\WiFiTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\WDI\ResolutionHost" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Management" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Validation" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\WS\WSTask" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Windows Filtering Platform\BfeOnServiceStartTypeChange" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Windows Media Sharing\UpdateLibrary" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\Automatic App Update" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\WindowsUpdate\sih" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Management" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WOF\WIM-Hash-Validation" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization" /DISABLE
 schtasks /Change /TN "\Microsoft\Windows\Work Folders\Work Folders Maintenance Work" /DISABLE
+schtasks /Change /TN "\Microsoft\Windows\WS\WSTask" /DISABLE
 schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTask" /DISABLE
 schtasks /Change /TN "\Microsoft\XblGameSave\XblGameSaveTaskLogon" /DISABLE
 schtasks /Change /TN "\NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
@@ -1083,10 +1093,13 @@ ipconfig/flushdns
 netsh interface ip delete arpcache
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
 netsh int tcp set supplemental custom congestionprovider = ctcp
+netsh int ip set global taskoffload=disabled
+netsh int ip set global neighborcachelimit=4096
 netsh int ipv6 set state disabled
 netsh int isatap set state disabled
-netsh int tcp set global autotuninglevel=normal
+netsh int tcp set global autotuninglevel=disable
 netsh int tcp set global dca=enabled
+netsh int tcp set security mpp=disabled
 netsh int tcp set global ecn=enabled
 netsh int tcp set global ecncapability=disabled
 netsh int tcp set global initialRto=2000
@@ -1097,17 +1110,19 @@ netsh int tcp set global rsc=disabled
 netsh int tcp set global rss=enabled
 netsh int tcp set global timestamps=disabled
 netsh int tcp set heuristics disabled
-netsh int tcp set security mpp=disabled
 netsh int tcp set security profiles=disabled
-netsh int tcp set supplemental Custom
+netsh int tcp set security mpp=disabled profiles=disabled
+netsh int ip set global multicastforwarding=disabled
+netsh int ip set global icmpredirects=disabled
 netsh int tcp set supplemental Custom congestionprovider=ctcp
 netsh int tcp set supplemental Internet congestionprovider=ctcp
-netsh int tcp set supplemental InternetCustom
 netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
 netsh int teredo set state disabled
-netsh int tsp set global maxsynretransmissions=2
+netsh int tcp set global maxsynretransmissions=2
 netsh winsock set autotuning on
 
+powershell "ForEach($adapter In Get-NetAdapter){Disable-NetAdapterPowerManagement -Name $adapter.Name -ErrorAction SilentlyContinue}"
+powershell "ForEach($adapter In Get-NetAdapter){Disable-NetAdapterLso -Name $adapter.Name -ErrorAction SilentlyContinue}"
 powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 2
 powershell Set-NetAdapterRss -Name "Ethernet" -NumberOfReceiveQueues 4
 powershell Set-NetAdapterRss -Name "Ethernet 2" -NumberOfReceiveQueues 2
@@ -1119,7 +1134,6 @@ PowerShell Disable-NetAdapterIPsecOffload -Name "*"
 PowerShell Disable-NetAdapterPowerManagement -Name "*"
 PowerShell Disable-NetAdapterQos -Name "*"
 
-reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /t REG_SZ /v "Disabled" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /v "Teredo_State" /d "Disabled" /f
@@ -1136,14 +1150,23 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableLargeMtu" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableConnectionRateLimiting" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableHeuristics" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUBHDetect" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnablePMTUDiscovery" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableWsd" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "GlobalMaxTcpWindowSize" /t REG_DWORD /d "8760" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxConnectionsPerServer" /t REG_DWORD /d "20" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxFreeTcbs" /t REG_DWORD /d "65535" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxHashTableSize" /t REG_DWORD /d "65535" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "SackOpts" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "SynAttackProtect" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TCPMaxDataRetransmissions" /t REG_DWORD /d "5" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxDupAcks" /t REG_DWORD /d "2" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "30" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "32" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpWindowSize" /t REG_DWORD /d "8760" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostPriority" /t REG_DWORD /d "5" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostsPriority" /t REG_DWORD /d "5" /f
@@ -1307,6 +1330,7 @@ pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Wi
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
 DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
+DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
 DEL /f /s /q %systemdrive%\*.tmp
 DEL /f /s /q %systemdrive%\*._mp
 DEL /f /s /q %systemdrive%\*.log
