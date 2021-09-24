@@ -215,7 +215,49 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe" /v "Debugger" /t REG_SZ /d "1" /f
 
 
-:::::: GAMING TWEAKS ::::::
+::DISABLE CORTANA SEARCH BAR AND CORTANA BUTTON
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d "0" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowCortanaButton" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f
+
+
+::COMPLETELY REMOVING CORTANA
+Powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage"
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "CortanaConsent" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Windows Search" /v "CortanaConsent" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v "DisableVoice" /t REG_DWORD /d "1" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "VoiceShortcut" /t REG_DWORD /d 0 /f
+
+::DISABLE USE OF BING IN SEARCH
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\InputPersonalization" /v RestrictImplicitInkCollection /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\InputPersonalization" /v RestrictImplicitTextCollection /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\Personalization\Settings" /v AcceptedPrivacyPolicy /t REG_DWORD /d 0 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "CortanaCapabilities" /t REG_SZ /d "" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "DeviceHistoryEnabled" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "IsAssignedAccess" /t REG_DWORD /d "0" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "IsWindowsHelloActive" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowIndexingEncryptedStoresOrItems" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchPrivacy" /t REG_DWORD /d 3 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchSafeSearch" /t REG_DWORD /d 3 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Microsoft\PolicyManager\default\Experience\AllowCortana" /v "value" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\SearchCompanion" /v "DisableContentFileUpdates" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchPrivacy" /t REG_DWORD /d "3" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "DoNotUseWebResults" /t REG_DWORD /d "1" /f
+
 
 
 ::DISABLE STICKY AND TOGGLE KEYS
@@ -597,3 +639,76 @@ w32tm /config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.o
 net start w32time
 w32tm /config /update
 w32tm /resync /rediscover
+
+::SYSTEM CLEAN
+taskkill /f /im explorer.exe
+@echo Please wait......
+timeout /t 3
+pushd "C:\Temp" && (rd /s /q "C:\Temp" 2>nul & popd)
+pushd "%windir%\temp" && (rd /s /q "%windir%\temp" 2>nul & popd)
+pushd "%temp%" && (rd /s /q "%temp%" 2>nul & popd)
+pushd "C:\Windows\Temp" && (rd /s /q "C:\Windows\Temp" 2>nul & popd)
+pushd "%windir%\Prefetch " && (rd /s /q "%windir%\Prefetch" 2>nul & popd)
+pushd "%windir%\system32\dllcache" && (rd /s /q "%windir%\system32\dllcache" 2>nul & popd)
+pushd "%windir%\spool\printers" && (rd /s /q "%windir%\spool\printers" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Settings\Temp" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
+pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
+DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
+DEL /f /s /q %systemdrive%\*.tmp
+DEL /f /s /q %systemdrive%\*._mp
+DEL /f /s /q %systemdrive%\*.log
+DEL /f /s /q %systemdrive%\*.gid
+DEL /f /s /q %systemdrive%\*.chk
+DEL /f /s /q %systemdrive%\*.old
+DEL /f /s /q %systemdrive%\recycled\*.*
+DEL /f /s /q %systemdrive%\$Recycle.Bin\*.*
+DEL /f /s /q %windir%\*.bak
+FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
+IF (%adminTest%)==(Access) goto noAdmin
+for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
+goto theEnd
+:do_clear
+echo clearing %1
+wevtutil.exe cl %1
+goto :eof
+:noAdmin
+echo You must run this script as an Administrator!
+echo.
+:theEnd
+start explorer.exe
+
+::DISCORD CACHE CLEAN
+taskkill /im discord.exe /f
+rd "%AppData%\Discord\Cache" /s /q
+rd "%AppData%\Discord\Code Cache" /s /q
+md "%AppData%\Discord\Cache"
+md "%AppData%\Discord\Code Cache"
+
+::EDGE CACHE CLEAN
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\*history*." /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\LOG" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\LOG.old" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Login Data" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Login Data-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Media History" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Media History-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Action Predictor" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Action Predictor-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Network Persistent State" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Reporting and NEL" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Reporting and NEL-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\QuotaManager" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\QuotaManager-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Shortcuts" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Shortcuts-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Top Sites" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Top Sites-journal" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Visited Links" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data" /s /f /q
+del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data-journal" /s /f /q
