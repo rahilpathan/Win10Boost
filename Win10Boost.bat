@@ -422,6 +422,31 @@ powercfg -change -disk-timeout-ac 0
 powercfg -change -disk-timeout-dc 0
 powercfg -change -standby-timeout-ac 0
 powercfg -change -standby-timeout-dc 0
+Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 70
+Powercfg -setactive scheme_current
+
+Powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 85
+Powercfg -setactive scheme_current
+
+Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMAX 90
+Powercfg -setactive scheme_current
+
+Powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMAX 100
+Powercfg -setactive scheme_current
+
+:: Disable Away Mode policy
+powercfg /setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
+powercfg /setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
+:: Disable Idle States
+powercfg /setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
+powercfg /setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
+:: Disable Hybrid Sleep
+powercfg /setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94ac6d29-73ce-41a6-809f-6363ba21b47e 0
+powercfg /setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94ac6d29-73ce-41a6-809f-6363ba21b47e 0
+
+powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
+
+powercfg.exe -setactive SCHEME_CURRENT
 
 ::DISABLE HIBERNATE
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
@@ -544,6 +569,9 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" /v
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "start" /t REG_DWORD /d 2 /f
 sc stop "DoSvc" & sc config "DoSvc" start=disabled
 
+::IE RUN ONCE 
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Internet Explorer\Main" /v "RunOnceComplete" /t REG_DWORD /d 1 /f
+
 ::DISABLE WINDOWS SEARCH (ENABLE THIS IF YOU DON'T HAVE OUTLOOK)
 ::sc stop WSearch
 ::sc config WSearch start= disabled
@@ -655,9 +683,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v WaitToKillServiceTimeout /t R
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v HungAppTimeout /t REG_SZ /d 2000 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v AutoEndTasks /t REG_SZ /d 1 /f
 reg add "HKCU\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d "1" /f
-
-::DISABLING IRIS SERVICE
-reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\IrisService /f
 
 ::DISABLE ACTIVEX
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWORD /d 0x00000003 /f
@@ -829,8 +854,7 @@ reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitF
 ::DISABLE APP TRACKING (WILL NOT REMEMBER SEARCH OR RUN HISTORY, ENABLE IF YOU WANT PRIVACY)
 ::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 1 /f
 
-::IE RUN ONCE 
-reg add "HKCU\SOFTWARE\Policies\Microsoft\Internet Explorer\Main" /v "RunOnceComplete" /t REG_DWORD /d 1 /f
+
 
 ::DISABLE DATA COLLECTION
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
@@ -883,7 +907,6 @@ reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "Di
 reg add "HKLM\Software\Policies\Microsoft\Windows\WDI\{9c5a40da-b965-4fc3-8781-88dd50a6299d}" /v "ScenarioExecutionEnabled" /t REG_DWORD /d "0" /f
 
 ::TWEAK LOGGING SERVICES
-
 ::LIMIT LOGGING TO 48MB
 wevtutil sl Security /ms:48048576
 wevtutil sl Application /ms:48048576
