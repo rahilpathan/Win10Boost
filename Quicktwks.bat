@@ -600,6 +600,14 @@ wevtutil sl "Microsoft-Windows-Sysmon/Operational" /ms:24048576
 wevtutil sl "Microsoft-Windows-TaskScheduler/Operational" /e:true
 wevtutil sl "Microsoft-Windows-DNS-Client/Operational" /e:true
 
+ipconfig /release 
+ipconfig /renew 
+ipconfig /flushdns 
+netsh int ip reset 
+netsh winsock reset 
+netsh interface ipv4 reset 
+netsh interface ipv6 reset 
+netsh advfirewall reset 
 netsh interface ip delete arpcache
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
 netsh int tcp set supplemental custom congestionprovider = ctcp
@@ -643,7 +651,7 @@ w32tm /resync /rediscover
 ::SYSTEM CLEAN
 taskkill /f /im explorer.exe
 @echo Please wait......
-timeout /t 3
+timeout /t 5
 pushd "C:\Temp" && (rd /s /q "C:\Temp" 2>nul & popd)
 pushd "%windir%\temp" && (rd /s /q "%windir%\temp" 2>nul & popd)
 pushd "%temp%" && (rd /s /q "%temp%" 2>nul & popd)
@@ -653,13 +661,16 @@ pushd "%windir%\system32\dllcache" && (rd /s /q "%windir%\system32\dllcache" 2>n
 pushd "%windir%\spool\printers" && (rd /s /q "%windir%\spool\printers" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Settings\Temp" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
 DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
+DEL /q /f /s %USERPROFILE%\AppData\Roaming\Microsoft\Office\*.tmp 
 DEL /f /s /q %systemdrive%\*.tmp
 DEL /f /s /q %systemdrive%\*._mp
 DEL /f /s /q %systemdrive%\*.log
@@ -669,6 +680,7 @@ DEL /f /s /q %systemdrive%\*.old
 DEL /f /s /q %systemdrive%\recycled\*.*
 DEL /f /s /q %systemdrive%\$Recycle.Bin\*.*
 DEL /f /s /q %windir%\*.bak
+del /f /s /q %windir%\prefetch\*.*
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")

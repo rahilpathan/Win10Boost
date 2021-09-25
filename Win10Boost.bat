@@ -1,8 +1,7 @@
+:: CHECK FOR ADMIN PRIVILEGES
+dism || (echo This script must be Run as Administrator. && pause && exit /b 1)
 ::RUN CMD AD ADMIN
 %SystemRoot%\System32\reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /f /t REG_SZ /v "C:\WINDOWS\system32\cmd.exe" /d "RUNASADMIN"
-
-::PREFETCH SETTINGS (If Windows installed on SSD drive - set 0, HDD - 3)
-SET Prefetch=0
 
 ::::: REMOVING WINDOWS DEFAULT APPS ::::: 
 ::(Keeping Calculator, Sound recorder, BingWeather, Dolby, Netflix, Hulu, PrimeVideo, Spotify, Skype, Viber)
@@ -414,6 +413,8 @@ reg add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002b
 :::::::: PERFORMANCE TWEAKS ::::::::
 
 
+::PREFETCH SETTINGS (If Windows installed on SSD drive - set 0, HDD - 3)
+SET Prefetch=0
 
 ::POWER BOOSTER
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 95533644-e700-4a79-a56c-a89e8cb109d9
@@ -436,12 +437,12 @@ Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMAX 100
 Powercfg -setactive scheme_current
 Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 30
 Powercfg -setactive scheme_current
-:: Disable Away Mode policy
+::Disable Away Mode policy
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
 Powercfg -setactive scheme_current
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
 Powercfg -setactive scheme_current
-:: Disable Idle States
+::Disable Idle States
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
 Powercfg -setactive scheme_current
 powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
@@ -450,31 +451,44 @@ PowerCfg -SETACVALUEINDEX SCHEME_CURRENT SUB_PROCESSOR IDLEDISABLE 0
 Powercfg -setactive scheme_current
 PowerCfg -SETDCVALUEINDEX SCHEME_CURRENT SUB_PROCESSOR IDLEDISABLE 0
 Powercfg -setactive scheme_current
-:: Disable Hybrid Sleep
-powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94ac6d29-73ce-41a6-809f-6363ba21b47e 0
-powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94ac6d29-73ce-41a6-809f-6363ba21b47e 0
+::Disable Hybrid Sleep
+powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
+powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
 powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 powercfg.exe -setactive SCHEME_CURRENT
 ::DISABLE HIBERNATE
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
 powercfg /x -hibernate-timeout-ac 0
 powercfg /x -hibernate-timeout-dc 0
+::COOLING
+powercfg /setACvalueindex scheme_current SUB_PROCESSOR SYSCOOLPOL 1
+powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
+
+powercfg /setDCvalueindex scheme_current SUB_PROCESSOR SYSCOOLPOL 1
 ::REG MODS
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\238c9fa8-0aad-41ed-83f4-97be242c8f20\94ac6d29-73ce-41a6-809f-6363ba21b47e" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\238c9fa8-0aad-41ed-83f4-97be242c8f20\bd3b718a-0680-4d9d-8ab2-e1d2b4ac806d" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\245d8541-3943-4422-b025-13a784f679b7" /v "AcSettingIndex" /t reg_dword /d "1" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\2a737441-1930-4402-8d77-b2bebba308a3\0853a681-27c8-4100-a2fd-82013e970683" /v "AcSettingIndex" /t reg_dword /d "10000" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\2a737441-1930-4402-8d77-b2bebba308a3\48e6b7a6-50f5-4782-a5d4-53bb8f07e226" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\2a737441-1930-4402-8d77-b2bebba308a3\d4e98f31-5ffe-4ce1-be31-1b38b384c009" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\4f971e89-eebd-4455-a8de-9e59040e7347\96996bc0-ad50-47ec-923b-6f41874dd9eb" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "AcSettingIndex" /t reg_dword /d "100" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\54533251-82be-4824-96c1-47b60b740d00\3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\54533251-82be-4824-96c1-47b60b740d00\5d76a2ca-e8c0-402f-a133-2158492d58ad" /v "AcSettingIndex" /t reg_dword /d "1" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\54533251-82be-4824-96c1-47b60b740d00\893dee8e-2bef-41e0-89c6-b55d0929964c" /v "AcSettingIndex" /t reg_dword /d "100" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\54533251-82be-4824-96c1-47b60b740d00\bc5038f7-23e0-4960-96da-33abaf5935ec" /v "AcSettingIndex" /t reg_dword /d "100" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\7516b95f-f776-4464-8c53-06167f40cc99\3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e" /v "AcSettingIndex" /t reg_dword /d "0" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\User\Powerschemes\95533644-e700-4a79-a56c-a89e8cb109d9\7516b95f-f776-4464-8c53-06167f40cc99\aded5e82-b909-4619-9949-f5d71dac0bcb" /v "AcSettingIndex" /t reg_dword /d "100" /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v CoreParkingDisabled /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v AwayModeEnabled /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v Class1InitialUnparkCount /t REG_DWORD /d 100 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v CsEnabled /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v CustomizeDuringSetup /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v EnergyEstimationEnabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v HiberFileSizePercent /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v HibernateEnabled /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v MfBufferingThreshold /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v PerfCalculateActualUtilization /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v TimerRebaseThresholdOnDripsExit /t REG_DWORD /d 30 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v EventProcessorEnabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v HiberFileType /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v Class2InitialUnparkCount /t REG_DWORD /d 100 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v EnergyEstimationDisabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v PerfBoostAtGuaranteed /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v PpmMfBufferingThreshold /t REG_DWORD /d 0 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v MfOverridesDisabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v PpmMfOverridesDisabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v UserBatteryDischargeEstimator /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v PowerThrottlingOff /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v HyberbootEnabled /t REG_DWORD /d 1 /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling /v PowerThrottlingOff /t REG_DWORD /d 1 /f
 
 ::DISABLE SYSMAIN/SUPERFETCH
 sc stop SysMain
@@ -830,7 +844,7 @@ reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore" /f
 reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore\Settings" /f
 reg add "HKEY_USERS\.DEFAULT\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" /v "HasAccepted" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" /v "HasAccepted" /t REG_DWORD /d "0" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /T REG_DWORD /V "AllowTelemetry" /d 0 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t "REG_DWORD" /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "MaxTelemetryAllowed" /t "REG_DWORD" /d "0" /f
 reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t "REG_DWORD" /d "0" /f
@@ -876,8 +890,6 @@ reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitF
 
 ::DISABLE APP TRACKING (WILL NOT REMEMBER SEARCH OR RUN HISTORY, ENABLE IF YOU WANT PRIVACY)
 ::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 1 /f
-
-
 
 ::DISABLE DATA COLLECTION
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
@@ -1144,16 +1156,19 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 
 
 ::ENABLE IF RUNNING FIRST TIME, SHOULD NOT BE ON SCHEDULER
+
 ::ipconfig /release
 ::ipconfig /renew
+::ipconfig /flushdns 
 ::netsh int ip reset
 ::netsh int tcp reset
 ::netsh winsock reset
 ::netsh winsock reset proxy
 ::netsh winsock reset catalog
+::netsh interface ipv4 reset 
+::netsh interface ipv6 reset 
 ::netsh advfirewall reset
 
-ipconfig/flushdns
 netsh interface ip delete arpcache
 netsh interface ipv6 6to4 set state state=disabled undoonstop=disabled
 netsh int tcp set supplemental custom congestionprovider = ctcp
@@ -1197,21 +1212,54 @@ PowerShell Disable-NetAdapterRsc -Name "*"
 PowerShell Disable-NetAdapterIPsecOffload -Name "*"
 PowerShell Disable-NetAdapterPowerManagement -Name "*"
 PowerShell Disable-NetAdapterQos -Name "*"
+Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpAckFrequency -Value 1"
+Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
+Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TCPNoDelay -Value 1"
 
+for /f %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v InterfaceMetric /t REG_DWORD /d 0000055 /f
+for /f %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v TCPNoDelay /t REG_DWORD /d 0000001 /f
+for /f %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v TcpAckFrequency /t REG_DWORD /d 0000001 /f
+for /f %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v TcpDelAckTicks /t REG_DWORD /d 0000000 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoNetCrawling" /t REG_DWORD /d "1" /f
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d "1" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "4294967295" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /t REG_SZ /v "Disabled" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition" /v "Teredo_State" /d "Disabled" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\NetBT\Parameters" /v "NameSrvQueryTimeout" /t REG_DWORD /d "3000" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "DeadGWDetectDefault" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "EnablePMTUDiscovery" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "GlobalMaxTcpWindowSize" /t REG_DWORD /d "5840" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "MaxConnectionsPerServer" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "MaxUserPort" /t REG_DWORD /d "65534" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "SackOpts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "TcpMaxDupAcks" /t REG_DWORD /d "2" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "32" /f
+reg add "HKLM\SYSTEM\ControlSet001\Services\Tcpip\Parameters" /v "TcpWindowSize" /t REG_DWORD /d "5840" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottlinge" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\DNS\Parameters" /v "MaximumUdpPacketSize" /t REG_DWORD /d "1221" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d "384" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d "86400" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxSOACacheEntryTtlLimit" /t REG_DWORD /d "300" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeCacheTime" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NegativeSOACacheTime" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "NetFailureCacheTime" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "ServiceDllUnloadOnStop" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "maxcachettl" /t REG_DWORD /d "13824" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "maxnegativecachettl" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "IRPStackSize" /t REG_DWORD /d 32 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SizReqBuf" /t REG_DWORD /d 16384 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "Size" /t REG_DWORD /d "3" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DeadGWDetectDefault" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d "64" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableLargeMtu" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableConnectionRateLimiting" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableHeuristics" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableICMPRedirect" /t REG_DWORD /d "1" /f
@@ -1229,11 +1277,13 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TCPMaxData
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxDupAcks" /t REG_DWORD /d "2" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "30" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpTimedWaitDelay" /t REG_DWORD /d "32" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpWindowSize" /t REG_DWORD /d "8760" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d "16" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d "16" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "UseDelayedAcceptance" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "Class" /t REG_DWORD /d "8" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d "6" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostPriority" /t REG_DWORD /d "5" /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostsPriority" /t REG_DWORD /d "5" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "LocalPriority" /t REG_DWORD /d "4" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d "7" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d "4" /f
@@ -1241,10 +1291,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\services\TCPIP6\Parameters" /v "EnableICS
 reg add "HKLM\System\CurrentControlSet\Services\Dnscache\Parameters" /v "EnableAutoDoh" /t REG_DWORD /d "2" /f
 reg add "HKLM\System\CurrentControlSet\Services\NetBT\Parameters" /v "EnableLMHOSTS" /t REG_DWORD /d "0" /f
 reg add "HKLM\System\CurrentControlSet\Services\Tcpip\QoS" /v "Do not use NLA" /t REG_SZ /d "1" /f
-
-Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpAckFrequency -Value 1"
-Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TcpDelAckTicks -Value 0"
-Powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\*' -Name TCPNoDelay -Value 1"
 
 
 ::::: SECURITY TWEAKS ::::::
@@ -1378,7 +1424,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v No
 ::SYSTEM CLEAN
 taskkill /f /im explorer.exe
 @echo Please wait......
-timeout /t 3
+timeout /t 5
 pushd "C:\Temp" && (rd /s /q "C:\Temp" 2>nul & popd)
 pushd "%windir%\temp" && (rd /s /q "%windir%\temp" 2>nul & popd)
 pushd "%temp%" && (rd /s /q "%temp%" 2>nul & popd)
@@ -1388,13 +1434,16 @@ pushd "%windir%\system32\dllcache" && (rd /s /q "%windir%\system32\dllcache" 2>n
 pushd "%windir%\spool\printers" && (rd /s /q "%windir%\spool\printers" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\Local Settings\Temporary Internet Files" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Settings\Temp" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
 DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
+DEL /q /f /s %USERPROFILE%\AppData\Roaming\Microsoft\Office\*.tmp 
 DEL /f /s /q %systemdrive%\*.tmp
 DEL /f /s /q %systemdrive%\*._mp
 DEL /f /s /q %systemdrive%\*.log
@@ -1404,6 +1453,7 @@ DEL /f /s /q %systemdrive%\*.old
 DEL /f /s /q %systemdrive%\recycled\*.*
 DEL /f /s /q %systemdrive%\$Recycle.Bin\*.*
 DEL /f /s /q %windir%\*.bak
+del /f /s /q %windir%\prefetch\*.*
 FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
 IF (%adminTest%)==(Access) goto noAdmin
 for /F "tokens=*" %%G in ('wevtutil.exe el') DO (call :do_clear "%%G")
@@ -1449,31 +1499,52 @@ del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data" /s /f /q
 del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data-journal" /s /f /q
 
 ::RESTORE ORIGINAL BCDEDITS (ONLY IF EVER MODIFIED)
-::bcdedit /deletevalue {current} safeboot
-::bcdedit /deletevalue {current} safebootalternateshell
-::bcdedit /deletevalue {current} removememory
-::bcdedit /deletevalue {current} truncatememory
-::bcdedit /deletevalue {current} useplatformclock
-::bcdedit /deletevalue {default} safeboot
-::bcdedit /deletevalue {default} safebootalternateshell
-::bcdedit /deletevalue {default} removememory
-::bcdedit /deletevalue {default} truncatememory
-::bcdedit /deletevalue {default} useplatformclock
-::bcdedit /set {bootmgr} displaybootmenu no
-::bcdedit /set {current} advancedoptions false
-::bcdedit /set {current} bootems no
-::bcdedit /set {current} bootmenupolicy legacy
-::bcdedit /set {current} bootstatuspolicy IgnoreAllFailures
-::bcdedit /set {current} disabledynamictick yes
-::bcdedit /set {current} lastknowngood yes
-::bcdedit /set {current} recoveryenabled no
-::bcdedit /set {default} advancedoptions false
-::bcdedit /set {default} bootems no
-::bcdedit /set {default} bootmenupolicy legacy
-::bcdedit /set {default} bootstatuspolicy IgnoreAllFailures
-::bcdedit /set {default} disabledynamictick yes
-::bcdedit /set {default} lastknowngood yes
-::bcdedit /set {default} recoveryenabled no
+::bcdedit /deletevalue allowedinmemorysettings
+::bcdedit /deletevalue avoidlowmemory
+::bcdedit /deletevalue bootems
+::bcdedit /deletevalue bootlog
+::bcdedit /deletevalue bootmenupolicy
+::bcdedit /deletevalue bootux
+::bcdedit /deletevalue configaccesspolicy
+::bcdedit /deletevalue configflags
+::bcdedit /deletevalue debug
+::bcdedit /deletevalue disabledynamictick
+::bcdedit /deletevalue disableelamdrivers
+::bcdedit /deletevalue ems
+::bcdedit /deletevalue extendedinput
+::bcdedit /deletevalue firstmegabytepolicy
+::bcdedit /deletevalue forcefipscrypto
+::bcdedit /deletevalue forcelegacyplatform
+::bcdedit /deletevalue graphicsmodedisabled
+::bcdedit /deletevalue halbreakpoint
+::bcdedit /deletevalue highestmode
+::bcdedit /deletevalue hypervisorlaunchtype
+::bcdedit /deletevalue increaseuserva
+::bcdedit /deletevalue integrityservices
+::bcdedit /deletevalue isolatedcontext
+::bcdedit /deletevalue nointegritychecks
+::bcdedit /deletevalue nolowmem
+::bcdedit /deletevalue noumex
+::bcdedit /deletevalue nx
+::bcdedit /deletevalue onecpu
+::bcdedit /deletevalue pae
+::bcdedit /deletevalue perfmem
+::bcdedit /deletevalue quietboot
+::bcdedit /deletevalue removememory
+::bcdedit /deletevalue safeboot
+::bcdedit /deletevalue safebootalternateshell
+::bcdedit /deletevalue sos
+::bcdedit /deletevalue testsigning
+::bcdedit /deletevalue tpmbootentropy
+::bcdedit /deletevalue truncatememory
+::bcdedit /deletevalue tscsyncpolicy
+::bcdedit /deletevalue usefirmwarepcisettings
+::bcdedit /deletevalue usephysicaldestination
+::bcdedit /deletevalue useplatformclock
+::bcdedit /deletevalue useplatformtick
+::bcdedit /deletevalue vm
+::bcdedit /deletevalue vsmlaunchtype
+setlocal ENABLEDELAYEDEXPANSION
 
 ::RE-SYNC TIME
 net stop w32time
@@ -1483,7 +1554,6 @@ w32tm /config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.o
 net start w32time
 w32tm /config /update
 w32tm /resync /rediscover
-
 
 echo ....#####   Please Restart the System to take Effect!   #####......
 PAUSE
