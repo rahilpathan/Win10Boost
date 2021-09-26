@@ -116,7 +116,7 @@ Powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F1|Remove-App
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d 0x00000001 /f
 
 ::ENABLE PEEK
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisablePreviewDesktop" /t REG_DWORD /d "0" /f 1>NUL 2>NUL
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisablePreviewDesktop" /t REG_DWORD /d "0" /f 1
 
 ::WALLPAPER QUALITY TWEAK
 reg add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t "REG_DWORD" /d "100" /f
@@ -221,7 +221,7 @@ reg add "HKEY_USERS\.DEFAULT\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_S
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d "31" /f
 
 ::REMOVE SHORTCUT TEXT FROM SHORTCUTS (s:tenforums.com)
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates" /v "ShortcutNameTemplate" /t REG_SZ /d "\"%%s.lnk\"" /f 1>NUL 2>NUL
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates" /v "ShortcutNameTemplate" /t REG_SZ /d "\"%%s.lnk\"" /f 1
 
 ::DISABLE NARRATOR
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe" /v "Debugger" /t REG_SZ /d "1" /f
@@ -545,14 +545,6 @@ sc config WMPNetworkSvc start= disabled
 ::DISABLE INDEXING
 ::schtasks /Change /TN "Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /DISABLE
 ::sc config "PimIndexMaintenanceSvc" start=disabled
-::DEL "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb" /s
-::DEL "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /s
-::ATTRIB -r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
-::ECHO "" > C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb
-::ATTRIB +r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
-::ATTRIB -r "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl"
-::ECHO "" > C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
-::ATTRIB +r "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl"
 
 ::DISABLE DIAGNOSTIC SYSTEM HOST (INVESTIGATE)
 ::sc config WdiSystemHost start= disabled
@@ -675,26 +667,27 @@ sc config dmwappushservice start= demand
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\dmwappushsvc" /v "Start" /t REG_SZ /d "4" /f
 
 ::DISABLE HEALTH MONITORING
+reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\HelpSvc" /v "Headlines" /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoSecondLevelCollection" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoFileCollection" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting\DW" /v "DWNoExternalURL" /t REG_DWORD /d 1 /f
-reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "EnableDeviceHealthAttestationService" /t REG_DWORD /d 00000000 /f
+reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "EnableDeviceHealthAttestationService" /t REG_DWORD /d 0 /f
 
 ::DISABLE ERROR REPORTING AND ADVERTISING
 sc stop WerSvc
 sc config WerSvc start= disabled
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\W3SVC" /v Start /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d 00000000 /f
-reg add "HKCU\Control Panel\International\User Profile" /v HttpAcceptLanguageOptOut /t REG_DWORD /d 1 /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v Enabled /t REG_DWORD /d 0 /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI" /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d "0" /f
+reg add "HKCU\Control Panel\International\User Profile" /v "HttpAcceptLanguageOptOut" /t REG_DWORD /d "1" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /v "DisabledByGroupPolicy" /t REG_DWORD /d "1" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI" /t REG_DWORD /d "1" /f
 reg add "HKCU\Software\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f
 reg add "HKCU\Software\Microsoft\Windows\Windows Error Reporting" /v "DontSendAdditionalData" /t REG_DWORD /d "1" /f
 reg add "HKCU\Software\Microsoft\Windows\Windows Error Reporting\Consent" /v "DefaultConsent" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Windows\Windows Error Reporting\Consent" /v "DefaultOverrideBehavior" /t REG_DWORD /d "1" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /t REG_DWORD /v DisabledByGroupPolicy /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "AutoApproveOSDumps" /t REG_DWORD /d 0 /f
@@ -905,6 +898,7 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "DoNotShowF
 reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d "0" /f
 reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d "1" /f
+REG ADD "HKCU\SOFTWARE\Microsoft\Assistance\Client\1.0\Settings" /v "ImplicitFeedback" /t REG_DWORD /d "0" /f
 
 ::DISABLE APP TRACKING (WILL NOT REMEMBER SEARCH OR RUN HISTORY, ENABLE IF YOU WANT PRIVACY)
 ::reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /t REG_DWORD /v Start_TrackProgs /d 1 /f
@@ -925,10 +919,10 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient" /v "CorporateSQMURL" /t REG
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform" /v "NoGenTicket" /t "REG_DWORD" /d "1" /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowCommercialDataPipeline" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "LimitEnhancedDiagnosticDataWindowsAnalytics" /t REG_DWORD /d 00000000 /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "MicrosoftEdgeDataOptIn" /t REG_DWORD /d 00000000 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowCommercialDataPipeline" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "LimitEnhancedDiagnosticDataWindowsAnalytics" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\DataCollection" /v "MicrosoftEdgeDataOptIn" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Visibility" /v DiagnosticErrorText /t REG_DWORD /d "0" /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Strings" /v DiagnosticErrorText /t REG_SZ /d "" /f
 reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Strings" /v DiagnosticLinkText /t REG_SZ /d "" /f
@@ -944,8 +938,9 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableWizard" 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisablePCA" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "SbEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Steps-Recorder" /v "Enabled" /t REG_DWORD /d "0" /f
-reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d 00000000 /f
-
+reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Settings" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d "1" /f
+reg add "HKLM\SYSTEM\DriverDatabase\Policies\Settings" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d "1" /f
 ::DISABLE RESPONSIVENESS TRACKING
 reg add "HKLM\Software\Policies\Microsoft\Windows\WDI\{9c5a40da-b965-4fc3-8781-88dd50a6299d}" /v "ScenarioExecutionEnabled" /t REG_DWORD /d "0" /f
 
@@ -1009,7 +1004,7 @@ schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
 schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
-::MAPS 
+::MAPS
 schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Maps\MapsUpdateTask" /DISABLE
 ::OTHERS
@@ -1082,9 +1077,7 @@ schtasks /Change /TN "Microsoft\Windows\RemoteAssistance\RemoteAssistanceTask" /
 schtasks /Change /TN "Microsoft\Windows\RetailDemo\CleanupOfflineContent" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\SettingSync\BackgroundUploadTask" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\SettingSync\NetworkStateChangeTask" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyMonitorToastTask" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyRefreshTask" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Shell\IndexerAutomaticMaintenance" /DISABLE
@@ -1114,6 +1107,30 @@ schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /DISABLE
 schtasks /Change /TN "\NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
 schtasks /Change /TN "\NvTmRepOnLogon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
 schtasks /Change /TN "\NvTmRep_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\StateRepository\MaintenanceTasks" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UpdateOrchestrator\Report policies" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UpdateOrchestrator\Schedule Scan Static Task" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UpdateOrchestrator\UpdateModelTask" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UpdateOrchestrator\USO_UxBroker" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UpdateOrchestrator\Schedule Work" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\UPnP\UPnPHostConfig" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\InstallService\ScanForUpdates" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\InstallService\ScanForUpdatesAsUser" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\InstallService\SmartRetry" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\International\Synchronize Language Settings" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\MemoryDiagnostic\ProcessMemoryDiagnosticEvents" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\MemoryDiagnostic\RunFullMemoryDiagnostic" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Multimedia\Microsoft\Windows\Multimedia" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Printing\EduPrintProv" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Ras\MobilityManager" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\PushToInstall\LoginCheck" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Time Synchronization\SynchronizeTime" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Time Synchronization\ForceSynchronizeTime" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Time Zone\SynchronizeTimeZone" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\WaaSMedic\PerformRemediation" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Wininet\CacheTask" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Device Setup\Metadata Refresh" /DISABLE
+
 
 ::3RD PARTY TOOLS TELEMETRY DISABLE
 ::ADOBE
@@ -1438,8 +1455,10 @@ pushd "%USERPROFILE%\Local Settings\Temporary Internet Files" && (rd /s /q "%USE
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files" 2>nul & popd)
 pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Settings\Temp" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
-pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
+::pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd) //THIS WILL REMOVE USER PINNED ITEMS
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
+pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
+pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
 DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
 DEL /q /f /s %USERPROFILE%\AppData\Roaming\Microsoft\Office\*.tmp 
@@ -1466,13 +1485,19 @@ echo You must run this script as an Administrator!
 echo.
 :theEnd
 start explorer.exe
+timeout /t 3
+start explorer.exe
 
-::DISCORD CACHE CLEAN
-taskkill /im discord.exe /f
-rd "%AppData%\Discord\Cache" /s /q
-rd "%AppData%\Discord\Code Cache" /s /q
-md "%AppData%\Discord\Cache"
-md "%AppData%\Discord\Code Cache"
+::TELEMETRY CLEAN
+takeown /f "%ProgramData%\Microsoft\Diagnosis" /r /d y
+takeown /f "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /r /d y
+icacls "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /grant administrators:F /t
+echo "" > "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl"
+echo Clear successful: "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl"
+DEL "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /s
+ATTRIB -r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
+ECHO "" > C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb
+ATTRIB +r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
 
 ::EDGE CACHE CLEAN
 del "%LocalAppData%\Microsoft\Edge\User Data\Default\*history*." /s /f /q
@@ -1496,6 +1521,7 @@ del "%LocalAppData%\Microsoft\Edge\User Data\Default\Top Sites-journal" /s /f /q
 del "%LocalAppData%\Microsoft\Edge\User Data\Default\Visited Links" /s /f /q
 del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data" /s /f /q
 del "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data-journal" /s /f /q
+
 
 ::RESTORE ORIGINAL BCDEDITS (ONLY IF EVER MODIFIED)
 ::bcdedit /deletevalue allowedinmemorysettings
