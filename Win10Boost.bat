@@ -357,9 +357,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v Start /t REG_
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v Start /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_DWORD /d 0 /f
 
-::REMOVE XBOX SCHEDULED TASKS
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTask" /DISABLE
-schtasks /Change /TN "Microsoft\XblGameSave\XblGameSaveTaskLogon" /DISABLE
 takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
 icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
 taskkill /im GameBarPresenceWriter.exe /f
@@ -426,23 +423,22 @@ powercfg -change -disk-timeout-ac 0
 powercfg -change -disk-timeout-dc 0
 powercfg -change -standby-timeout-ac 0
 powercfg -change -standby-timeout-dc 0
-
 ::AC VALUES
 Powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMAX 100
 Powercfg -setactive scheme_current
-Powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 80
+Powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100
 Powercfg -setactive scheme_current
 ::DC VALUES
 Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMAX 100
 Powercfg -setactive scheme_current
-Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 30
+Powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 50
 Powercfg -setactive scheme_current
-::Disable Away Mode policy
+::DISABLE AWAY MODE
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
 Powercfg -setactive scheme_current
-powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
+powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
 Powercfg -setactive scheme_current
-::Disable Idle States
+::DISABLE IDLE STATES
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
 Powercfg -setactive scheme_current
 powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
@@ -451,21 +447,30 @@ PowerCfg -SETACVALUEINDEX SCHEME_CURRENT SUB_PROCESSOR IDLEDISABLE 0
 Powercfg -setactive scheme_current
 PowerCfg -SETDCVALUEINDEX SCHEME_CURRENT SUB_PROCESSOR IDLEDISABLE 0
 Powercfg -setactive scheme_current
-::Disable Hybrid Sleep
+::DISABLE HYBRID SLEEP
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
 powercfg -setdcvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
 powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 powercfg.exe -setactive SCHEME_CURRENT
 ::DISABLE HIBERNATE
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabledHiberbootEnabled" /t REG_DWORD /d "0" /f
 powercfg /x -hibernate-timeout-ac 0
 powercfg /x -hibernate-timeout-dc 0
 ::COOLING
 powercfg /setACvalueindex scheme_current SUB_PROCESSOR SYSCOOLPOL 1
-powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 abfc2519-3608-4c2a-94ea-171b0ed546ab 0
-
 powercfg /setDCvalueindex scheme_current SUB_PROCESSOR SYSCOOLPOL 1
-::REG MODS
+::DISABLE CORE PARKING
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "ValueMax" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "ValueMin" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334028" /v "ValueMax" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334028" /v "ValueMin" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334029" /v "ValueMax" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334029" /v "ValueMin" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318584" /v "ValueMax" /t REG_DWORD /d "0" /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318584" /v "ValueMin" /t REG_DWORD /d "0" /f
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583
+
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v CoreParkingDisabled /t REG_DWORD /d 0 /f
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v AwayModeEnabled /t REG_DWORD /d 0 /f
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power /v Class1InitialUnparkCount /t REG_DWORD /d 100 /f
@@ -564,9 +569,6 @@ wmic pagefileset where name="%SystemDrive%\\pagefile.sys" set InitialSize=0,Maxi
 wmic pagefileset where name="%SystemDrive%\\pagefile.sys" delete
 
 ::DISABLE OFFICE TELEMETRY
-schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
-schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
-schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
 reg add "HKCU\Software\Microsoft\Office\Common\ClientTelemetry" /v "DisableTelemetry" /t REG_DWORD /d "1" /f
 reg add "HKCU\Software\Microsoft\Office\16.0\Common" /v "sendcustomerdata" /t REG_DWORD /d "0" /f
 reg add "HKCU\Software\Microsoft\Office\16.0\Common\Feedback" /v "enabled" /t REG_DWORD /d "0" /f
@@ -724,11 +726,6 @@ reg add "HKCU\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d "1" /f
 ::DISABLE ACTIVEX
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\AxInstSV" /v "Start" /t REG_DWORD /d 0x00000003 /f
 
-::DISABLE FAMILY SAFETY MONITOR SERVICE
-schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
-schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /DISABLE
-
 ::RESTORE OLD PHOTOVIEWER AND SET AS DEFAULT
 reg add "HKCR\Applications\photoviewer.dll\shell\open" /v "MuiVerb" /t REG_SZ /d "@photoviewer.dll,-3043" /f
 reg add "HKCR\Applications\photoviewer.dll\shell\open\command" /ve /t REG_EXPAND_SZ /d "%%SystemRoot%%\System32\rundll32.exe \"%%ProgramFiles%%\Windows Photo Viewer\PhotoViewer.dll\", ImageView_Fullscreen %%1" /f
@@ -863,7 +860,7 @@ sc config "DcpSvc" start=disabled
 ::DISABLE SMART SCREEN AND TELEMETRY
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableSmartScreen" /t REG_DWORD /d 0 /f
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f
-schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
+
 
 ::DISABLE CEIP (WINDOWS CUSTOMER EXPERIENCE INDEX)
 reg add "HKLM\SOFTWARE\Microsoft\SQMClient\IE" /v "CEIPEnable" /t REG_DWORD /d "0" /f
@@ -917,16 +914,6 @@ reg add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Strings" /v DiagnosticLinkTe
 DEL /q C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl
 
 ::DISABLE APP COMPATIBILITY DATA LOGGING
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableEngine" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableWizard" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisablePCA" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "SbEnable" /t REG_DWORD /d 0 /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Steps-Recorder" /v "Enabled" /t REG_DWORD /d "0" /f
-reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v "DisableSendGenericDriverNotFoundToWER" /t REG_DWORD /d 00000000 /f::DISABLE APP COMPATIBILITY DATA LOGGING
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
@@ -994,9 +981,17 @@ reg add "HKLM\Software\Policies\Microsoft\Edge" /v "PromotionalTabsEnabled" /t R
 reg add "HKLM\Software\Policies\Microsoft\Edge" /v "ShowRecommendationsEnabled" /t REG_DWORD /d "0" /f
 
 ::::: DISABLE BLOAT SCHEDULED TASKS:::::
+::DISABLE FAMILY SAFETY MONITOR SERVICE
+schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyMonitor" /DISABLE
+schtasks /Change /tn "Microsoft\Windows\Shell\FamilySafetyRefresh" /DISABLE
+::OFFICE TASKS
 schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /DISABLE
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /DISABLE
 schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /DISABLE
+::MAPS 
+schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /DISABLE
+schtasks /Change /TN "Microsoft\Windows\Maps\MapsUpdateTask" /DISABLE
+::OTHERS
 schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Application Experience\AitAgent" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /DISABLE
@@ -1037,8 +1032,6 @@ schtasks /Change /TN "Microsoft\Windows\Location\Notifications" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Location\WindowsActionDialog" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Maintenance\WinSAT" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Management\Provisioning\Logon" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Maps\MapsUpdateTask" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Media Center\ActivateWindowsSearch" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Media Center\ConfigureInternetTimeService" /DISABLE
 schtasks /Change /TN "Microsoft\Windows\Media Center\DispatchRecoveryTasks" /DISABLE
@@ -1112,8 +1105,6 @@ reg add "HKLM\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown" /v "bUp
 
 ::MICROSOFT
 reg add "HKCU\SOFTWARE\Microsoft\MediaPlayer\Preferences" /v "UsageTracking" /t REG_DWORD /d 0 /f
-schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /DISABLE
-schtasks /Change /TN "Microsoft\Windows\Maps\MapsToastTask" /DISABLE
 
 ::GOOGLE CHROME
 schtasks /Change /TN "GoogleUpdateTaskMachineCore" /DISABLE
@@ -1197,7 +1188,6 @@ netsh int tcp set supplemental Custom congestionprovider=ctcp
 netsh int tcp set supplemental Internet congestionprovider=ctcp
 netsh int tcp set supplemental InternetCustom congestionprovider=ctcp
 netsh int teredo set state disabled
-netsh int tcp set global maxsynretransmissions=2
 netsh winsock set autotuning on
 
 powershell "ForEach($adapter In Get-NetAdapter){Disable-NetAdapterPowerManagement -Name $adapter.Name -ErrorAction SilentlyContinue}"
@@ -1439,8 +1429,6 @@ pushd "%USERPROFILE%\Local Settings\Temp" && (rd /s /q "%USERPROFILE%\Local Sett
 pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 pushd "%AppData%\Microsoft\Windows\Recent\" && (rd /s /q "%AppData%\Microsoft\Windows\Recent\" 2>nul & popd)
 pushd "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" && (rd /s /q "%USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer" 2>nul & popd)
-pushd "%USERPROFILE%\Local Settings\History" && (rd /s /q "%USERPROFILE%\Local Settings\History" 2>nul & popd)
-pushd "%USERPROFILE%\AppData\Local\Temp" && (rd /s /q "%USERPROFILE%\AppData\Local\Temp" 2>nul & popd)
 DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
 DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
 DEL /q /f /s %USERPROFILE%\AppData\Roaming\Microsoft\Office\*.tmp 
