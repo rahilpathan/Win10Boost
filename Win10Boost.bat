@@ -559,11 +559,19 @@ sc config WpcMonSvc start= disabled
 ::reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v EnableBITSMaxBandwidth /t REG_DWORD /d 0 /f
 ::reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v MaxDownloadTime /t REG_DWORD /d 1 /f
 
-::ADJUSTING THE PAGE FILE (FOR ALL SYSTEMS ONLY IF YOU HAVE <=8GB OF RAM)
+::DISABLE WINDOWS UPDATE 
+::sc config wuauserv start= disable
+::sc config bits start= disable
+::sc config DcomLaunch start= disable
+::net stop wuauserv
+::net stop bits
+::net stop DcomLaunch
+
+::SET PAGEFILE, IF LESS 8GB OF RAM
 ::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
 ::wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=400,MaximumSize=16384
 
-::SET ZERO PAGE FILE (>8GB RAM)
+::SET ZERO PAGEFILE (MORE THAN 8GB RAM)
 wmic computersystem where name="%computername%" set AutomaticManagedPagefile=False
 wmic pagefileset where name="%SystemDrive%\\pagefile.sys" set InitialSize=0,MaximumSize=0
 wmic pagefileset where name="%SystemDrive%\\pagefile.sys" delete
@@ -621,7 +629,6 @@ reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management
 ::DISABLE TROUBLESHOOTING SERVICE
 ::sc config wercplsupport start= disabled
 ::sc config PcaSvc start= disabled
-
 
 ::DISABLE DISK DIAGNOSTICS
 schtasks /end /tn "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"
