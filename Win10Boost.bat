@@ -554,10 +554,10 @@ sc config IEEtwCollectorService start= disabled
 ::DISABLE PARENTAL CONTROL
 sc config WpcMonSvc start= disabled
 
-::DISABLE BITS
-sc config "BITS" start=disabled
-reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v EnableBITSMaxBandwidth /t REG_DWORD /d 0 /f
-reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v MaxDownloadTime /t REG_DWORD /d 1 /f
+::DISABLE BITS (IF YOU INTEND TO DISABLE WINDOWS UPDATE)
+::sc config "BITS" start=disabled
+::reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v EnableBITSMaxBandwidth /t REG_DWORD /d 0 /f
+::reg add HKLM\Software\Policies\Microsoft\Windows\BITS /v MaxDownloadTime /t REG_DWORD /d 1 /f
 
 ::ADJUSTING THE PAGE FILE (FOR ALL SYSTEMS ONLY IF YOU HAVE <=8GB OF RAM)
 ::wmic computersystem where name=”%computername%” set AutomaticManagedPagefile=False
