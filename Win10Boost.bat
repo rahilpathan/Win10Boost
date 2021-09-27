@@ -1464,11 +1464,11 @@ DEL /F /S /Q /A %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
 DEL /f /s /q /a %LocalAppData%\Microsoft\Windows\Explorer\*.db
 DEL /q /f /s %USERPROFILE%\AppData\Roaming\Microsoft\Office\*.tmp 
 DEL /f /s /q %systemdrive%\*.tmp
-::DEL /f /s /q %systemdrive%\*._mp
-::DEL /f /s /q %systemdrive%\*.log
-::DEL /f /s /q %systemdrive%\*.gid
-::DEL /f /s /q %systemdrive%\*.chk
-::DEL /f /s /q %systemdrive%\*.old
+DEL /f /s /q %systemdrive%\*._mp
+DEL /f /s /q %systemdrive%\*.log
+DEL /f /s /q %systemdrive%\*.gid
+DEL /f /s /q %systemdrive%\*.chk
+DEL /f /s /q %systemdrive%\*.old
 DEL /f /s /q %systemdrive%\recycled\*.*
 DEL /f /s /q %systemdrive%\$Recycle.Bin\*.*
 DEL /f /s /q %windir%\*.bak
