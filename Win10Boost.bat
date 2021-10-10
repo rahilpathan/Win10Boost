@@ -1476,6 +1476,9 @@ Powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName 'SmbDir
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb10" /v Start /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SMB1" /t REG_DWORD /d "0" /f
 
+::ENABLE VIRTUALIZATION BASED SECURITY 
+reg add "HKLM\System\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f
 
 ::DISABLE REMOTE REGISTRY FOR SECURITY
 sc config RemoteRegistry start= disabled
