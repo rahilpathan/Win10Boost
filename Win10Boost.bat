@@ -450,11 +450,11 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v Start /t REG_D
 takeown /f "%WinDir%\System32\GameBarPresenceWriter.exe" /a
 icacls "%WinDir%\System32\GameBarPresenceWriter.exe" /grant:r Administrators:F /c
 taskkill /im GameBarPresenceWriter.exe /f
-move "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.OLD"
 takeown /f "%WinDir%\System32\bcastdvr.exe" /a
 icacls "%WinDir%\System32\bcastdvr.exe" /grant:r Administrators:F /c
 taskkill /im bcastdvr.exe /f
-move C:\Windows\System32\bcastdvr.exe C:\Windows\System32\bcastdvr.OLD
+ren “%WinDir%\System32\bcastdvr.exe” “bcastdvr.bak”
+ren "%WinDir%\System32\GameBarPresenceWriter.exe" "GameBarPresenceWriter.bak"
 
 ::COMPLETELY REMOVING CORTANA
 Powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage"
