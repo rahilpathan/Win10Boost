@@ -5,7 +5,16 @@
 
 **Note: This tool is free to use. Use at your own risk. If you are using it, then you are liable for any damage caused to your system.**
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster. Feel free if you have any suggestions by navigating to the issues tab.
- 
+
+
+If you copy the code to your own version, please give credits or atleast give this repo a Star! :D
+
+Don't be like someone I found just copied the whole code and called it his own. I have spent days to combine and tagged comments.
+
+Spread the knowledge, spread the happiness.
+
+
+
 ______________
  How to use:
 1. Download 'Win10Boost.bat file' or copy paste the entire content to notepad and save it as batch file. 
