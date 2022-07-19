@@ -240,7 +240,7 @@ powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-445
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-4455-a8de-9e59040e7347 96996bc0-ad50-47ec-923b-6f41874dd9eb 1
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-4455-a8de-9e59040e7347 a7066653-8d6c-40a8-910e-a1f54b84c7e5 2
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 501a4d13-42af-4429-9fd1-a8218c268e20 ee12f906-d277-404b-b6da-e5fa1a576df5 0
-powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 893dee8e-2bef-41e0-89c6-b55d0929964c 100
+powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 893dee8e-2bef-41e0-89c6-b55d0929964c 30
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 bc5038f7-23e0-4960-96da-33abaf5935ec 100
 powercfg -setacvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
@@ -273,7 +273,7 @@ powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-445
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-4455-a8de-9e59040e7347 96996bc0-ad50-47ec-923b-6f41874dd9eb 1
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 4f971e89-eebd-4455-a8de-9e59040e7347 a7066653-8d6c-40a8-910e-a1f54b84c7e5 2
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 501a4d13-42af-4429-9fd1-a8218c268e20 ee12f906-d277-404b-b6da-e5fa1a576df5 0
-powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 893dee8e-2bef-41e0-89c6-b55d0929964c 50
+powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 893dee8e-2bef-41e0-89c6-b55d0929964c 15
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 94d3a615-a899-4ac5-ae2b-e4d8f634367f 1
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 54533251-82be-4824-96c1-47b60b740d00 bc5038f7-23e0-4960-96da-33abaf5935ec 100
 powercfg -setdcvalueindex 8c5e7fda-e8bf-4a96-9a85-a6e23a8c615c 7516b95f-f776-4464-8c53-06167f40cc99 17aaa29b-8b43-4b94-aafe-35f64daaf1ee 0
