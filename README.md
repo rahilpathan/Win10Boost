@@ -7,7 +7,7 @@
 This is my personal library of optimizing Windows 10, preserving the constant search for tweaks to make system lighter and faster. Feel free if you have any suggestions by navigating to the issues tab.
 
 
-I have spent days to collect, test and tag each action with comments.
+
 _Please be humble enough give credits or atleast give this repo a Star! :D
 Spread the knowledge, spread the happiness._
 
