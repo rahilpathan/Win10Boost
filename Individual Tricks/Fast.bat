@@ -222,7 +222,7 @@ reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v I
 reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f
 reg delete "HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f
 
-powershell Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahilpathan/Win10Boost/main/Other%20Tricks/PP/RevisionPowerplanV2.9.pow -OutFile "%HOMEPATH%\Documents\Type1.pow"
+powershell Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahilpathan/Win10Boost/main/Other%20Tricks/PP/IdealPowerplan.pow -OutFile "%HOMEPATH%\Documents\Type1.pow"
 powercfg.exe /import "%HOMEPATH%\Documents\Type1.pow" 8d5e7fda-e8bf-4a96-9a85-a6e23a8c614b
 powercfg /setactive 8d5e7fda-e8bf-4a96-9a85-a6e23a8c614b
 
