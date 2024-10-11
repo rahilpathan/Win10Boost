@@ -92,7 +92,57 @@ for /f "tokens=2 delims==" %%a in ('wmic logicaldisk where "DriveType=3" get Dev
     fsutil behavior set EncryptPagingFile 0 %%a
 )
 
-echo.
-echo System optimization complete. Some changes require a reboot to take effect.
+:: Performance Tweaks - Customize your options
+
+rem Set the power plan to "High Performance"
+powercfg /setactive "High Performance"
+
+rem Disable dynamic frequency scaling (if desired)
+powercfg /setacvalueindex SCHEME_GLOBAL 5738 0
+
+rem Set minimum processor state to 100%
+powercfg /setacvalueindex SCHEME_GLOBAL 5720 100
+
+rem Set maximum processor state to 100%
+powercfg /setacvalueindex SCHEME_GLOBAL 5724 100
+
+rem Disable adaptive brightness (if applicable)
+powercfg /setacvalueindex SCHEME_GLOBAL 5704 0
+
+rem Disable automatic dimming (if applicable)
+powercfg /setacvalueindex SCHEME_GLOBAL 5706 0
+
+rem Disable hibernation (if desired)
+powercfg /hibernate off
+
+rem Disable hybrid sleep (if desired)
+powercfg /hibernate off
+
+rem Set hard disk idle timeout to 0 seconds
+powercfg /setacvalueindex SCHEME_GLOBAL 5728 0
+
+rem Set hard disk spin-down timeout to 0 seconds
+powercfg /setacvalueindex SCHEME_GLOBAL 5730 0
+
+rem Set PCI Express link state power management to 0 (performance mode)
+powercfg /setacvalueindex SCHEME_GLOBAL 5740 0
+
+rem Set USB selective suspend timeout to 0 seconds
+powercfg /setacvalueindex SCHEME_GLOBAL 5742 0
+
+rem CPU Parking tweaks
+powercfg /setacvalueindex SCHEME_GLOBAL 5741 0
+powercfg /setacvalueindex SCHEME_GLOBAL 5743 0
+
+rem BCEdit tweaks (modify as needed)
+bcdedit /set processorcores 8 (CHECK THIS NUMBER github.com/rahilpathan)
+bcdedit /set numprocthreads 16 (CHECK THIS NUMBER github.com/rahilpathan)
+
+rem Other potential tweaks (explore and adjust as needed)
+powercfg /setacvalueindex SCHEME_GLOBAL 5708 0 (disable idle timers)
+powercfg /setacvalueindex SCHEME_GLOBAL 5716 0 (disable PCI Express bus mastering)
+powercfg /setacvalueindex SCHEME_GLOBAL 5718 0 (disable PCI Express link state power management)
+
+echo Enhanced system optimization complete. Some changes require a reboot to take effect.
 echo Please review the changes and reboot your system when ready.
 pause
