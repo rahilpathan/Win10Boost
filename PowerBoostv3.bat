@@ -72,7 +72,7 @@ echo Disabling unnecessary services...
 for %%s in (
     DiagTrack dmwappushservice MapsBroker PcaSvc RemoteRegistry RetailDemo TrkWks
     WerSvc XblAuthManager XblGameSave XboxNetApiSvc WSearch WMPNetworkSvc W32Time
-    CDPSvc CDPUserSvc lfsvc geolocation SysMain wuauserv DusmSvc TabletInputService
+    CDPSvc CDPUserSvc lfsvc geolocation SysMain wuauserv DusmSvc
     PimIndexMaintenanceSvc wisvc
 ) do (
     sc config %%s start= disabled
