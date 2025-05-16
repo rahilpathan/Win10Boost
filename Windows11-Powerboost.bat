@@ -5,16 +5,6 @@ echo Applying hybrid performance tweaks...
 :: Requires Admin
 net session >nul 2>&1 || (echo This script requires administrator privileges. Please run as admin. & pause & exit)
 
-:: POWER SETTINGS
-powercfg -setactive SCHEME_BALANCED
-powercfg -change standby-timeout-ac 30
-powercfg -change monitor-timeout-ac 10
-powercfg -change hibernate-timeout-ac 60
-powercfg -attributes SUB_PROCESSOR 3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb -ATTRIB_HIDE
-powercfg -setacvalueindex SCHEME_BALANCED SUB_PROCESSOR PERFBOOSTMODE 2
-powercfg -setacvalueindex SCHEME_BALANCED SUB_PROCESSOR PROCTHROTTLEMIN 50
-powercfg -setacvalueindex SCHEME_BALANCED SUB_PROCESSOR PROCTHROTTLEMAX 100
-
 :: FAST STARTUP & HYBRID SLEEP
 powercfg /hibernate on
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 1 /f
