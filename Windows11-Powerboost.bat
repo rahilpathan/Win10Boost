@@ -53,6 +53,18 @@ sc stop DiagTrack
 sc config DiagTrack start= disabled
 sc stop dmwappushservice
 sc config dmwappushservice start= disabled
+sc config DiagTrack start=disabled
+sc config dmwappushservice start=disabled
+sc config TabletInputService start=disabled
+sc config MapsBroker start=disabled
+sc config RetailDemo start=disabled
+sc config RemoteRegistry start=disabled REM Security enhancement
+sc config WerSvc start=disabled REM Windows Error Reporting
+sc config WMPNetworkSvc start=disabled
+sc config XblAuthManager start=disabled REM Xbox services
+sc config XblGameSave start=disabled
+sc config XboxNetApiSvc start=disabled
+sc config Fax start=disabled
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack" /v ShowedToastAtLevel /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f
