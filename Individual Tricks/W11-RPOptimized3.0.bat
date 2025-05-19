@@ -27,6 +27,7 @@ powercfg -attributes SUB_PROCESSOR 893dee8e-2bef-41e0-89c6-b55d0929964c -ATTRIB_
 powercfg -attributes SUB_PROCESSOR 36687f9e-e3a5-4dbf-b1dc-15eb381c6863 -ATTRIB_HIDE
 powercfg -attributes SUB_PROCESSOR 45bcc044-d885-43e2-8605-ee0ec6e96b59 -ATTRIB_HIDE
 powercfg -attributes SUB_PROCESSOR be337238-0d82-4146-a960-4f3749d470c7 -ATTRIB_HIDE
+
 :: --- CPU Performance ---
 REM Processor performance boost mode: 2 (Aggressive) on AC, 1 (Enabled) on DC
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 2 >nul
@@ -36,6 +37,11 @@ REM Maximum processor frequency: 100% on AC (no explicit command needed if PROCF
 REM Minimum processor frequency: 100% on AC
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMAX 100 >nul
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMIN 50 >nul
+
+REM Minimum CPU cores parked
+powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR CPMINCORES 128 >nul
+powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR CPMINCORES 4 >nul
+
 
 REM System cooling policy: Active on AC (0), Passive on DC (1)
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR SYSCOOLPOL 0 >nul
