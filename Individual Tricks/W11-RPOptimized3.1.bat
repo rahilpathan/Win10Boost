@@ -45,7 +45,7 @@ powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR CPMINCORES 4 >nul
 
 REM System cooling policy: Active on AC (0), Passive on DC (1)
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR SYSCOOLPOL 0 >nul
-powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR SYSCOOLPOL 1 >nul
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR SYSCOOLPOL 0 >nul
 
 REM Core Parking registry tweaks
 reg add "HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "ValueMax" /t REG_DWORD /d 0 /f >nul
@@ -82,6 +82,13 @@ powercfg -setdcvalueindex %NEW_SCHEME% 4f971e89-eebd-4455-a8de-9e59040e7347 5ca8
 
 REM Additional Device running on AC Power performance boosting tricks (github/rahilpathan)
 REM IF CPU Overheats Change PERFDECTHRESHOLD=90, CPDECREASETIME=20 CPMINCORES=4
+powercfg -attributes SUB_PROCESSOR CPMINCORES -ATTRIB_HIDE
+powercfg -attributes SUB_PROCESSOR CPMAXCORES -ATTRIB_HIDE
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPMAXCORES 100
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPMINCORES 100
+powercfg -setdcvalueindex %NEW_SCHEME% sub_processor CPMAXCORES 100
+powercfg -setdcvalueindex %NEW_SCHEME% sub_processor CPMINCORES 100
+powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR 94d3a615-a899-4ac5-ae2b-e4d8f634367f 0
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTHRESHOLD 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTIME 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFDECTHRESHOLD 100
