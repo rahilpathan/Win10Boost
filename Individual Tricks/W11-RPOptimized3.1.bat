@@ -80,6 +80,23 @@ REM Lid Close Action: Do nothing on AC, Sleep on DC
 powercfg -setacvalueindex %NEW_SCHEME% 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0 >nul
 powercfg -setdcvalueindex %NEW_SCHEME% 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1 >nul
 
+REM Additional Device running on AC Power performance boosting tricks (github/rahilpathan)
+REM IF CPU Overheats Change PERFDECTHRESHOLD=90, CPDECREASETIME=20 CPMINCORES=4
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTHRESHOLD 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTIME 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFDECTHRESHOLD 100
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFAUTONOMOUS 0
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFDUTYCYCLING 0
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PROCTHROTTLEMAX 100
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPMINCORES 100
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor DISTRIBUTEUTIL 0
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPINCREASETIME 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPDECREASETIME 100
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPHEADROOM 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPCONCURRENCY 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor LATENCYHINTUNPARK 1
+powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFEPP 0
+
 REM Re-activate the scheme to ensure all changes are applied to the current scheme context
 powercfg -setactive %NEW_SCHEME%
 echo.
