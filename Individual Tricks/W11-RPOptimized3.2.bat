@@ -4,13 +4,13 @@ net session >nul 2>&1 || (echo ERROR: This script must be run as Administrator. 
 
 REM Define GUIDs for the base and new power schemes
 set "BASE_SCHEME=e9a42b02-d5df-448d-aa00-03f14749eb61" REM Balanced power plan GUID
-set "NEW_SCHEME=99999999-9999-9999-9999-999999999997"  REM Custom GUID for the new scheme
+set "NEW_SCHEME=99999999-9999-9999-9999-999999999995"  REM Custom GUID for the new scheme
 powercfg -setactive 381b4222-f694-41f0-9685-ff5bb260df2e
-powercfg -delete 99999999-9999-9999-9999-999999999997
-powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 99999999-9999-9999-9999-999999999997
+powercfg -delete 99999999-9999-9999-9999-999999999995
+powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 99999999-9999-9999-9999-999999999995
 
 REM Change the name and description of the new power scheme
-powercfg -changename %NEW_SCHEME% "RP-Optimized3.0" "Max performance on AC, ultra-low power on battery"
+powercfg -changename %NEW_SCHEME% "Extreme Performance" "Max performance on AC, ultra-low power on battery"
 REM Set the new power scheme as active
 powercfg -setactive %NEW_SCHEME%
 
@@ -103,10 +103,22 @@ powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPHEADROOM 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPCONCURRENCY 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor LATENCYHINTUNPARK 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFEPP 0
+sc stop "SysMain" >nul 2>&1
+sc config "SysMain" start= disabled  >nul 2>&1
+bcdedit /deletevalue useplatformclock  >nul 2>&1
+bcdedit /set disabledynamictick yes  >nul 2>&1
+bcdedit /set tscsyncpolicy Enhanced  >nul 2>&1
+bcdedit /set useplatformtick yes  >nul 2>&1
+fsutil behavior set memoryusage 2  >nul 2>&1
+fsutil behavior set allowextchar 1  >nul 2>&1
+fsutil behavior set mftzone 4  >nul 2>&1
+fsutil behavior set disablecompression 1  >nul 2>&1
+fsutil behavior set disableencryption 1  >nul 2>&1
+fsutil behavior set disabledeletenotify 0  >nul 2>&1
 
 REM Re-activate the scheme to ensure all changes are applied to the current scheme context
 powercfg -setactive %NEW_SCHEME%
 echo.
-echo Power plan RP-Optimized3.0 configured and activated!
+echo Power plan RP-Optimized3.2 configured and activated!
 pause
 exit /b 0
