@@ -3,7 +3,7 @@ REM Ensure the script is run as Administrator
 net session 2>&1 || (echo ERROR: This script must be run as Administrator. & echo Please right-click and select "Run as administrator". & pause & exit /b 1)
 
 REM Define GUIDs for the base and new power schemes
-set "BASE_SCHEME=e9a42b02-d5df-448d-aa00-03f14749eb61" REM Balanced power plan GUID
+set "BASE_SCHEME=e9a42b02-d5df-448d-aa00-03f14749eb61" REM High Performance power plan GUID
 set "NEW_SCHEME=99999999-9999-9999-9999-999999999995"  REM Custom GUID for the new scheme
 powercfg -setactive 381b4222-f694-41f0-9685-ff5bb260df2e
 powercfg -delete 99999999-9999-9999-9999-999999999995
@@ -31,7 +31,7 @@ REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v Attribu
 
 :: --- CPU Performance ---
 REM Processor performance boost mode: 2 (Aggressive) on AC, 1 (Enabled) on DC
-powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 5
+powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 2
 powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 4
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEPOL 0
 powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEPOL 2
