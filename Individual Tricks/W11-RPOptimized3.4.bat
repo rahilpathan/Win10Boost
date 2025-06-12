@@ -30,8 +30,8 @@ powercfg -attributes SUB_PROCESSOR be337238-0d82-4146-a960-4f3749d470c7 -ATTRIB_
 
 :: --- CPU Performance ---
 REM Processor performance boost mode: 2 (Aggressive) on AC, 1 (Enabled) on DC
-powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 5 >nul
-powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 6 >nul
+powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 2 >nul
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 3 >nul
 
 REM Maximum processor frequency: 100% on AC (no explicit command needed if PROCFREQMAX is unhidden and set to 0 for no limit)
 REM Minimum processor frequency: 100% on AC
@@ -109,9 +109,8 @@ powercfg -setdcvalueindex SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 3c
 
 sc stop "SysMain" >nul 2>&1
 sc config "SysMain" start= disabled  >nul 2>&1
-bcdedit /deletevalue useplatformclock  >nul 2>&1
 bcdedit /set disabledynamictick yes  >nul 2>&1
-bcdedit /set tscsyncpolicy Enhanced  >nul 2>&1
+bcdedit /set tscsyncpolicy disabled  >nul 2>&1
 bcdedit /set useplatformtick yes  >nul 2>&1
 fsutil behavior set memoryusage 2  >nul 2>&1
 fsutil behavior set allowextchar 1  >nul 2>&1
@@ -120,9 +119,38 @@ fsutil behavior set disablecompression 1  >nul 2>&1
 fsutil behavior set disableencryption 1  >nul 2>&1
 fsutil behavior set disabledeletenotify 0  >nul 2>&1
 
+powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "Disable-MMAgent -mc -pc"
+
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d 0 /f >nul
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePageCombining" /t REG_DWORD /d 1 /f >nul
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableBoottrace" /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "SfTracingState" /t REG_DWORD /d 0 /f
+reg add "HKLM\System\CurrentControlSet\Services\iagpio" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iai2c" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_GPIO2" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_GPIO2_BXT_P" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_I2C" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_I2C_BXT_P" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSSi_GPIO" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSSi_I2C" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaStorAVC" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaStorV" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\intelide" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\intelpep" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\intelppm" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\AmdK8" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\AmdPPM" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdsata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdsbs" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdxata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+
+
 REM Re-activate the scheme to ensure all changes are applied to the current scheme context
 powercfg -setactive %NEW_SCHEME%
 echo.
-echo Power plan RP-Optimized3.3 configured and activated!
+echo Power plan RP-Optimized3.4 configured and activated!
 pause
 exit /b 0
