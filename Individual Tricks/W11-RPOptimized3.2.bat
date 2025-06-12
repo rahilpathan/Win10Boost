@@ -30,8 +30,8 @@ powercfg -attributes SUB_PROCESSOR be337238-0d82-4146-a960-4f3749d470c7 -ATTRIB_
 
 :: --- CPU Performance ---
 REM Processor performance boost mode: 2 (Aggressive) on AC, 1 (Enabled) on DC
-powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 2 >nul
-powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 1 >nul
+powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 5 >nul
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PERFBOOSTMODE 6 >nul
 
 REM Maximum processor frequency: 100% on AC (no explicit command needed if PROCFREQMAX is unhidden and set to 0 for no limit)
 REM Minimum processor frequency: 100% on AC
@@ -103,6 +103,10 @@ powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPHEADROOM 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPCONCURRENCY 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor LATENCYHINTUNPARK 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFEPP 0
+
+powercfg -setacvalueindex SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e 0
+powercfg -setdcvalueindex SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e 300
+
 sc stop "SysMain" >nul 2>&1
 sc config "SysMain" start= disabled  >nul 2>&1
 bcdedit /deletevalue useplatformclock  >nul 2>&1
@@ -119,6 +123,6 @@ fsutil behavior set disabledeletenotify 0  >nul 2>&1
 REM Re-activate the scheme to ensure all changes are applied to the current scheme context
 powercfg -setactive %NEW_SCHEME%
 echo.
-echo Power plan RP-Optimized3.2 configured and activated!
+echo Power plan RP-Optimized3.3 configured and activated!
 pause
 exit /b 0
