@@ -127,9 +127,17 @@ powercfg -setdcvalueindex %NEW_SCHEME% 7516b95f-f776-4464-8c53-06167f40cc99 3c0b
 
 sc stop "SysMain" 2>&1
 sc config "SysMain" start= disabled  2>&1
+
 bcdedit /set disabledynamictick yes  2>&1
-bcdedit /set tscsyncpolicy disabled  2>&1
-bcdedit /set useplatformtick yes  2>&1
+
+bcdedit /set tscsyncpolicy enhanced 2>&1
+
+bcdedit /deletevalue useplatformtick
+
+bcdedit /set uselegacyapicmode no
+
+bcdedit /set usephysicaldestination no
+
 fsutil behavior set memoryusage 2  2>&1
 fsutil behavior set allowextchar 1  2>&1
 fsutil behavior set mftzone 4  2>&1
