@@ -64,7 +64,7 @@ powercfg -setdcvalueindex %NEW_SCHEME% 2a737441-1930-4402-8d77-b2bebba308a3 48e6
 
 REM PCI Express - Link State Power Management: Off on AC (0), Max power savings on DC (usually 2 or 3, 3 is not standard, 2 is Max Power Savings)
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PCIEXPRESS ASPM 0
-powercfg -setdcvalueindex %NEW_SCHEME% SUB_PCIEXPRESS ASPM 2
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PCIEXPRESS ASPM 3
 
 REM Values: 0 (Max Perf), 1 (Low PS), 2 (Med PS), 3 (Max PS)
 powercfg -setacvalueindex %NEW_SCHEME% 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 0
@@ -78,7 +78,7 @@ REM 0 = Prevent idling to sleep, 1 = Allow computer to sleep
 powercfg -setacvalueindex %NEW_SCHEME% SUB_VIDEO VIDEOIDLE 0
 powercfg -setdcvalueindex %NEW_SCHEME% SUB_VIDEO VIDEOIDLE 1
 
-REM Adaptive Brightness: Off on AC, On on DC
+REM Adaptive Brightness: Off on AC and DC
 powercfg -setacvalueindex %NEW_SCHEME% 7516b95f-f776-4464-8c53-06167f40cc99 FBD9AA66-9553-4097-BA44-ED6E9D65EAB8 0
 powercfg -setacvalueindex %NEW_SCHEME% 7516B95F-F776-4464-8C53-06167F40CC99 ADED5E82-B909-4619-9949-F5D71DAC0B67 100
 
@@ -105,16 +105,24 @@ powercfg -attributes SUB_PROCESSOR PROCFREQMAX -ATTRIB_HIDE
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCFREQMAX 0
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMAX 100
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMIN 80
-powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMAX 100
-powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMIN 50
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMAX 100
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR PROCTHROTTLEMIN 50
+
 powercfg -setacvalueindex %NEW_SCHEME% SUB_PROCESSOR 94d3a615-a899-4ac5-ae2b-e4d8f634367f 0
+powercfg -setdcvalueindex %NEW_SCHEME% SUB_PROCESSOR 94d3a615-a899-4ac5-ae2b-e4d8f634367f 0
+
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTHRESHOLD 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFINCTIME 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFDECTHRESHOLD 100
+
+powercfg -setdcvalueindex %NEW_SCHEME% sub_processor PERFINCTIME 1
+powercfg -setdcvalueindex %NEW_SCHEME% sub_processor PERFDECTHRESHOLD 90
+
+
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFAUTONOMOUS 0
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PERFDUTYCYCLING 0
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor PROCTHROTTLEMAX 100
-powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPMINCORES 100
+
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor DISTRIBUTEUTIL 0
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPINCREASETIME 1
 powercfg -setacvalueindex %NEW_SCHEME% sub_processor CPDECREASETIME 100
@@ -176,6 +184,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdxata" /v "Start" /t REG_DWORD
 REM Re-activate the scheme to ensure all changes are applied to the current scheme context
 powercfg -setactive %NEW_SCHEME%
 echo.
-echo Power plan RP-Optimized3.5 configured and activated!
+echo Power plan RP-Optimized3.6 configured and activated!
 pause
 exit /b 0
