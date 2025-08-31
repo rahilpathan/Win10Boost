@@ -29,6 +29,7 @@ powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMIN      100 
 PAUSE
 powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR SYS_COOLING_POLICY   0   >nul
 powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR SYS_COOLING_POLICY   1   >nul
+
 PAUSE
 powercfg -setacvalueindex SCHEME_CURRENT SUB_PROCESSOR MIN_PROCESSOR_STATE     100   >nul
 powercfg -setdcvalueindex SCHEME_CURRENT SUB_PROCESSOR MIN_PROCESSOR_STATE      5   >nul
