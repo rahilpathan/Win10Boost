@@ -1,4 +1,6 @@
-# Win10Boost = OPTIMIZE + PERSONALIZE + SECURE
+# Win10Boost = OPTIMIZE + PERSONALIZE + SECURE 
+5/25/25: **Unmanaged Project**. I only do it on my idle time and as a hobby, you are fully responsible if you chose to use any of the tweaks in this repository.
+
  _Windows 10 optimizations using registry modification, power optimization, disabling unnecessary services and logging. 
  Also added Gaming tweaks and Windows hardening scripts to make the script versatile.
  Script is labelled what each command does, edit the script using notepad - add double colons (::) to disable any command line._
